@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>lala Live Bar</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="livebar-style.css">
 </head>
+
 <body>
 
     <!-- ヘッダー（戻るボタン） -->
@@ -29,26 +33,26 @@
             <div class="info-card">
                 <h2>Welcome</h2>
                 <p>
-                    ここはlalaがプロデュースする、音楽と海風を感じる大人のための秘密基地。<br>
+                    ここはlalaがプロデュースする、音楽を感じる大人のための秘密基地。<br>
                     定期的なアコースティックライブや、こだわりのカクテルをお楽しみいただけます。
                 </p>
-                
+
                 <div class="details">
                     <div class="detail-item">
                         <strong>営業時間</strong><br>
-                        18:00 - 24:00 (定休日: 月曜)
+                        18:00 - 翌1:00 (定休日: 月曜)
                     </div>
                     <div class="detail-item">
                         <strong>住所</strong><br>
-                        東京都港区〇〇 1-2-3 海辺のビル B1F
+                        宮崎県宮崎市橘通西３丁目2-24ライオンタワービル B1F
                     </div>
                     <div class="detail-item">
                         <strong>テーブルチャージ</strong><br>
-                        ¥1,000 (ライブ開催時は別途チケット代)
+                        ¥700
                     </div>
                 </div>
             </div>
-            
+
             <h3 class="menu-title mt-4">Drink Menu</h3>
             <ul class="menu-list">
                 <li><span>Teal Ocean (オリジナルカクテル)</span> <span>¥1,200</span></li>
@@ -62,78 +66,116 @@
     <!-- 予約フォームセクション -->
     <section class="bar-reservation fade-in-up" id="reservation">
         <div class="container">
-            <div class="reservation-card" style="background: rgba(0,0,0,0.5); padding: 40px; border-radius: 12px; border: 1px solid var(--primary-color);">
-                <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 20px; text-align: center;">Table & Live Reservation</h2>
-                <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem;">
-                    ※ご予約は18:00〜22:00の間、30分ごとに承ります（2時間制）。<br>
-                    ライブ開催日もこちらからお席と一緒にご予約いただけます。
-                </p>
-                
-                <form id="barReservationForm">
-                    <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px;">
-                        <div class="form-group" style="flex: 1;">
-                            <label style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">日付 *</label>
-                            <input type="date" id="resDate" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
+            <div class="reservation-card"
+                style="background: rgba(0,0,0,0.5); padding: 40px; border-radius: 12px; border: 1px solid var(--primary-color);">
+                <h2
+                    style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 20px; text-align: center;">
+                    Table & Live Reservation</h2>
+
+                <div class="coming-soon-banner" style="text-align: center; margin-top: 30px; padding-bottom: 20px;">
+                    <img src="images/bar_coming_soon_mystery.png" alt="Coming Soon - Mystery Bar"
+                        style="width: 100%; max-width: 800px; border-radius: 12px; border: 2px solid var(--primary-color); box-shadow: 0 0 30px rgba(40, 212, 212, 0.3); opacity: 0.9; margin-bottom: 30px;">
+                    <h3
+                        style="font-family: var(--font-heading); color: var(--primary-color); font-size: 3rem; letter-spacing: 0.25em; text-transform: uppercase; text-shadow: 0 0 15px var(--primary-color), 0 0 30px var(--primary-color);">
+                        COMING SOON</h3>
+                    <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 20px; letter-spacing: 0.1em;">
+                        オープンに向けて準備中です。<br>
+                        さらに上質な空間と、特別なメニューをお届けします。どうぞご期待ください。
+                    </p>
+                </div>
+
+                <!-- フォーム部分は一時的に非表示にします -->
+                <div style="display: none;">
+                    <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem;">
+                        ※ご予約は18:00〜22:00の間、30分ごとに承ります（2時間制）。<br>
+                        ライブ開催日もこちらからお席と一緒にご予約いただけます。
+                    </p>
+
+                    <form id="barReservationForm">
+                        <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label
+                                    style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">日付
+                                    *</label>
+                                <input type="date" id="resDate" required
+                                    style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label
+                                    style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">時間
+                                    *</label>
+                                <select id="resTime" required
+                                    style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
+                                    <option value="">選択してください</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="18:30">18:30</option>
+                                    <option value="19:00">19:00</option>
+                                    <option value="19:30">19:30</option>
+                                    <option value="20:00">20:00</option>
+                                    <option value="20:30">20:30</option>
+                                    <option value="21:00">21:00</option>
+                                    <option value="21:30">21:30</option>
+                                    <option value="22:00">22:00</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group" style="flex: 1;">
-                            <label style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">時間 *</label>
-                            <select id="resTime" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
-                                <option value="">選択してください</option>
-                                <option value="18:00">18:00</option>
-                                <option value="18:30">18:30</option>
-                                <option value="19:00">19:00</option>
-                                <option value="19:30">19:30</option>
-                                <option value="20:00">20:00</option>
-                                <option value="20:30">20:30</option>
-                                <option value="21:00">21:00</option>
-                                <option value="21:30">21:30</option>
-                                <option value="22:00">22:00</option>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label
+                                style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">予約人数
+                                *</label>
+                            <select id="resCount" required
+                                style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
+                                <option value="1">1名</option>
+                                <option value="2">2名</option>
+                                <option value="3">3名</option>
+                                <option value="4">4名</option>
+                                <option value="5">5名</option>
+                                <option value="6">6名以上（要相談）</option>
                             </select>
                         </div>
-                    </div>
-                    
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">予約人数 *</label>
-                        <select id="resCount" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
-                            <option value="1">1名</option>
-                            <option value="2">2名</option>
-                            <option value="3">3名</option>
-                            <option value="4">4名</option>
-                            <option value="5">5名</option>
-                            <option value="6">6名以上（要相談）</option>
-                        </select>
-                    </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">お名前 *</label>
-                        <input type="text" id="resName" required placeholder="例: 山田 太郎" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
-                    </div>
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label
+                                style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">お名前
+                                *</label>
+                            <input type="text" id="resName" required placeholder="例: 山田 太郎"
+                                style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
+                        </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">メールアドレス *</label>
-                        <input type="email" id="resEmail" required placeholder="例: info@example.com" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
-                    </div>
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label
+                                style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">メールアドレス
+                                *</label>
+                            <input type="email" id="resEmail" required placeholder="例: info@example.com"
+                                style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
+                        </div>
 
-                    <div class="form-group" style="margin-bottom: 30px;">
-                        <label style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">備考・メッセージ</label>
-                        <textarea id="resMessage" rows="3" placeholder="ご要望などがあればご記入ください" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;"></textarea>
-                    </div>
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <label
+                                style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">備考・メッセージ</label>
+                            <textarea id="resMessage" rows="3" placeholder="ご要望などがあればご記入ください"
+                                style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;"></textarea>
+                        </div>
 
-                    <!-- エラーメッセージ領域 -->
-                    <div id="resError" style="color: #e74c3c; margin-bottom: 20px; text-align: center; display: none;">
-                        指定された日時は満席のためご予約いただけません。
-                    </div>
+                        <!-- エラーメッセージ領域 -->
+                        <div id="resError"
+                            style="color: #e74c3c; margin-bottom: 20px; text-align: center; display: none;">
+                            指定された日時は満席のためご予約いただけません。
+                        </div>
 
-                    <div style="text-align: center;">
-                        <button type="submit" class="btn primary-btn" style="width: 100%; max-width: 300px; padding: 15px; font-size: 1.1rem; background-color: var(--primary-color); border: none; cursor: pointer; border-radius: 4px;">予約を確定する</button>
-                    </div>
-                </form>
+                        <div style="text-align: center;">
+                            <button type="submit" class="btn primary-btn"
+                                style="width: 100%; max-width: 300px; padding: 15px; font-size: 1.1rem; background-color: var(--primary-color); border: none; cursor: pointer; border-radius: 4px;">予約を確定する</button>
+                        </div>
+                    </form>
 
-                <div id="resSuccessMessage" style="display: none; padding-top: 30px; text-align: center;">
-                    <h3 style="color: var(--primary-color); margin-bottom: 15px;">ご予約完了しました！</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">
-                        ご来店をお待ちしております。<br>キャンセルをご希望の場合は、直接店舗までご連絡ください。
-                    </p>
+                    <div id="resSuccessMessage" style="display: none; padding-top: 30px; text-align: center;">
+                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">ご予約完了しました！</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">
+                            ご来店をお待ちしております。<br>キャンセルをご希望の場合は、直接店舗までご連絡ください。
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -142,10 +184,15 @@
     <!-- CSS追加分（レスポンシブ等） -->
     <style>
         @media (max-width: 600px) {
-            .form-row { flex-direction: column; gap: 15px !important; }
+            .form-row {
+                flex-direction: column;
+                gap: 15px !important;
+            }
         }
+
         #barReservationForm select option {
-            color: #000; /* セレクトボックスのオプションは黒文字にして見やすく */
+            color: #000;
+            /* セレクトボックスのオプションは黒文字にして見やすく */
         }
     </style>
 
@@ -157,4 +204,5 @@
     <!-- 共通プログラムの読み込み -->
     <script src="script.js"></script>
 </body>
+
 </html>
