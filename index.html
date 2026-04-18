@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lala Official Fan Site</title>
+    <!-- 検索エンジン向けのサイト説明（SEO対策）-->
+    <meta name="description" content="ポップス歌手lalaの公式ファンサイト。最新情報、ファンクラブ案内、グッズ販売など。">
+    <!-- Google Fontsの読み込み（洗練されたフォントを使用） -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- 各種スタイルの読み込み -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==============================================
+         HEADER (ナビゲーション)
+    =============================================== -->
+    <header id="header">
+        <div class="header-container">
+            <!-- サイトロゴ（テキストまたは画像） -->
+            <a href="#" class="logo">lala</a>
+            <!-- ナビゲーションメニュー -->
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#news">News</a></li>
+                    <li><a href="#discography">Discography</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="livebar.html" class="highlight-link">Live Bar</a></li>
+                </ul>
+            </nav>
+            <!-- 画面が小さい時用のハンバーガーメニュー -->
+            <div class="mobile-menu-btn">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==============================================
+         HERO SECTION (トップ画面)
+    =============================================== -->
+    <!-- 
+      背景画像を変更する場合は、style.css の .hero セクションの background-image を変更するか、
+      ここに<img>タグを配置してください。
+    -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content fade-in">
+            <h1 class="hero-title">A Voice that <br>Echoes in the Sun & Sea.</h1>
+            <p class="hero-subtitle">lala Official Fan Site</p>
+            <div class="hero-buttons">
+                <!-- リンク先を変更してください -->
+                <a href="#services" class="btn primary-btn">Fanclub Join</a>
+                <a href="#news" class="btn secondary-btn">Live Tickets</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         ABOUT SECTION (プロフィール)
+    =============================================== -->
+    <section class="about" id="about">
+        <div class="container section-inner">
+            <div class="about-image fade-in-up">
+                <!-- ご自身の画像を images フォルダに入れてファイル名を指定してください -->
+                <div class="image-placeholder">
+                    <!-- 画像が用意できたら以下のコメントタグを外して使用してください -->
+                    <!-- <img src="images/profile.jpg" alt="lala Profile"> -->
+                    <span>Photo Area</span>
+                </div>
+            </div>
+            <div class="about-text fade-in-up delay-1">
+                <h2 class="section-title">About <span>lala</span></h2>
+                <!-- プロフ文を入力してください -->
+                <p>
+                    海と太陽の光を歌声に宿すポップス歌手。<br>
+                    透明感のある歌声と、シックで落ち着いたパフォーマンスで魅了する。<br>
+                    全世界へ向けて、心に響く音楽を届けています。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         NEWS & SCHEDULE (最新情報・ライブ)
+    =============================================== -->
+    <section class="news" id="news">
+        <div class="container">
+            <h2 class="section-title text-center fade-in-up">News & Schedule</h2>
+            <div style="display:flex; gap: 40px; flex-wrap: wrap;">
+                <!-- 最新ニュース -->
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="color: var(--primary-color); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 20px;" class="fade-in-up">Latest News</h3>
+                    <div id="dynamicNewsList" class="news-list fade-in-up delay-1">
+                        <div class="text-center" style="color:var(--text-muted); padding: 20px;">ニュースはありません</div>
+                    </div>
+                </div>
+
+                <!-- ライブスケジュール -->
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="color: var(--primary-color); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 20px;" class="fade-in-up delay-1">Live Schedule</h3>
+                    <div id="dynamicLiveList" class="news-list fade-in-up delay-2">
+                        <div class="text-center" style="color:var(--text-muted); padding: 20px;">予定されているライブはありません</div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4 fade-in-up delay-2">
+                <a href="#" class="btn outline-btn">View All</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         SCHEDULE & CALENDAR (予約状況 / スケジュール)
+    =============================================== -->
+    <section class="schedule" id="schedule">
+        <div class="container">
+            <h2 class="section-title text-center fade-in-up">Schedule & Reservation</h2>
+            <p class="text-center fade-in-up delay-1" style="color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem;">
+                BARの予約状況とライブイベントの予定です。（※日付をタップで予約画面へ）<br>
+                <span class="legend-item"><span class="legend-color" style="background:#2ecc71;"></span>空席あり</span>
+                <span class="legend-item"><span class="legend-color" style="background:#f39c12;"></span>残りわずか</span>
+                <span class="legend-item"><span class="legend-color" style="background:#e74c3c;"></span>満席</span>
+            </p>
+            <div class="calendar-wrapper fade-in-up delay-2">
+                <div class="calendar-header">
+                    <button id="prevMonth" class="cal-btn">&lt;</button>
+                    <h3 id="calendarMonthYear"></h3>
+                    <button id="nextMonth" class="cal-btn">&gt;</button>
+                </div>
+                <div class="calendar-grid calendar-weekdays">
+                    <div class="cal-day-name sunday">Sun</div>
+                    <div class="cal-day-name">Mon</div>
+                    <div class="cal-day-name">Tue</div>
+                    <div class="cal-day-name">Wed</div>
+                    <div class="cal-day-name">Thu</div>
+                    <div class="cal-day-name">Fri</div>
+                    <div class="cal-day-name saturday">Sat</div>
+                </div>
+                <div class="calendar-grid" id="calendarDays">
+                    <!-- Javascriptで生成します -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         DISCOGRAPHY (楽曲紹介)
+    =============================================== -->
+    <section class="discography glass-bg" id="discography">
+        <div class="container">
+            <h2 class="section-title text-center fade-in-up">Discography</h2>
+            <div class="coming-soon-text text-center fade-in-up" style="font-size: 1.5rem; letter-spacing: 0.2em; padding: 40px 0; color: var(--primary-color);">
+                COMING SOON
+            </div>
+            
+            <!-- ⬇︎ 今後楽曲情報を表示する際はこちらのコメントアウト（<!- - と - ->）を外して編集してください ⬇︎
+            <div class="disco-grid">
+                
+                <div class="disco-card fade-in-up">
+                    <div class="disco-img-placeholder">
+                        <span>Jacket Image</span>
+                    </div>
+                    <div class="disco-info">
+                        <h3>Teal Ocean</h3>
+                        <p>1st Album / 2025</p>
+                    </div>
+                </div>
+
+                <div class="disco-card fade-in-up delay-1">
+                    <div class="disco-img-placeholder">
+                        <span>Jacket Image</span>
+                    </div>
+                    <div class="disco-info">
+                        <h3>Midnight Sun</h3>
+                        <p>EP / 2024</p>
+                    </div>
+                </div>
+
+                <div class="disco-card fade-in-up delay-2">
+                    <div class="disco-img-placeholder">
+                        <span>Jacket Image</span>
+                    </div>
+                    <div class="disco-info">
+                        <h3>Breeze</h3>
+                        <p>Single / 2024</p>
+                    </div>
+                </div>
+
+            </div>
+            ⬆︎ ここまで ⬆︎ -->
+        </div>
+    </section>
+
+    <!-- ==============================================
+         SERVICES (ファンクラブ・物販・スクール)
+    =============================================== -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title text-center fade-in-up">Fanclub & Services</h2>
+            <div class="services-grid">
+                
+                <!-- ファンクラブ -->
+                <a href="fanclub.html" class="service-card fade-in-up">
+                    <div class="service-icon">✦</div>
+                    <h3>Fanclub</h3>
+                    <p>会員限定のコンテンツ配信、先行チケット申し込みはこちら</p>
+                </a>
+
+                <!-- オンラインストア（物販・楽曲） -->
+                <a href="store.html" class="service-card fade-in-up delay-1">
+                    <div class="service-icon">🛒</div>
+                    <h3>Online Store</h3>
+                    <p>公式グッズ、CD、デジタル楽曲の販売</p>
+                </a>
+
+                <!-- オンラインスクール -->
+                <a href="school.html" class="service-card fade-in-up delay-2">
+                    <div class="service-icon">🎤</div>
+                    <h3>Vocal School</h3>
+                    <p>lalaによるオンラインボーカルレッスンの申し込み</p>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         LIVE BAR LINK (ライブバー導線)
+    =============================================== -->
+    <section class="livebar-link-section fade-in-up">
+        <div class="livebar-banner">
+            <div class="banner-content">
+                <h2>lala Live Bar</h2>
+                <p>lalaが経営するライブ＆バー。生の音楽と美味しいお酒を。</p>
+                <a href="livebar.html" class="btn primary-btn">Go to Bar Site</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         FOOTER
+    =============================================== -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <h3>lala</h3>
+                <p>Official Site</p>
+            </div>
+            
+            <div class="footer-sns">
+                <!-- SNSのリンクURLを入れてください -->
+                <a href="#" target="_blank" title="YouTube">YT</a>
+                <a href="#" target="_blank" title="Instagram">IG</a>
+                <a href="#" target="_blank" title="Twitter">X</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 lala Official. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ==============================================
+         TICKET MODAL (チケット申し込みフォーム)
+    =============================================== -->
+    <div class="modal-overlay" id="ticketModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModalBtn">&times;</span>
+            <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 20px;">Live Ticket Reservation</h2>
+            <p id="modalLiveTitle" style="margin-bottom: 20px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;"></p>
+            
+            <form id="ticketForm">
+                <input type="hidden" id="liveNameInput" name="liveName">
+                <div class="form-group">
+                    <label>お名前 (Name) *</label>
+                    <input type="text" id="userName" required placeholder="例: 山田 太郎">
+                </div>
+                <div class="form-group">
+                    <label>メールアドレス (Email) *</label>
+                    <input type="email" id="userEmail" required placeholder="例: info@example.com">
+                </div>
+                <div class="form-group">
+                    <label>予約人数 *</label>
+                    <select id="ticketCount" required>
+                        <option value="1">1名</option>
+                        <option value="2">2名</option>
+                        <option value="3">3名</option>
+                        <option value="4">4名</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>備考・メッセージ</label>
+                    <textarea id="userMessage" rows="3" placeholder="lalaへのメッセージやご要望があればどうぞ"></textarea>
+                </div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="submit" class="btn primary-btn" style="width: 100%;">予約を申し込む</button>
+                </div>
+            </form>
+            
+            <!-- 送信後の決済リンク表示エリア（formの外に配置） -->
+            <div id="formSuccessMessage" style="display: none; margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="color: var(--primary-color); font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; text-align: center;">ご予約情報の送信が完了しました！</p>
+                <p style="font-size: 0.9rem; margin-bottom: 20px; color: var(--text-muted); text-align: center;">お席を確保するため、以下のボタンより決済（Square）を完了させてください。</p>
+                
+                <!-- ここにSquareのリンクを貼ります -->
+                <a href="https://square.link/YOUR_LINK_HERE" target="_blank" class="btn outline-btn" style="width: 100%; border-color: #fff; color: #fff; text-align: center;">Squareで決済へ進む</a>
+                <p style="font-size: 0.75rem; margin-top: 10px; color: var(--text-muted); text-align: center;">※別ウィンドウで安全な決済画面が開きます</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- スクリプトの読み込み -->
+    <script src="script.js"></script>
+</body>
+</html>

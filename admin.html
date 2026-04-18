@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lala - Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-header {
+            background: #080d12;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .admin-title {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .admin-container {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 80vh;
+        }
+
+        .dashboard-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .data-table th {
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--primary-color);
+            font-weight: normal;
+            font-size: 0.9rem;
+        }
+
+        .data-table tr:hover {
+            background: rgba(40, 212, 212, 0.05);
+        }
+
+        .delete-btn {
+            background: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c9302c;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* スマホ用レスポンシブ対応 */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 15px;
+            }
+
+            .admin-container {
+                padding: 20px 10px;
+            }
+
+            .flex-wrap-container {
+                flex-direction: column;
+            }
+
+            .flex-wrap-container>div {
+                min-width: 100% !important;
+                margin-bottom: 20px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px;
+                white-space: nowrap;
+                font-size: 0.8rem;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            /* スマホでも表が潰れないように */
+        }
+
+        /* アコーディオン用スタイル */
+        .accordion-item {
+            margin-bottom: 10px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .accordion-header {
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            transition: all 0.3s;
+        }
+        .accordion-header:hover {
+            background: rgba(40, 212, 212, 0.1);
+        }
+        .accordion-content {
+            display: none;
+            padding: 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .accordion-content.active {
+            display: block;
+        }
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+        .accordion-icon.open {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="admin-header">
+        <div class="admin-title">lala - Admin Dashboard</div>
+        <a href="index.html" class="outline-btn" style="padding: 6px 15px; font-size: 0.8rem;">サイトへ戻る</a>
+    </header>
+
+    <div class="admin-container">
+        <div class="flex-wrap-container"
+            style="display: flex; gap: 20px; align-items: stretch; margin-bottom: 40px; flex-wrap: wrap;">
+            <!-- 左側：イベント管理 -->
+            <div
+                style="flex: 1; min-width: 400px; background: rgba(0,0,0,0.3); padding: 30px; border-radius: 8px; border: var(--glass-border);">
+                <h2 style="margin-bottom: 20px; color: var(--primary-color);">Calendar Event Management</h2>
+                <form id="adminEventForm" style="margin-bottom: 20px;">
+                    <div style="display:flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="date" id="eventDate" required
+                            style="padding: 10px; width: 140px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+                        <select id="eventTime" required style="padding: 10px; width: 110px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+                            <option value="" style="color:#000;">時間選択</option>
+                        </select>
+                        <select id="eventCategory" required style="padding: 10px; width: 100px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+                            <option value="LIVE" style="color:#000;">LIVE</option>
+                            <option value="NEWS" style="color:#000;">NEWS</option>
+                        </select>
+                        <input type="text" id="eventTitle" placeholder="イベントタイトル" required
+                            style="padding: 10px; flex: 1; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+                        <button type="submit" class="btn primary-btn" style="padding: 10px 20px;">追加</button>
+                    </div>
+                </form>
+                <div style="max-height: 200px; overflow-y: auto;">
+                    <table class="data-table" style="font-size: 0.85rem;">
+                        <thead>
+                            <tr>
+                                <th>日付</th>
+                                <th>時間</th>
+                                <th>種別</th>
+                                <th>タイトル</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 右側：簡易メニュー -->
+            <div
+                style="flex: 1; min-width: 300px; display:flex; flex-direction:column; justify-content:center; align-items:center; background: rgba(0,0,0,0.3); padding: 30px; border-radius: 8px; border: var(--glass-border);">
+                <h2 style="margin-bottom: 5px;">Admin Control Panel</h2>
+                <p style="color: var(--text-muted); text-align: center; font-size: 0.9rem; margin-bottom: 20px;">
+                    スプレッドシートと同期しています。最新の情報を表示するには更新をクリックしてください。
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 10px; width: 80%;">
+                    <button id="refreshBtn" class="btn primary-btn" style="padding: 10px 20px;">↻ 最新データに同期</button>
+                    <button id="exportBtn" class="btn outline-btn" style="padding: 10px 20px; font-size: 0.8rem;">📥 データをJSON出力 (バックアップ)</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 15px;">Live Bar Reservations (BAR予約)</h2>
+        <div>
+            <p style="text-align: right; margin-bottom: 10px;"><strong>BAR総予約数: <span id="barTotalCount"
+                        style="color: var(--primary-color); font-size: 1.2rem;">0</span> 件</strong></p>
+            <div id="barAccordionContainer" class="accordion-container">
+                <!-- Javascriptでデータが行として挿入されます -->
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 15px;">Live Ticket Reservations (チケット申し込み)</h2>
+        <div>
+            <p style="text-align: right; margin-bottom: 10px;"><strong>チケット総予約数: <span id="totalCount"
+                        style="color: var(--primary-color); font-size: 1.2rem;">0</span> 件</strong></p>
+            <div id="ticketAccordionContainer" class="accordion-container">
+                <!-- Javascriptでデータが行として挿入されます -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="text-center" style="color: var(--text-muted); font-size: 0.8rem; padding: 20px;">
+            &copy; 2026 Admin Panel. (Local Demo Version)
+        </div>
+    </footer>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

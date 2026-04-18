@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lala Official Fanclub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .subpage-header { padding: 20px 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 100; }
+        .back-btn { color: #fff; font-size: 0.9rem; letter-spacing: 0.1em; opacity: 0.8; }
+        .back-btn:hover { opacity: 1; color: var(--primary-color); }
+        .subpage-hero { height: 40vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, rgba(8,16,23,0.3), var(--bg-color));}
+        .content-area { padding: 60px 0 100px; }
+        .plan-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px;}
+        .plan-card { background: var(--surface-color); border: var(--glass-border); padding: 40px; border-radius: 12px; text-align: center; }
+        .plan-card h3 { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 20px; font-family: var(--font-heading);}
+        .price { font-size: 2rem; margin-bottom: 20px; }
+        .plan-features { text-align: left; margin-bottom: 30px; }
+        .plan-features li { margin-bottom: 10px; font-size: 0.9rem; border-bottom: 1px dotted rgba(255,255,255,0.1); padding-bottom: 5px;}
+    </style>
+</head>
+<body>
+    <header class="subpage-header">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+    </header>
+
+    <div class="subpage-hero fade-in">
+        <h1 class="hero-title" style="font-size: 3rem;">Fanclub</h1>
+    </div>
+
+    <section class="content-area fade-in-up delay-1">
+        <div class="container" style="max-width: 900px;">
+            <p class="text-center">lala Official Fanclubへようこそ。<br>ここでしか見られない限定写真や動画、ライブチケットの最速先行受付など、特別なコンテンツをお届けします。</p>
+
+            <div class="plan-cards">
+                <!-- 無料プラン -->
+                <div class="plan-card">
+                    <h3>Common Member</h3>
+                    <div class="price">¥550<span style="font-size: 1rem;">/月</span></div>
+                    <ul class="plan-features">
+                        <li>メールマガジン購読</li>
+                        <li>一部の無料公開ニュース閲覧</li>
+                    </ul>
+                    <a href="#" class="btn secondary-btn">登録する</a>
+                </div>
+
+                <!-- プレミアムプラン -->
+                <div class="plan-card" style="border-color: var(--primary-color);">
+                    <h3>Premium Member</h3>
+                    <div class="price" style="color: var(--primary-color);">¥980<span style="font-size: 1rem; color: #fff;">/月</span></div>
+                    <ul class="plan-features">
+                        <li>ライブチケット等の最速先行受付</li>
+                        <li>限定写真・動画の閲覧</li>
+                        <li>バースデーメール</li>
+                        <li>会員限定グッズの購入権</li>
+                    </ul>
+                    <a href="#" class="btn primary-btn">入会する</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 簡易アニメーション用のスクリプト -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
+            setTimeout(() => {
+                faders.forEach(fader => fader.classList.add('appear'));
+            }, 100);
+        });
+    </script>
+</body>
+</html>

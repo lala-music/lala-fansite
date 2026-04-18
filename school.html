@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lala Vocal School</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .subpage-header { padding: 20px 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 100; }
+        .back-btn { color: #fff; font-size: 0.9rem; letter-spacing: 0.1em; opacity: 0.8; }
+        .back-btn:hover { opacity: 1; color: var(--primary-color); }
+        .subpage-hero { height: 40vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, rgba(8,16,23,0.3), var(--bg-color));}
+        .content-area { padding: 60px 0 100px; }
+        .school-container { max-width: 800px; margin: 0 auto;}
+        .form-box { background: var(--surface-color); border: var(--glass-border); padding: 50px; border-radius: 12px; margin-top: 40px;}
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 10px; color: var(--primary-color); font-size: 0.9rem;}
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; padding: 15px; 
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); 
+            color: #fff; border-radius: 4px; outline: none; font-family: var(--font-body);
+        }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--primary-color); }
+        .course-info { display: flex; gap: 20px; margin-bottom: 40px; }
+        .course-card { flex: 1; background: rgba(0,0,0,0.3); padding: 25px; border-radius: 8px; border-left: 3px solid var(--primary-color);}
+    </style>
+</head>
+<body>
+    <header class="subpage-header">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+    </header>
+
+    <div class="subpage-hero fade-in">
+        <h1 class="hero-title" style="font-size: 3rem;">Vocal School</h1>
+    </div>
+
+    <section class="content-area fade-in-up delay-1">
+        <div class="container school-container">
+            <h2 class="section-title text-center" style="font-size: 2rem;">Online Lessons</h2>
+            <p class="text-center" style="margin-bottom: 40px;">lala本人が直接指導するオンラインボーカルレッスン。<br>基礎的な発声から、表現力を高めるテクニックまで丁寧にサポートします。</p>
+
+            <div class="course-info">
+                <div class="course-card">
+                    <h3>【マンツーマン】スタンダード</h3>
+                    <p class="mt-4" style="color: var(--primary-color); font-size: 1.2rem;">¥6,000 / 45分</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">課題曲を用いた本格的なボイストレーニング指導。</p>
+                </div>
+                <div class="course-card">
+                    <h3>【グループ】ワークショップ</h3>
+                    <p class="mt-4" style="color: var(--primary-color); font-size: 1.2rem;">¥3,000 / 60分</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">月1回開催。複数名で発声の基礎や音楽理論を学びます。</p>
+                </div>
+            </div>
+
+            <div class="form-box">
+                <h3 style="margin-bottom: 30px; text-align: center;">無料体験・お問い合わせフォーム</h3>
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label>お名前</label>
+                        <input type="text" placeholder="例：山田 太郎" required>
+                    </div>
+                    <div class="form-group">
+                        <label>メールアドレス</label>
+                        <input type="email" placeholder="例：info@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>希望コース</label>
+                        <select>
+                            <option value="">選択してください</option>
+                            <option value="trial">無料体験レッスンを希望</option>
+                            <option value="standard">マンツーマンを希望</option>
+                            <option value="group">グループワークショップ参加希望</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>メッセージ・ご質問等</label>
+                        <textarea rows="5" placeholder="歌に関するお悩みなどがあればご記入ください"></textarea>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn primary-btn" style="width: 100%;">送信する</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
+            setTimeout(() => {
+                faders.forEach(fader => fader.classList.add('appear'));
+            }, 100);
+        });
+    </script>
+</body>
+</html>

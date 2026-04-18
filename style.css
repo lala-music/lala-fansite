@@ -1,0 +1,730 @@
+/* =========================================================================
+   lala Official Fan Site - Main Stylesheet
+   Theme: Sea & Sun / Chic & Calm 
+   Primary Color: #28D4D4
+========================================================================= */
+
+/* --- CSS Variables (設定値) --- */
+:root {
+    --primary-color: #28D4D4; /* メインカラー（青緑系） */
+    --primary-dark: #1b9b9b;
+    --bg-color: #0b1116;      /* シックな深海をイメージしたダークな背景 */
+    --surface-color: rgba(26, 35, 45, 0.7); /* 半透明なカード背景 */
+    --text-main: #f0f4f8;     /* メインテキスト（白・明るいグレー） */
+    --text-muted: #a0aec0;    /* 柔らかいテキスト */
+    
+    --font-heading: 'Cormorant Garamond', serif; /* エレガントな見出し用フォント */
+    --font-body: 'Noto Sans JP', sans-serif;    /* 読みやすい本文用フォント */
+    
+    --glass-border: 1px solid rgba(255, 255, 255, 0.05);
+    --transition: all 0.4s ease-out;
+}
+
+/* --- Base Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--text-main);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-inner {
+    padding: 100px 0;
+}
+
+section {
+    padding: 80px 0;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    letter-spacing: 0.1em;
+    font-weight: 400;
+}
+
+.section-title span {
+    color: var(--primary-color);
+    font-style: italic;
+}
+
+.text-center { text-align: center; }
+.mt-4 { margin-top: 40px; }
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: #000;
+    font-weight: 500;
+}
+
+.primary-btn:hover {
+    background-color: var(--primary-dark);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(40, 212, 212, 0.3);
+}
+
+.secondary-btn {
+    background-color: transparent;
+    border: 1px solid var(--text-main);
+    color: var(--text-main);
+}
+
+.secondary-btn:hover {
+    background-color: var(--text-main);
+    color: #000;
+}
+
+.outline-btn {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.outline-btn:hover {
+    background-color: var(--primary-color);
+    color: #000;
+}
+
+/* --- Header / Navigation --- */
+#header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: var(--transition);
+    padding: 20px 0;
+}
+
+#header.scrolled {
+    background: rgba(11, 17, 22, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 15px 0;
+    border-bottom: var(--glass-border);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--primary-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+.highlight-link {
+    color: var(--primary-color) !important;
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.mobile-menu-btn span {
+    width: 25px;
+    height: 2px;
+    background-color: var(--text-main);
+}
+
+/* --- Hero Section --- */
+/*
+  TODO: ここでメイン画像をプレースホルダー用のグラデーションにしています。
+  画像がある場合は、background-image を URL() で指定するか、HTML内で<img>タグを使用してください。
+*/
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* シックな朝焼けの海風のグラデーション */
+    background: linear-gradient(135deg, rgba(8,16,23,0.9) 0%, rgba(20,50,60,0.8) 100%);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, var(--bg-color) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* --- About Section --- */
+.about .section-inner {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.about-image {
+    flex: 1;
+}
+
+.image-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--surface-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    border: var(--glass-border);
+    overflow: hidden;
+    position: relative;
+}
+
+.image-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-text {
+    flex: 1;
+}
+
+.about-text p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+/* --- News Section --- */
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.news-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: var(--surface-color);
+    border: var(--glass-border);
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.news-item:hover {
+    background: rgba(40, 212, 212, 0.05);
+    transform: translateX(5px);
+    border-left: 3px solid var(--primary-color);
+}
+
+.news-date {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    width: 120px;
+}
+
+.news-category {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-right: 20px;
+    letter-spacing: 0.05em;
+}
+
+.tag-live { background: rgba(40,212,212,0.2); color: var(--primary-color); }
+.tag-release { background: rgba(255,255,255,0.1); color: #fff; }
+.tag-info { border: 1px solid rgba(255,255,255,0.2); color: var(--text-muted); }
+
+.news-title {
+    flex: 1;
+    font-size: 1rem;
+}
+
+.news-title a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* --- Discography --- */
+.glass-bg {
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPgo8ZmlsdGVyIGlkPSJuIiB4PSIwIiB5PSIwIj4KPGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNiIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPgo8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJyZ2JhKDExLCAxNywgMjIsIDAuOTgpIi8+CjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNuKSIgb3BhY2l0eT0iMC4wNSIvPgo8L3N2Zz4=');
+    border-top: var(--glass-border);
+    border-bottom: var(--glass-border);
+}
+
+.disco-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.disco-card {
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.disco-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+}
+
+.disco-img-placeholder {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #151d26;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+}
+
+.disco-img-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.disco-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.disco-info h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.disco-info p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* --- Services --- */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.service-card {
+    display: block;
+    background: var(--surface-color);
+    border: var(--glass-border);
+    padding: 40px 30px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.service-card:hover {
+    background: rgba(40, 212, 212, 0.1);
+    transform: translateY(-5px);
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.service-card h3 {
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.service-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* --- Live Bar Banner --- */
+.livebar-link-section {
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.livebar-banner {
+    background: linear-gradient(rgba(11, 17, 22, 0.7), rgba(11, 17, 22, 0.7)), url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48L3N2Zz4=');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--primary-color);
+    border-radius: 12px;
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-content h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.banner-content p {
+    margin-bottom: 25px;
+    color: var(--text-main);
+}
+
+/* --- Footer --- */
+footer {
+    background: #05080a;
+    padding: 60px 0 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.footer-brand h3 {
+    font-family: var(--font-heading);
+    color: var(--primary-color);
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+}
+
+.footer-sns {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-sns a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.footer-sns a:hover {
+    background: var(--primary-color);
+    color: #000;
+    border-color: var(--primary-color);
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* --- Animations (Fade In) --- */
+.fade-in {
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.fade-in.appear {
+    opacity: 1;
+}
+
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.fade-in-up.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.delay-1 { transition-delay: 0.2s; }
+.delay-2 { transition-delay: 0.4s; }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .header-container { padding: 0 20px; }
+    .nav-links { display: none; } /* ハンバーガー実装はスクリプトで拡張可能。今回は非表示 */
+    .mobile-menu-btn { display: flex; }
+    
+    .hero-title { font-size: 2.5rem; }
+    .hero-buttons { flex-direction: column; }
+    
+    .about .section-inner { flex-direction: column; }
+    
+    .news-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+    
+    .disco-grid, .services-grid { grid-template-columns: 1fr; }
+    
+    .footer-content { flex-direction: column; gap: 30px; text-align: center; }
+}
+
+/* --- Ticket Modal --- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    background: var(--bg-color);
+    border: 1px solid var(--primary-color);
+    padding: 40px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(40, 212, 212, 0.2);
+}
+.modal-close {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 2rem;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+.modal-close:hover { color: var(--primary-color); }
+.form-group { margin-bottom: 20px; text-align: left; }
+.form-group label { display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;}
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 12px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; border-radius: 4px; font-family: var(--font-body); outline: none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--primary-color);
+}
+
+/* --- Calendar --- */
+.calendar-wrapper {
+    background: var(--surface-color);
+    border: var(--glass-border);
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 20px;
+}
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.calendar-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    letter-spacing: 0.1em;
+}
+.cal-btn {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: var(--transition);
+}
+.cal-btn:hover {
+    background: var(--primary-color);
+    color: #000;
+}
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+.calendar-weekdays {
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+.cal-day-name.sunday { color: #e74c3c; }
+.cal-day-name.saturday { color: #3498db; }
+
+.cal-day {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    min-width: 0; /* Flexbox・Gridで中のテキストが親を押し広げるのを防ぐ */
+}
+.cal-day:hover {
+    background: rgba(40, 212, 212, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+}
+.cal-day.empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+.cal-day.empty:hover {
+    transform: none;
+}
+.cal-date {
+    font-size: 1.1rem;
+    font-family: var(--font-heading);
+    margin-bottom: 5px;
+}
+.cal-day.sunday .cal-date { color: #e74c3c; }
+.cal-day.saturday .cal-date { color: #3498db; }
+
+.cal-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: auto;
+}
+.status-available { background-color: #2ecc71; box-shadow: 0 0 5px #2ecc71;}
+.status-few { background-color: #f39c12; box-shadow: 0 0 5px #f39c12;}
+.status-full { background-color: #e74c3c; box-shadow: 0 0 5px #e74c3c;}
+.status-closed { background-color: #7f8c8d; }
+
+.cal-event {
+    background: var(--primary-color);
+    color: #000;
+    font-size: 0.65rem;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-top: 5px;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+}
+
+.legend-item {
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+}
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .calendar-wrapper { padding: 10px; }
+    .calendar-grid { gap: 3px; }
+    .calendar-weekdays { font-size: 0.75rem; margin-bottom: 5px; }
+    .cal-day { padding: 2px; }
+    .cal-date { font-size: 0.8rem; margin-bottom: 2px; }
+    .cal-status { width: 8px; height: 8px; margin-top: 2px; }
+    .cal-event { font-size: 0.6rem; padding: 1px 2px; margin-top: 2px; line-height: 1.2; }
+}
