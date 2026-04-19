@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lala謹製御朱印 | lala Online Store</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- スタイルシート -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .subpage-header { padding: 20px 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 100; }
+        .back-btn { color: #fff; font-size: 0.9rem; letter-spacing: 0.1em; opacity: 0.8; text-decoration: none; transition: all 0.3s;}
+        .back-btn:hover { opacity: 1; color: var(--primary-color); }
+        
+        .product-detail-area { padding: 120px 0 100px; min-height: 100vh; display: flex; align-items: center;}
+        .product-container { display: flex; gap: 50px; flex-wrap: wrap; background: var(--surface-color); padding: 40px; border-radius: 12px; border: var(--glass-border); max-width: 900px; margin: 0 auto;}
+        
+        .product-image-container { flex: 1; min-width: 300px; }
+        .product-image-container img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); object-fit: cover;}
+        
+        .product-info-container { flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center;}
+        .product-category { color: var(--text-muted); font-size: 0.9rem; letter-spacing: 0.1em; margin-bottom: 5px;}
+        .product-title { font-family: var(--font-heading); font-size: 2.2rem; color: #fff; margin-bottom: 15px;}
+        .product-price { color: var(--primary-color); font-size: 1.5rem; font-weight: bold; margin-bottom: 25px; letter-spacing: 0.05em;}
+        
+        .product-description { color: var(--text-muted); font-size: 1rem; line-height: 1.8; margin-bottom: 30px;}
+        
+        .product-actions { margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;}
+        .purchase-btn { display: inline-block; width: 100%; text-align: center; padding: 15px 0; font-size: 1.1rem; border-radius: 4px; background: var(--primary-color); color: var(--bg-color); font-weight: bold; text-decoration: none; transition: all 0.3s;}
+        .purchase-btn:hover { background: #2bdbe1; box-shadow: 0 0 15px rgba(40, 212, 212, 0.4);}
+        .disabled-btn { background: rgba(255,255,255,0.1); color: var(--text-muted); cursor: not-allowed;}
+        .disabled-btn:hover { background: rgba(255,255,255,0.1); box-shadow: none;}
+        
+        .shipping-note { display: block; text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 15px;}
+    </style>
+</head>
+<body>
+    <header class="subpage-header">
+        <a href="store.html" class="back-btn">← Back to Store</a>
+    </header>
+
+    <section class="product-detail-area fade-in">
+        <div class="container">
+            <div class="product-container fade-in-up delay-1">
+                
+                <!-- 商品画像 -->
+                <div class="product-image-container">
+                    <img src="images/二千十五年九月一日.png" alt="lala謹製御朱印">
+                </div>
+
+                <!-- 商品情報 -->
+                <div class="product-info-container">
+                    <div>
+                        <div class="product-category">ORIGINAL GOODS</div>
+                        <h1 class="product-title">lala謹製 御朱印</h1>
+                        <div class="product-price">¥500 <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(税込)</span></div>
+                        
+                        <div class="product-description">
+                            <p style="margin-bottom: 15px;">
+                                lalaの直筆文字とオリジナル印が押された特別な御朱印。<br>
+                                想いを込めて一枚一枚丁寧に仕上げています。
+                            </p>
+                            <p>
+                                ライブ会場にお越しになれない方にも、lalaの音楽と海からのエネルギーをお届けしたいという願いから作られました。<br>
+                                日々の御守りや、大切な方への贈り物としても最適です。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="product-actions">
+                        <!-- 購入ボタン (現在は準備中) -->
+                        <a href="#" class="purchase-btn disabled-btn" onclick="alert('現在オンライン決済システムを準備中です。もうしばらくお待ちください！'); return false;">現在準備中 (Coming Soon)</a>
+                        <span class="shipping-note">※送料全国一律 ¥200 (クリックポスト)</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ふわっと表示するアニメーション
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
+            setTimeout(() => {
+                faders.forEach(fader => fader.classList.add('appear'));
+            }, 100);
+        });
+    </script>
+</body>
+</html>
