@@ -238,8 +238,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData.toString()
                 });
                 
-                // 成功を想定してリロード
+                // フェールセーフ：GASの同期が失敗してもローカルで反映されるように直接保存する
+                const localEvents = JSON.parse(localStorage.getItem('admin_events') || '[]');
+                localEvents.push({
+                    id: id.toString(),
+                    date: date,
+                    time: time,
+                    type: category,
+                    title: title
+                });
+                localStorage.setItem('admin_events', JSON.stringify(localEvents));
+
+                // 成功を想定してフォームをリセットし再描画
                 adminEventForm.reset();
+                loadAllFromLocal(); // ローカルの最新データを描画
+                
+                // その後、可能ならGASから最新状態を同期する
                 fetchAllDataFromGAS();
             } catch (error) {
                 console.error("Add Event Error:", error);
