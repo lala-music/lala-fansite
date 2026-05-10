@@ -106,7 +106,7 @@
             margin-bottom: 50px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .admin-header {
                 flex-direction: column;
                 gap: 15px;
@@ -205,10 +205,10 @@
             style="display: flex; gap: 20px; align-items: stretch; margin-bottom: 40px; flex-wrap: wrap;">
             <!-- 左側：イベント管理 -->
             <div
-                style="flex: 1; min-width: 400px; background: rgba(0,0,0,0.3); padding: 30px; border-radius: 8px; border: var(--glass-border);">
+                style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.3); padding: 30px; border-radius: 8px; border: var(--glass-border);">
                 <h2 style="margin-bottom: 20px; color: var(--primary-color);">Calendar Event Management</h2>
                 <form id="adminEventForm" style="margin-bottom: 20px;">
-                    <div style="display:flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="display:flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                         <input type="date" id="eventDate" required
                             style="padding: 10px; width: 140px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
                         <select id="eventTime" required style="padding: 10px; width: 110px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
@@ -241,7 +241,7 @@
 
             <!-- 右側：簡易メニュー -->
             <div
-                style="flex: 1; min-width: 300px; display:flex; flex-direction:column; justify-content:center; align-items:center; background: rgba(0,0,0,0.3); padding: 30px; border-radius: 8px; border: var(--glass-border);">
+                style="flex: 1; min-width: 250px; display:flex; flex-direction:column; justify-content:center; align-items:center; background: rgba(0,0,0,0.3); padding: 30px; border-radius: 8px; border: var(--glass-border);">
                 <h2 style="margin-bottom: 5px;">Admin Control Panel</h2>
                 <p style="color: var(--text-muted); text-align: center; font-size: 0.9rem; margin-bottom: 20px;">
                     スプレッドシートと同期しています。最新の情報を表示するには更新をクリックしてください。
