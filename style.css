@@ -45,6 +45,11 @@ ul {
     list-style: none;
 }
 
+p {
+    word-break: auto-phrase; /* モダンブラウザでの日本語の自然な改行 */
+    overflow-wrap: break-word; /* 単語の途中での不自然な改行やはみ出しを防ぐ */
+}
+
 .container {
     max-width: 1100px;
     margin: 0 auto;
