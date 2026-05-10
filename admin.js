@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbx-w_WPQ9jgmHhdnjOYOdiaQns08-zBra2sO1v0ZbSAMR2NlXR1HVVKmOhzNk-F8kg9/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuB_mPG_3Nya4vO0kH2rOh3fle2QCM-N84zCOF-EWHlRA3EZba7epJWxrVrCflw2U/exec';
 
     // --- 要素の取得 ---
     const ticketAccordionContainer = document.getElementById('ticketAccordionContainer');
@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const adminEventForm = document.getElementById('adminEventForm');
     const eventTableBody = document.getElementById('eventTableBody');
+
+    // --- 認証機能の初期設定 ---
+    let adminToken = sessionStorage.getItem('adminToken') || '';
+    const authOverlay = document.getElementById('authOverlay');
+    const adminPasswordInput = document.getElementById('adminPasswordInput');
+    const authLoginBtn = document.getElementById('authLoginBtn');
+    const authErrorMsg = document.getElementById('authErrorMsg');
 
     // 時間の選択肢(30分ごと)を自動生成
     const eventTimeSelect = document.getElementById('eventTime');
@@ -29,9 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // GASとの通信・データ同期
     // =====================================
     async function fetchAllDataFromGAS() {
+        if (!adminToken) return;
         if (refreshBtn) refreshBtn.textContent = '同期中...';
         try {
-            const response = await fetch(GAS_URL);
+            const response = await fetch(GAS_URL + "?password=" + encodeURIComponent(adminToken));
             const data = await response.json();
             
             if (data.events) {
@@ -216,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // GASへ保存
             const formData = new URLSearchParams();
             formData.append('type', 'event');
+            formData.append('password', adminToken);
             formData.append('id', id);
             formData.append('date', date);
             formData.append('time', time);
@@ -246,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirm("このイベントを削除しますか？")) {
             const formData = new URLSearchParams();
             formData.append('type', 'delete_event');
+            formData.append('password', adminToken);
             formData.append('id', id);
 
             try {
@@ -271,9 +281,60 @@ document.addEventListener('DOMContentLoaded', () => {
         loadEvents();
     }
 
-    // 初回読み込み: ローカルを即表示してからGASと同期
-    loadAllFromLocal();
-    fetchAllDataFromGAS();
+    // 初回実行用の認証チェック
+    async function checkAuthAndLoad() {
+        if (!adminToken) {
+            if (authOverlay) authOverlay.style.display = 'flex';
+            return;
+        }
+        
+        if (authOverlay) authOverlay.style.display = 'none';
+        loadAllFromLocal();
+        fetchAllDataFromGAS();
+    }
+
+    if (authLoginBtn) {
+        authLoginBtn.addEventListener('click', async () => {
+            const pass = adminPasswordInput.value;
+            if (!pass) return;
+            
+            authLoginBtn.textContent = '認証中...';
+            authErrorMsg.style.display = 'none';
+            
+            try {
+                const response = await fetch(GAS_URL + "?password=" + encodeURIComponent(pass));
+                const data = await response.json();
+                
+                if (data.result === 'error' && data.message === 'Unauthorized') {
+                    authErrorMsg.style.display = 'block';
+                    authLoginBtn.textContent = 'ログイン';
+                } else {
+                    // 認証成功
+                    adminToken = pass;
+                    sessionStorage.setItem('adminToken', pass);
+                    authOverlay.style.display = 'none';
+                    
+                    if (data.events) localStorage.setItem('admin_events', JSON.stringify(data.events));
+                    if (data.reservations) {
+                        const tickets = data.reservations.filter(r => r.type === 'ticket');
+                        const barRes = data.reservations.filter(r => r.type === 'bar');
+                        localStorage.setItem('lala_reservations', JSON.stringify(tickets));
+                        localStorage.setItem('lala_bar_reservations', JSON.stringify(barRes));
+                    }
+                    
+                    loadAllFromLocal();
+                }
+            } catch (e) {
+                console.error("Auth Error:", e);
+                authErrorMsg.textContent = "通信エラーが発生しました";
+                authErrorMsg.style.display = 'block';
+                authLoginBtn.textContent = 'ログイン';
+            }
+        });
+    }
+
+    // 初期化実行
+    checkAuthAndLoad();
 
     // 更新ボタンの動作
     if (refreshBtn) {

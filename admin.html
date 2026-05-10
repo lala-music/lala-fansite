@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>lala - Admin Dashboard</title>
+    <!-- OGP & Favicon Tags -->
+    <meta property="og:title" content="lala - Admin Dashboard">
+    <meta property="og:description" content="lala Official Fan Site Admin Dashboard">
+    <meta property="og:image" content="images/LINE_ALBUM_アー写厳選_lala編集_260409_9.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -174,6 +181,19 @@
 </head>
 
 <body>
+    <!-- 認証用オーバーレイ -->
+    <div id="authOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div style="background: rgba(0,0,0,0.5); padding: 40px; border-radius: 12px; border: var(--glass-border); text-align: center; max-width: 400px; width: 90%;">
+            <h2 style="color: var(--primary-color); margin-bottom: 20px; font-family: var(--font-heading);">Admin Login</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">管理パスワードを入力してください</p>
+            <input type="password" id="adminPasswordInput" placeholder="Password" style="width: 100%; padding: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; outline: none;">
+            <button id="authLoginBtn" class="btn primary-btn" style="width: 100%; padding: 15px;">ログイン</button>
+            <p id="authErrorMsg" style="color: #d9534f; margin-top: 15px; font-size: 0.85rem; display: none;">パスワードが間違っています</p>
+            <div style="margin-top: 20px;">
+                <a href="index.html" style="color: var(--text-muted); font-size: 0.8rem; text-decoration: underline;">サイトへ戻る</a>
+            </div>
+        </div>
+    </div>
 
     <header class="admin-header">
         <div class="admin-title">lala - Admin Dashboard</div>

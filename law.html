@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特定商取引法に基づく表記 | lala Official Fan Site</title>
+    <meta name="description" content="lala Official Fan Siteにおける特定商取引法に基づく表記です。">
+    <!-- OGP Tags -->
+    <meta property="og:title" content="特定商取引法に基づく表記 | lala Official Fan Site">
+    <meta property="og:description" content="lala Official Fan Siteにおける特定商取引法に基づく表記です。">
+    <meta property="og:image" content="images/LINE_ALBUM_アー写厳選_lala編集_260409_9.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="images/favicon.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .subpage-header { padding: 20px 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 100; }
+        .back-btn { color: #fff; font-size: 0.9rem; letter-spacing: 0.1em; opacity: 0.8; }
+        .back-btn:hover { opacity: 1; color: var(--primary-color); }
+        .subpage-hero { height: 30vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, rgba(8,16,23,0.3), var(--bg-color));}
+        .content-area { padding: 60px 0 100px; }
+        .law-table { width: 100%; max-width: 800px; margin: 0 auto; border-collapse: collapse; background: var(--surface-color); border: var(--glass-border); border-radius: 8px; overflow: hidden;}
+        .law-table th, .law-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .law-table th { width: 30%; text-align: left; background: rgba(0,0,0,0.4); color: var(--primary-color); font-weight: normal;}
+        .law-table td { color: var(--text-muted); line-height: 1.6;}
+    </style>
+</head>
+<body>
+    <header class="subpage-header">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+    </header>
+
+    <div class="subpage-hero fade-in">
+        <h1 class="hero-title" style="font-size: 2.5rem;">特定商取引法に基づく表記</h1>
+    </div>
+
+    <section class="content-area fade-in-up delay-1">
+        <div class="container">
+            <table class="law-table">
+                <tr>
+                    <th>販売事業者名</th>
+                    <td>lala Official</td>
+                </tr>
+                <tr>
+                    <th>運営責任者名</th>
+                    <td>[運営責任者名をご入力ください]</td>
+                </tr>
+                <tr>
+                    <th>所在地</th>
+                    <td>〒000-0000<br>[所在地をご入力ください]</td>
+                </tr>
+                <tr>
+                    <th>お問い合わせ窓口</th>
+                    <td>
+                        Email: [メールアドレスをご入力ください]<br>
+                        TEL: [電話番号をご入力ください]<br>
+                        ※お問い合わせはメールにて承っております。
+                    </td>
+                </tr>
+                <tr>
+                    <th>販売価格</th>
+                    <td>各商品・サービスの購入ページにて表示する価格</td>
+                </tr>
+                <tr>
+                    <th>商品代金以外の必要料金</th>
+                    <td>消費税、送料（全国一律 〇〇円 等）、振込手数料（銀行振込の場合）</td>
+                </tr>
+                <tr>
+                    <th>お支払い方法</th>
+                    <td>クレジットカード決済（Square）、銀行振込</td>
+                </tr>
+                <tr>
+                    <th>代金の支払時期</th>
+                    <td>
+                        クレジットカード：購入時<br>
+                        銀行振込：ご注文から7日以内
+                    </td>
+                </tr>
+                <tr>
+                    <th>商品の引渡時期・サービスの提供時期</th>
+                    <td>
+                        物品：決済完了後、通常3〜7営業日以内に発送いたします。<br>
+                        デジタルコンテンツ・サービス：決済完了後、すぐにご利用いただけます。
+                    </td>
+                </tr>
+                <tr>
+                    <th>返品・不良品について</th>
+                    <td>
+                        お客様都合による返品・交換・キャンセルはお受けしておりません。<br>
+                        商品に欠陥がある場合（不良品・破損等）は、商品到着後7日以内にお問い合わせ窓口までご連絡ください。速やかに交換等の対応をさせていただきます。
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- フッターは後ほど共通化で差し替えます -->
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 lala Official. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
+            setTimeout(() => { faders.forEach(fader => fader.classList.add('appear')); }, 100);
+        });
+    </script>
+</body>
+</html>

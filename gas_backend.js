@@ -9,10 +9,20 @@
 // =========================================================================
 
 /**
+ * 管理用パスワード（ご自身で自由に変更してください）
+ */
+var ADMIN_PASSWORD = "lala_secret_pass";
+
+/**
  * データの取得 (GETリクエスト)
  * スケジュール情報などをブラウザに返します
  */
 function doGet(e) {
+  // 認証チェック
+  if (e.parameter.password !== ADMIN_PASSWORD) {
+    return createJsonResponse({ "result": "error", "message": "Unauthorized" });
+  }
+
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title"]);
@@ -44,6 +54,9 @@ function doPost(e) {
 
     // 1. スケジュール(イベント)の管理
     if (type === 'event') {
+      if (e.parameter.password !== ADMIN_PASSWORD) {
+        return createJsonResponse({ "result": "error", "message": "Unauthorized" });
+      }
       var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title"]);
       eventSheet.appendRow([
         e.parameter.id || Date.now(),
@@ -56,6 +69,9 @@ function doPost(e) {
     }
 
     if (type === 'delete_event') {
+      if (e.parameter.password !== ADMIN_PASSWORD) {
+        return createJsonResponse({ "result": "error", "message": "Unauthorized" });
+      }
       var eventSheet = ss.getSheetByName("Events");
       if (eventSheet) {
         var id = e.parameter.id;

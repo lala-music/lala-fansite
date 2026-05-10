@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lala Vocal School</title>
+    <title>lala Vocal Audition</title>
+    <!-- OGP & Favicon Tags -->
+    <meta property="og:title" content="lala Vocal Audition | lala Official Fan Site">
+    <meta property="og:description" content="次世代の才能を発掘する、lalaプロデュースのボーカルオーディション。">
+    <meta property="og:image" content="images/LINE_ALBUM_アー写厳選_lala編集_260409_9.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
@@ -34,29 +41,33 @@
     </header>
 
     <div class="subpage-hero fade-in">
-        <h1 class="hero-title" style="font-size: 3rem;">Vocal School</h1>
+        <h1 class="hero-title" style="font-size: 3rem;">Vocal Audition</h1>
     </div>
 
     <section class="content-area fade-in-up delay-1">
         <div class="container school-container">
-            <h2 class="section-title text-center" style="font-size: 2rem;">Online Lessons</h2>
-            <p class="text-center" style="margin-bottom: 40px;">lala本人が直接指導するオンラインボーカルレッスン。<br>基礎的な発声から、表現力を高めるテクニックまで丁寧にサポートします。</p>
+            <h2 class="section-title text-center" style="font-size: 2rem;">Audition Registration</h2>
+            <p class="text-center" style="margin-bottom: 40px; line-height: 1.8;">
+                次世代の才能を発掘する、lalaプロデュースのボーカルオーディション。<br>
+                あなたの持つ原石のような歌声を、私たちが全力で磨き上げ、サポートします。<br>
+                歌うことが好き、自分の声を世界に届けたいという情熱を持った方をお待ちしています。
+            </p>
 
             <div class="course-info">
                 <div class="course-card">
-                    <h3>【マンツーマン】スタンダード</h3>
-                    <p class="mt-4" style="color: var(--primary-color); font-size: 1.2rem;">¥6,000 / 45分</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">課題曲を用いた本格的なボイストレーニング指導。</p>
+                    <h3>【一次審査】音源・書類審査</h3>
+                    <p class="mt-4" style="color: var(--primary-color); font-size: 1.2rem;">無料</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">ご自身の歌声がわかる音源（動画または音声データ）と、プロフィールによる審査を行います。</p>
                 </div>
                 <div class="course-card">
-                    <h3>【グループ】ワークショップ</h3>
-                    <p class="mt-4" style="color: var(--primary-color); font-size: 1.2rem;">¥3,000 / 60分</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">月1回開催。複数名で発声の基礎や音楽理論を学びます。</p>
+                    <h3>【二次審査】オンライン面談・実技</h3>
+                    <p class="mt-4" style="color: var(--primary-color); font-size: 1.2rem;">無料</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">一次審査通過者を対象に、オンラインでの面談と実技チェックを行います。</p>
                 </div>
             </div>
 
             <div class="form-box">
-                <h3 style="margin-bottom: 30px; text-align: center;">無料体験・お問い合わせフォーム</h3>
+                <h3 style="margin-bottom: 30px; text-align: center;">オーディション エントリーフォーム</h3>
                 <form action="#" method="POST">
                     <div class="form-group">
                         <label>お名前</label>
@@ -67,17 +78,16 @@
                         <input type="email" placeholder="例：info@example.com" required>
                     </div>
                     <div class="form-group">
-                        <label>希望コース</label>
-                        <select>
-                            <option value="">選択してください</option>
-                            <option value="trial">無料体験レッスンを希望</option>
-                            <option value="standard">マンツーマンを希望</option>
-                            <option value="group">グループワークショップ参加希望</option>
-                        </select>
+                        <label>年齢</label>
+                        <input type="number" placeholder="例：20" required>
                     </div>
                     <div class="form-group">
-                        <label>メッセージ・ご質問等</label>
-                        <textarea rows="5" placeholder="歌に関するお悩みなどがあればご記入ください"></textarea>
+                        <label>音源URL (YouTube, SoundCloudなど)</label>
+                        <input type="url" placeholder="例：https://youtube.com/..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>自己PR・志望動機</label>
+                        <textarea rows="5" placeholder="あなたの音楽に対する想いや、オーディションへの意気込みをご記入ください" required></textarea>
                     </div>
                     <div class="text-center mt-4">
                         <button type="submit" class="btn primary-btn" style="width: 100%;">送信する</button>
@@ -86,6 +96,32 @@
             </div>
         </div>
     </section>
+
+    <!-- ==============================================
+         FOOTER
+    =============================================== -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <h3>lala</h3>
+                <p>Official Site</p>
+            </div>
+            
+            <div class="footer-links" style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="law.html" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'">特定商取引法に基づく表記</a>
+                <a href="faq.html" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'">FAQ / お問い合わせ</a>
+            </div>
+            
+            <div class="footer-sns">
+                <a href="https://www.youtube.com/" target="_blank" title="YouTube">YT</a>
+                <a href="https://www.instagram.com/" target="_blank" title="Instagram">IG</a>
+                <a href="https://x.com/" target="_blank" title="Twitter">X</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 lala Official. All Rights Reserved.</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
