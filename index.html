@@ -338,6 +338,25 @@
         </div>
     </div>
 
+    <!-- ==============================================
+         TIMETABLE MODAL (タイムテーブルモーダル)
+    =============================================== -->
+    <div id="timetableModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="modal-close" id="closeTimetableModalBtn">&times;</span>
+            <h2 id="modalTimetableTitle" style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 5px; text-align: center;">YYYY.MM.DD</h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">本日の営業状況（2時間制）</p>
+            
+            <div id="timetableContent" style="background: rgba(0,0,0,0.3); border-radius: 8px; border: var(--glass-border); padding: 15px; max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+                <!-- タイムテーブルのリストがここに入ります -->
+            </div>
+            
+            <div id="timetableActionContainer" style="text-align: center;">
+                <a href="#" id="timetableReserveBtn" class="btn primary-btn" style="width: 100%;">この日で予約する</a>
+            </div>
+        </div>
+    </div>
+
     <!-- スクリプトの読み込み -->
     <script src="script.js"></script>
 </body>

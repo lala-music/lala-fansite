@@ -724,6 +724,48 @@ footer {
     margin-right: 5px;
 }
 
+/* --- Timetable Modal --- */
+.tt-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.tt-item:last-child {
+    border-bottom: none;
+}
+.tt-time {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+.tt-status {
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+.tt-ok {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+}
+.tt-few {
+    background: rgba(243, 156, 18, 0.15);
+    color: #f39c12;
+    border: 1px solid #f39c12;
+}
+.tt-full {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+.tt-event {
+    text-align: center;
+    padding: 30px 10px;
+}
+
 @media (max-width: 768px) {
     .calendar-wrapper { padding: 10px; }
     .calendar-grid { gap: 3px; }
