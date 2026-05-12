@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 確認モーダルを表示
             showConfirmModal(details, (onComplete) => {
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuB_mPG_3Nya4vO0kH2rOh3fle2QCM-N84zCOF-EWHlRA3EZba7epJWxrVrCflw2U/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbyrM_Fz6WFo5kT0UYbYj8Z7WS8bHhCcTrL06aUDr3u0tR-GbxL98qt0Z7MWY5Al7zt-/exec';
                 
                 const formData = new URLSearchParams();
                 formData.append('type', 'ticket'); // GAS側にチケット予約だと伝える
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const dynamicNewsList = document.getElementById('dynamicNewsList');
     const dynamicLiveList = document.getElementById('dynamicLiveList');
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuB_mPG_3Nya4vO0kH2rOh3fle2QCM-N84zCOF-EWHlRA3EZba7epJWxrVrCflw2U/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyrM_Fz6WFo5kT0UYbYj8Z7WS8bHhCcTrL06aUDr3u0tR-GbxL98qt0Z7MWY5Al7zt-/exec';
 
     async function updateDynamicUI() {
         if (!dynamicNewsList || !dynamicLiveList) return;
@@ -339,8 +339,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // 日付文字列を YYYY-MM-DD 形式で作成
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
             
-            // クリックで予約ページへ (日付を付与)
-            dayDiv.href = `livebar.html?date=${dateStr}`;
+            // クリックでタイムテーブルモーダルを開く
+            dayDiv.href = '#';
+            if (thisDate >= today) {
+                dayDiv.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openTimetableModal(dateStr, adminEvents);
+                });
+            } else {
+                dayDiv.addEventListener('click', (e) => e.preventDefault());
+            }
 
             // 日付表示
             const dateSpan = document.createElement('span');
@@ -405,8 +413,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return { className: 'status-available', text: '〇' }; // 予約なし
         }
 
-        // 18:00〜23:30 までの各30分枠のアクティブ人数をカウント
-        const timeSlots = ["18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"];
+        // 10:00〜23:30 までの各30分枠のアクティブ人数をカウント
+        const timeSlots = ["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"];
         let maxConcurrent = 0;
         let fullSlots = 0;
 
@@ -415,8 +423,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // この時間枠にかぶっている予約を加算
             dayRes.forEach(r => {
                 const startIdx = timeSlots.indexOf(r.time);
-                // 2時間制なので、4スロット（1枠30分×4 = 120分 = 2時間）分の場所をとる
-                const endIdx = startIdx + 4; 
+                // 予約タイプによって長さを変える (BAR=4枠(2h), STUDIO=duration*2枠)
+                const slotsCount = r.resType === 'studio' ? parseInt(r.duration || 1, 10) * 2 : 4;
+                const endIdx = startIdx + slotsCount; 
                 const slotIdx = timeSlots.indexOf(slot);
                 if (slotIdx >= startIdx && slotIdx < endIdx) {
                     currentCount += parseInt(r.count, 10);
@@ -427,8 +436,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // 判定
-        if (fullSlots >= 8) { 
-            // 8枠以上(4時間分以上)満席なら「満席」扱いとする
+        if (fullSlots >= 10) { 
+            // 10枠以上(5時間分以上)満席なら「満席」扱いとする
             return { className: 'status-full', text: '×' };
         } else if (maxConcurrent >= 15) {
             // いずれかの時間に15席以上の予約があれば「残りわずか」
@@ -436,6 +445,103 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             return { className: 'status-available', text: '〇' };
         }
+    }
+
+    // ==========================================
+    // 5.5 タイムテーブルモーダル処理
+    // ==========================================
+    const timetableModal = document.getElementById('timetableModal');
+    const closeTimetableModalBtn = document.getElementById('closeTimetableModalBtn');
+    const modalTimetableTitle = document.getElementById('modalTimetableTitle');
+    const timetableContent = document.getElementById('timetableContent');
+    const timetableReserveBtn = document.getElementById('timetableReserveBtn');
+
+    if (timetableModal) {
+        closeTimetableModalBtn.addEventListener('click', () => timetableModal.style.display = 'none');
+        window.addEventListener('click', (e) => {
+            if (e.target === timetableModal) timetableModal.style.display = 'none';
+        });
+        
+        timetableReserveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            timetableModal.style.display = 'none';
+            // Scroll to reservation if we are on livebar.html
+            if (window.location.pathname.includes('livebar.html')) {
+                const resSection = document.getElementById('reservation');
+                if (resSection) {
+                    document.getElementById('resDate').value = timetableModal.getAttribute('data-date');
+                    resSection.scrollIntoView({behavior: 'smooth'});
+                }
+            } else {
+                window.location.href = `livebar.html?date=${timetableModal.getAttribute('data-date')}#reservation`;
+            }
+        });
+    }
+
+    function openTimetableModal(dateStr, adminEvents) {
+        if (!timetableModal) return;
+        
+        modalTimetableTitle.textContent = dateStr.replace(/-/g, '.');
+        timetableModal.setAttribute('data-date', dateStr);
+        
+        // イベントチェック
+        const isEventDay = adminEvents.some(e => String(e.date).split('T')[0] === dateStr && e.type !== 'NEWS');
+        if (isEventDay) {
+            timetableContent.innerHTML = `<div style="text-align:center; padding:20px; color:#e74c3c; font-weight:bold;">この日はイベント開催日のため、通常予約はできません。</div>`;
+            timetableModal.style.display = 'flex';
+            timetableReserveBtn.style.display = 'none';
+            return;
+        }
+        
+        timetableReserveBtn.style.display = 'inline-block';
+        
+        // 予約データを取得
+        const barRes = JSON.parse(localStorage.getItem('lala_bar_reservations') || '[]');
+        const dayRes = barRes.filter(r => r.date === dateStr);
+        
+        // 全時間枠 (10:00〜23:30)
+        const timeSlots = ["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"];
+        
+        let html = '';
+        timeSlots.forEach(slot => {
+            let currentCount = 0;
+            dayRes.forEach(r => {
+                const rStartIdx = timeSlots.indexOf(r.time);
+                const slotsCount = r.resType === 'studio' ? parseInt(r.duration || 1, 10) * 2 : 4;
+                const rEndIdx = rStartIdx + slotsCount;
+                const slotIdx = timeSlots.indexOf(slot);
+                if (slotIdx >= rStartIdx && slotIdx < rEndIdx) {
+                    currentCount += parseInt(r.count, 10);
+                }
+            });
+            
+            let status = '〇 空き';
+            let color = '#2ecc71';
+            if (currentCount >= 20) {
+                status = '× 満席';
+                color = '#e74c3c';
+            } else if (currentCount >= 15) {
+                status = '△ 残りわずか';
+                color = '#f39c12';
+            }
+            
+            // 区切り線（スタジオとBARの間）
+            if (slot === "18:00") {
+                html += `<div style="border-top:1px dashed rgba(255,255,255,0.2); margin:10px 0; padding-top:10px; color:var(--primary-color); font-size:0.8rem;">BAR TIME</div>`;
+            } else if (slot === "10:00") {
+                html += `<div style="color:var(--primary-color); font-size:0.8rem; margin-bottom:5px;">STUDIO TIME</div>`;
+            }
+
+            html += `
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding:8px 0;">
+                    <span>${slot}</span>
+                    <span style="color:${color}; font-weight:bold;">${status}</span>
+                </div>
+            `;
+        });
+        
+        timetableContent.innerHTML = html;
+        timetableModal.style.display = 'flex';
     }
 
     // ==========================================
@@ -449,9 +555,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dateParam) {
             document.getElementById('resDate').value = dateParam;
         }
+        // 予約タイプの切り替え処理
+        const resTypeSelect = document.getElementById('resType');
+        const resDurationGroup = document.getElementById('resDurationGroup');
+        const resTimeSelect = document.getElementById('resTime');
+        
+        resTypeSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            // 一旦すべてのオプションを非表示
+            Array.from(resTimeSelect.options).forEach(opt => opt.style.display = 'none');
+            resTimeSelect.options[0].style.display = ''; // 「選択してください」は表示
+            resTimeSelect.value = "";
+
+            if (val === 'studio') {
+                resDurationGroup.style.display = 'block';
+                // スタジオは10:00〜17:00
+                Array.from(resTimeSelect.options).forEach(opt => {
+                    if (opt.value >= "10:00" && opt.value <= "17:00") {
+                        opt.style.display = '';
+                    }
+                });
+            } else {
+                resDurationGroup.style.display = 'none';
+                // BARは18:00〜22:00
+                Array.from(resTimeSelect.options).forEach(opt => {
+                    if (opt.value >= "18:00" && opt.value <= "22:00") {
+                        opt.style.display = '';
+                    }
+                });
+            }
+        });
+        // 初期状態をトリガー
+        resTypeSelect.dispatchEvent(new Event('change'));
 
         barReservationForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            const resType = document.getElementById('resType').value;
+            const duration = resType === 'studio' ? document.getElementById('resDuration').value : 2;
             const date = document.getElementById('resDate').value;
             const time = document.getElementById('resTime').value;
             const count = parseInt(document.getElementById('resCount').value, 10);
@@ -476,9 +616,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const barRes = JSON.parse(localStorage.getItem('lala_bar_reservations') || '[]');
             const dayRes = barRes.filter(r => r.date === date);
             
-            const timeSlots = ["18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"];
+            const timeSlots = ["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"];
             const startIdx = timeSlots.indexOf(time);
-            const endIdx = startIdx + 4; // 2時間制なので4枠
+            const endIdx = startIdx + (resType === 'studio' ? duration * 2 : 4);
 
             let isOverBooked = false;
             
@@ -512,9 +652,13 @@ document.addEventListener('DOMContentLoaded', () => {
             errorDiv.style.display = 'none';
 
             // 確認画面へ渡すデータの整形
+            const typeLabel = resType === 'studio' ? '貸しスタジオ予約' : 'BAR テーブル予約';
+            const timeLabel = resType === 'studio' ? `${time} 〜 (${duration}時間)` : `${time} 〜 (2時間制)`;
+            
             const details = [
+                { label: 'ご予約種類', value: typeLabel },
                 { label: 'ご予約日', value: date },
-                { label: 'お時間', value: time + ' 〜 (2時間制)' },
+                { label: 'お時間', value: timeLabel },
                 { label: 'お名前', value: name },
                 { label: 'Email', value: email },
                 { label: '予約人数', value: count + ' 名' },
@@ -524,6 +668,8 @@ document.addEventListener('DOMContentLoaded', () => {
             showConfirmModal(details, (onComplete) => {
                 const reservationData = {
                     id: Date.now(),
+                    resType: resType,
+                    duration: duration,
                     date: date,
                     time: time,
                     count: count,
@@ -533,9 +679,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdAt: new Date().toLocaleString('ja-JP')
                 };
 
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzuB_mPG_3Nya4vO0kH2rOh3fle2QCM-N84zCOF-EWHlRA3EZba7epJWxrVrCflw2U/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbyrM_Fz6WFo5kT0UYbYj8Z7WS8bHhCcTrL06aUDr3u0tR-GbxL98qt0Z7MWY5Al7zt-/exec';
                 const formData = new URLSearchParams();
-                formData.append('type', 'bar'); // GAS側にBAR予約だと伝える
+                formData.append('type', 'bar'); // GAS側にまとめて予約だと伝えるが、後でgas_backendで判別する
+                formData.append('resType', resType); // 'bar' or 'studio'
+                formData.append('duration', duration);
                 formData.append('date', date);
                 formData.append('time', time);
                 formData.append('name', name);
@@ -543,12 +691,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.append('count', count);
                 formData.append('message', message);
 
-                if (GAS_URL === 'ここに発行されたURLを貼り付けます') {
+                const showSuccess = () => {
                     barRes.push(reservationData);
                     localStorage.setItem('lala_bar_reservations', JSON.stringify(barRes));
                     barReservationForm.style.display = 'none';
+                    
+                    if (resType === 'studio') {
+                        const price = count * duration * 550;
+                        document.getElementById('resSuccessMessage').innerHTML = `
+                            <h3 style="color: var(--primary-color); margin-bottom: 15px;">ご予約完了しました！</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                                ご予約ありがとうございます。<br>
+                                <strong>事前決済でお得！(50円引き)</strong><br>
+                                下記のボタンからお支払い手続きをお願いいたします。<br>
+                                <span style="display:inline-block; margin-top:10px; color:#fff;">お支払い金額: ¥${price}</span>
+                            </p>
+                            <a href="https://square.link/YOUR_LINK_HERE" target="_blank" class="btn outline-btn" style="margin-top: 20px; width: 100%; border-color: #fff; color: #fff;">Squareで決済する</a>
+                        `;
+                    }
+                    
                     document.getElementById('resSuccessMessage').style.display = 'block';
                     onComplete();
+                };
+
+                if (GAS_URL === 'ここに発行されたURLを貼り付けます') {
+                    showSuccess();
                 } else {
                     fetch(GAS_URL, {
                         method: 'POST',
@@ -556,19 +723,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: formData.toString()
                     }).then(() => {
-                        barRes.push(reservationData);
-                        localStorage.setItem('lala_bar_reservations', JSON.stringify(barRes));
-                        barReservationForm.style.display = 'none';
-                        document.getElementById('resSuccessMessage').style.display = 'block';
-                        onComplete();
+                        showSuccess();
                     }).catch(error => {
                         console.error('GAS URL CORS Redirect Error (Safe to ignore):', error.message);
-                        // GASの仕様上、リダイレクトによりCORSエラーが投げられてもPOST自体は成功しているため成功処理に進む
-                        barRes.push(reservationData);
-                        localStorage.setItem('lala_bar_reservations', JSON.stringify(barRes));
-                        barReservationForm.style.display = 'none';
-                        document.getElementById('resSuccessMessage').style.display = 'block';
-                        onComplete();
+                        showSuccess();
                     });
                 }
             });

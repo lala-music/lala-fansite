@@ -66,6 +66,16 @@
                         Free Drink (1h): ¥2,000〜<br>
                         Table Charge: ¥700 / Drink: ¥800〜
                     </div>
+                    <div class="detail-item" style="margin-top: 15px;">
+                        <strong>ライブハウス貸出 (Livehouse System)</strong><br>
+                        12:00〜22:00： ¥60,000 (税込)<br>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">※その他の時間や短い時間の貸し出しなど、お気軽にご相談ください。</span>
+                    </div>
+                    <div class="detail-item" style="margin-top: 15px;">
+                        <strong>貸しスタジオ (Rental Studio)</strong><br>
+                        1時間 1名： ¥600 <br>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">※事前決済の場合は50円引きの「¥550」となります。</span>
+                    </div>
                 </div>
             </div>
 
@@ -98,14 +108,45 @@
                     style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 20px; text-align: center;">
                     Table & Live Reservation</h2>
 
+                <!-- カレンダー表示 -->
+                <div style="margin-bottom: 40px;">
+                    <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">
+                        ※日付をタップするとタイムテーブル（空き状況）を確認できます。<br>
+                        <span class="legend-item"><span class="legend-color" style="background:#2ecc71; width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px;"></span>空きあり</span>
+                        <span class="legend-item"><span class="legend-color" style="background:#f39c12; width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px; margin-left:10px;"></span>残りわずか</span>
+                        <span class="legend-item"><span class="legend-color" style="background:#e74c3c; width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px; margin-left:10px;"></span>満席</span>
+                    </p>
+                    <div class="calendar-wrapper" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
+                        <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <button id="prevMonth" class="btn outline-btn" style="padding: 5px 15px;">&lt;</button>
+                            <h3 id="calendarMonthYear" style="margin: 0; color: var(--primary-color);"></h3>
+                            <button id="nextMonth" class="btn outline-btn" style="padding: 5px 15px;">&gt;</button>
+                        </div>
+                        <div class="calendar-grid calendar-weekdays" style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; margin-bottom: 10px; font-size: 0.9rem;">
+                            <div style="color: #e74c3c;">Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div style="color: #3498db;">Sat</div>
+                        </div>
+                        <div class="calendar-grid" id="calendarDays" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;">
+                            <!-- Javascriptで生成します -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 予約フォーム -->
                 <div>
+                    <h3 style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 20px; color: var(--text-main);">予約フォーム</h3>
                     <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem;">
-                        ※ご予約は18:00〜22:00の間、30分ごとに承ります（2時間制）。<br>
-                        ライブ開催日もこちらからお席と一緒にご予約いただけます。
+                        ※BARのご予約は18:00〜22:00の間、2時間制となります。<br>
+                        ※貸しスタジオは10:00〜17:00の間でご予約いただけます。
                     </p>
 
                     <form id="barReservationForm">
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">ご予約の種類 *</label>
+                            <select id="resType" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
+                                <option value="bar">BAR テーブル予約</option>
+                                <option value="studio">貸しスタジオ予約</option>
+                            </select>
+                        </div>
                         <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px;">
                             <div class="form-group" style="flex: 1;">
                                 <label
@@ -121,6 +162,21 @@
                                 <select id="resTime" required
                                     style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
                                     <option value="">選択してください</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="10:30">10:30</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="11:30">11:30</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="12:30">12:30</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="13:30">13:30</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="14:30">14:30</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="15:30">15:30</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="16:30">16:30</option>
+                                    <option value="17:00">17:00</option>
                                     <option value="18:00">18:00</option>
                                     <option value="18:30">18:30</option>
                                     <option value="19:00">19:00</option>
@@ -132,6 +188,16 @@
                                     <option value="22:00">22:00</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="form-group" id="resDurationGroup" style="display: none; margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; color: var(--text-main); font-size: 0.9rem;">ご利用時間（スタジオのみ） *</label>
+                            <select id="resDuration" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px;">
+                                <option value="1">1時間</option>
+                                <option value="2">2時間</option>
+                                <option value="3">3時間</option>
+                                <option value="4">4時間</option>
+                            </select>
                         </div>
 
                         <div class="form-group" style="margin-bottom: 20px;">
@@ -253,6 +319,23 @@
         }
     </style>
 
+
+    <!-- TIMETABLE MODAL (タイムテーブルモーダル) -->
+    <div id="timetableModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="modal-close" id="closeTimetableModalBtn">&times;</span>
+            <h2 id="modalTimetableTitle" style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 5px; text-align: center;">YYYY.MM.DD</h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">本日の営業・空き状況</p>
+            
+            <div id="timetableContent" style="background: rgba(0,0,0,0.3); border-radius: 8px; border: var(--glass-border); padding: 15px; max-height: 400px; overflow-y: auto; margin-bottom: 20px;">
+                <!-- タイムテーブルのリストがここに入ります -->
+            </div>
+            
+            <div id="timetableActionContainer" style="text-align: center;">
+                <a href="#reservation" id="timetableReserveBtn" class="btn primary-btn" style="width: 100%;">この日で予約する</a>
+            </div>
+        </div>
+    </div>
 
     <!-- ==============================================
          FOOTER

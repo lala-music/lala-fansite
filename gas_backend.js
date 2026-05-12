@@ -94,12 +94,21 @@ function doPost(e) {
       var email = e.parameter.email || '';
       var count = e.parameter.count || '0';
       var message = e.parameter.message || '';
-      var targetName = (type === 'bar') ? (e.parameter.date + " " + e.parameter.time) : e.parameter.liveTitle;
+      var targetName = '';
+      if (type === 'bar') {
+          if (e.parameter.resType === 'studio') {
+              targetName = "[スタジオ予約] " + e.parameter.date + " " + e.parameter.time + " (" + e.parameter.duration + "時間)";
+          } else {
+              targetName = "[BAR予約] " + e.parameter.date + " " + e.parameter.time;
+          }
+      } else {
+          targetName = e.parameter.liveTitle;
+      }
 
       resSheet.appendRow([submittedDate, type, targetName, name, email, count, message]);
 
       // 自動返信メール送信
-      sendConfirmationEmail(type, name, email, count, message, e.parameter.date, e.parameter.time, e.parameter.liveTitle);
+      sendConfirmationEmail(type, name, email, count, message, e.parameter.date, e.parameter.time, e.parameter.liveTitle, e.parameter.resType, e.parameter.duration);
 
       return createJsonResponse({ "result": "success" });
     }
@@ -141,13 +150,29 @@ function createJsonResponse(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-function sendConfirmationEmail(type, name, email, count, message, resDate, resTime, liveTitle) {
+function sendConfirmationEmail(type, name, email, count, message, resDate, resTime, liveTitle, resType, duration) {
   if (!email) return;
   
   var subject = "";
   var body = name + " 様\n\n";
 
-  if (type === 'bar') {
+  if (type === 'bar' && resType === 'studio') {
+    var price = parseInt(count, 10) * parseInt(duration, 10) * 550;
+    subject = "【lala Studio】貸しスタジオご予約完了のお知らせ";
+    body += "この度は、lala 貸しスタジオ をご予約いただき誠にありがとうございます。\n"
+         + "以下の内容で予約を承りました。\n\n"
+         + "--------------------------------------------------\n"
+         + "【ご予約日】 " + resDate + "\n"
+         + "【お時間】 " + resTime + " ～ (" + duration + "時間)\n"
+         + "【ご利用人数】 " + count + " 名\n"
+         + "【事前決済お支払い金額】 " + price + "円 (事前決済50円引き適用)\n"
+         + "【メッセージ】\n" + message + "\n"
+         + "--------------------------------------------------\n\n"
+         + "★事前決済でお得！★\n"
+         + "お手数ですが、以下の決済リンク(Square)よりお支払いをお願いいたします。\n"
+         + "https://square.link/YOUR_LINK_HERE\n\n"
+         + "ご利用を心よりお待ち申し上げております。\n\n";
+  } else if (type === 'bar') {
     subject = "【lala Live Bar】ご予約完了のお知らせ";
     body += "この度は、lala Live Bar のお席をご予約いただき誠にありがとうございます。\n"
          + "以下の内容で予約を承りました。\n\n"
@@ -178,7 +203,8 @@ function sendConfirmationEmail(type, name, email, count, message, resDate, resTi
       to: email,
       subject: subject,
       body: body,
-      name: "lala Official / Live Bar"
+      name: "lala Official / Live Bar",
+      replyTo: "omnivoreage@gmail.com"
     });
   } catch(e) {
     console.log("Email error: " + e.message);
