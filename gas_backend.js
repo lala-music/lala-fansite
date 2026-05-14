@@ -218,8 +218,8 @@ function sendConfirmationEmail(type, name, email, count, message, resDate, resTi
          + "https://square.link/YOUR_LINK_HERE\n\n"
          + "ご利用を心よりお待ち申し上げております。\n\n";
   } else if (type === 'bar') {
-    subject = "【lala Live Bar】ご予約完了のお知らせ";
-    body += "この度は、lala Live Bar のお席をご予約いただき誠にありがとうございます。\n"
+    subject = "【Live Bar Visca】ご予約完了のお知らせ";
+    body += "この度は、Live Bar Visca のお席をご予約いただき誠にありがとうございます。\n"
          + "以下の内容で予約を承りました。\n\n"
          + "--------------------------------------------------\n"
          + "【ご予約日】 " + resDate + "\n"
@@ -253,8 +253,8 @@ function sendConfirmationEmail(type, name, email, count, message, resDate, resTi
       to: email,
       subject: subject,
       body: body,
-      name: "lala Official / Live Bar",
-      replyTo: "omnivoreage@gmail.com"
+      name: "lala Official / Live Bar Visca",
+      replyTo: "no-reply@lala-official.com"
     });
   } catch(e) {
     console.log("Email error: " + e.message);

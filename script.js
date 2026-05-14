@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 確認モーダルを表示
             showConfirmModal(details, (onComplete) => {
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycby35VmqgOb5QOsJWzJTUGov940TGB3nLYut06xRp48dapz12WXuiPQXTvoY_q1JoZIm/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5_hLiUKG65eSWuH5IvvdswsRYxkI_g722-GKakdA6ntBRt5hv4z6eDvDipWl2RA_Y/exec';
                 
                 const formData = new URLSearchParams();
                 formData.append('type', 'ticket'); // GAS側にチケット予約だと伝える
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const dynamicNewsList = document.getElementById('dynamicNewsList');
     const dynamicLiveList = document.getElementById('dynamicLiveList');
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycby35VmqgOb5QOsJWzJTUGov940TGB3nLYut06xRp48dapz12WXuiPQXTvoY_q1JoZIm/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5_hLiUKG65eSWuH5IvvdswsRYxkI_g722-GKakdA6ntBRt5hv4z6eDvDipWl2RA_Y/exec';
 
     async function updateDynamicUI() {
         if (!dynamicNewsList || !dynamicLiveList) return;
@@ -261,28 +261,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // NEWSレンダリング
         if (newsEvents.length > 0) {
-            dynamicNewsList.innerHTML = newsEvents.map(ev => `
-                <div class="news-item" style="border-left: 3px solid #f39c12; cursor: pointer;" class="open-event-detail" data-id="${ev.id}">
-                    <div class="news-date" style="color: #f39c12;">${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}</div>
-                    <div class="news-category tag-info" style="border-color:#f39c12; color:#f39c12;">NEWS</div>
-                    <div class="news-title" style="text-decoration: underline;">
-                        ${ev.title}
+            dynamicNewsList.innerHTML = newsEvents.map(ev => {
+                const thumb = ev.imageUrl ? `<div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 4px; overflow: hidden; flex-shrink: 0;"><img src="${ev.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>` : '';
+                return `
+                <div class="news-item" style="border-left: 3px solid #f39c12; cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
+                    ${thumb}
+                    <div style="flex-grow: 1;">
+                        <div class="news-date" style="color: #f39c12;">${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}</div>
+                        <div class="news-category tag-info" style="border-color:#f39c12; color:#f39c12;">NEWS</div>
+                        <div class="news-title" style="text-decoration: underline;">
+                            ${ev.title}
+                        </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         // LIVEレンダリング
         if (liveEvents.length > 0) {
-            dynamicLiveList.innerHTML = liveEvents.map(ev => `
-                <div class="news-item" style="cursor: pointer;" class="open-event-detail" data-id="${ev.id}">
-                    <div class="news-date">${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}</div>
-                    <div class="news-category tag-live">LIVE</div>
-                    <div class="news-title" style="text-decoration: underline;">
-                        ${ev.title} <span style="font-size: 0.8rem; color: var(--primary-color);">[予約・詳細]</span>
+            dynamicLiveList.innerHTML = liveEvents.map(ev => {
+                const thumb = ev.imageUrl ? `<div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 4px; overflow: hidden; flex-shrink: 0;"><img src="${ev.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>` : '';
+                return `
+                <div class="news-item" style="cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
+                    ${thumb}
+                    <div style="flex-grow: 1;">
+                        <div class="news-date">${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}</div>
+                        <div class="news-category tag-live">LIVE</div>
+                        <div class="news-title" style="text-decoration: underline;">
+                            ${ev.title} <span style="font-size: 0.8rem; color: var(--primary-color);">[予約・詳細]</span>
+                        </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         // Add event listeners for the items
@@ -758,7 +768,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdAt: new Date().toLocaleString('ja-JP')
                 };
 
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycby35VmqgOb5QOsJWzJTUGov940TGB3nLYut06xRp48dapz12WXuiPQXTvoY_q1JoZIm/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5_hLiUKG65eSWuH5IvvdswsRYxkI_g722-GKakdA6ntBRt5hv4z6eDvDipWl2RA_Y/exec';
                 const formData = new URLSearchParams();
                 formData.append('type', 'bar'); // GAS側にまとめて予約だと伝えるが、後でgas_backendで判別する
                 formData.append('resType', resType); // 'bar' or 'studio'

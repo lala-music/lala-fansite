@@ -234,8 +234,13 @@
                         <textarea id="eventDescription" placeholder="イベント詳細・ニュース内容"
                             style="padding: 10px; flex: 2; height: 80px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); resize: vertical;"></textarea>
                         <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
-                            <input type="text" id="eventImageUrl" placeholder="画像/フライヤーURL"
-                                style="padding: 10px; width: 100%; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+                            <div id="imageDropZone" style="border: 2px dashed rgba(255,255,255,0.3); padding: 15px; text-align: center; border-radius: 8px; cursor: pointer; position: relative; background: rgba(255,255,255,0.02); transition: border-color 0.3s;">
+                                <span id="dropZoneText" style="font-size: 0.8rem; color: var(--text-muted);">画像をドラッグ＆ドロップ<br>またはクリックして選択</span>
+                                <input type="file" id="eventImageFile" accept="image/*" style="display:none;">
+                                <img id="eventImagePreview" style="max-width: 100%; max-height: 100px; display: none; border-radius: 4px; margin: 0 auto;">
+                                <input type="hidden" id="eventImageUrl">
+                                <button type="button" id="removeImageBtn" style="display:none; position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 0.8rem; line-height: 1;">×</button>
+                            </div>
                             <div style="display: flex; gap: 5px;">
                                 <button type="submit" id="eventSubmitBtn" class="btn primary-btn" style="flex: 1; padding: 10px;">追加</button>
                                 <button type="button" id="eventCancelEditBtn" class="btn outline-btn" style="padding: 10px; display: none;">取消</button>

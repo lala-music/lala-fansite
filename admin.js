@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycby35VmqgOb5QOsJWzJTUGov940TGB3nLYut06xRp48dapz12WXuiPQXTvoY_q1JoZIm/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5_hLiUKG65eSWuH5IvvdswsRYxkI_g722-GKakdA6ntBRt5hv4z6eDvDipWl2RA_Y/exec';
 
     // --- 要素の取得 ---
     const ticketAccordionContainer = document.getElementById('ticketAccordionContainer');
@@ -30,6 +30,110 @@ document.addEventListener('DOMContentLoaded', () => {
             eventTimeSelect.insertAdjacentHTML('beforeend', `<option value="${h}:00" style="color:#000;">${h}:00</option>`);
             eventTimeSelect.insertAdjacentHTML('beforeend', `<option value="${h}:30" style="color:#000;">${h}:30</option>`);
         }
+    }
+
+    // =====================================
+    // 画像ドラッグ＆ドロップと圧縮処理
+    // =====================================
+    const dropZone = document.getElementById('imageDropZone');
+    const fileInput = document.getElementById('eventImageFile');
+    const imagePreview = document.getElementById('eventImagePreview');
+    const imageUrlInput = document.getElementById('eventImageUrl');
+    const dropZoneText = document.getElementById('dropZoneText');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+
+    if (dropZone) {
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = 'var(--primary-color)';
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = 'rgba(255,255,255,0.3)';
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = 'rgba(255,255,255,0.3)';
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processImageFile(e.dataTransfer.files[0]);
+            }
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) {
+                processImageFile(e.target.files[0]);
+            }
+        });
+        removeImageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetImageUpload();
+        });
+    }
+
+    function processImageFile(file) {
+        if (!file.type.match('image.*')) return;
+        
+        dropZoneText.textContent = "画像圧縮中...";
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const MAX_WIDTH = 600;
+                const MAX_HEIGHT = 600;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // GASの50,000文字制限を回避するため、品質を調整
+                let quality = 0.7;
+                let dataUrl = canvas.toDataURL('image/jpeg', quality);
+                
+                // もし50000文字を超える場合は品質をさらに下げる
+                while (dataUrl.length > 45000 && quality > 0.1) {
+                    quality -= 0.1;
+                    dataUrl = canvas.toDataURL('image/jpeg', quality);
+                }
+
+                if (dataUrl.length > 50000) {
+                    alert("画像が大きすぎます。もっと小さな画像を選んでください。");
+                    resetImageUpload();
+                    return;
+                }
+
+                imageUrlInput.value = dataUrl;
+                imagePreview.src = dataUrl;
+                imagePreview.style.display = 'block';
+                dropZoneText.style.display = 'none';
+                removeImageBtn.style.display = 'block';
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function resetImageUpload() {
+        imageUrlInput.value = '';
+        imagePreview.src = '';
+        imagePreview.style.display = 'none';
+        dropZoneText.innerHTML = '画像をドラッグ＆ドロップ<br>またはクリックして選択';
+        dropZoneText.style.display = 'block';
+        removeImageBtn.style.display = 'none';
+        if (fileInput) fileInput.value = '';
     }
 
     // =====================================
@@ -225,7 +329,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('eventCategory')) document.getElementById('eventCategory').value = ev.type || 'LIVE';
         document.getElementById('eventTitle').value = ev.title;
         document.getElementById('eventDescription').value = ev.description || '';
-        document.getElementById('eventImageUrl').value = ev.imageUrl || '';
+        
+        const imageUrlInput = document.getElementById('eventImageUrl');
+        const imagePreview = document.getElementById('eventImagePreview');
+        const dropZoneText = document.getElementById('dropZoneText');
+        const removeImageBtn = document.getElementById('removeImageBtn');
+        
+        imageUrlInput.value = ev.imageUrl || '';
+        if (ev.imageUrl) {
+            imagePreview.src = ev.imageUrl;
+            imagePreview.style.display = 'block';
+            if (dropZoneText) dropZoneText.style.display = 'none';
+            if (removeImageBtn) removeImageBtn.style.display = 'block';
+        } else {
+            imagePreview.src = '';
+            imagePreview.style.display = 'none';
+            if (dropZoneText) dropZoneText.style.display = 'block';
+            if (removeImageBtn) removeImageBtn.style.display = 'none';
+        }
 
         document.getElementById('eventSubmitBtn').textContent = '更新';
         document.getElementById('eventCancelEditBtn').style.display = 'inline-block';
@@ -239,6 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         eventCancelEditBtn.addEventListener('click', () => {
             document.getElementById('adminEventForm').reset();
             document.getElementById('eventId').value = '';
+            if (typeof resetImageUpload === 'function') resetImageUpload();
             document.getElementById('eventSubmitBtn').textContent = '追加';
             eventCancelEditBtn.style.display = 'none';
         });
