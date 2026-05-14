@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyzfpa9agwqFjMxwvjXkWjASxMvHmwCATl8Tffy7JaYnZFnjvAYBh2YtfIKsO254yxM/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzxcrH96p8mr4Jdre99qyBSN0Qq8HVpeJbR78MUtKptc1WM47teqb_rSvWOXJ5TTWFK/exec';
 
     // --- 要素の取得 ---
     const ticketAccordionContainer = document.getElementById('ticketAccordionContainer');
@@ -324,7 +324,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!ev) return;
 
         document.getElementById('eventId').value = ev.id;
-        document.getElementById('eventDate').value = ev.date;
+        
+        let dateVal = ev.date || '';
+        if (dateVal && dateVal.includes('/')) {
+            dateVal = dateVal.replace(/\//g, '-');
+        } else if (dateVal && dateVal.includes('T')) {
+            dateVal = dateVal.split('T')[0];
+        }
+        document.getElementById('eventDate').value = dateVal;
+        
         if (document.getElementById('eventTime')) document.getElementById('eventTime').value = ev.time || '';
         if (document.getElementById('eventCategory')) document.getElementById('eventCategory').value = ev.type || 'LIVE';
         document.getElementById('eventTitle').value = ev.title;

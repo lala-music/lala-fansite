@@ -28,13 +28,14 @@ function doGet(e) {
     if (!isAuth) {
       // 予約データから個人情報を削除
       var sanitizedReservations = reservations.map(function(r) {
+        var targetStr = r.target ? r.target.toString() : '';
         return {
-          date: r.target.match(/([0-9]{4}-[0-9]{2}-[0-9]{2})/) ? r.target.match(/([0-9]{4}-[0-9]{2}-[0-9]{2})/)[1] : '', // targetから日付を抽出 (簡易)
-          time: r.target.match(/([0-9]{2}:[0-9]{2})/) ? r.target.match(/([0-9]{2}:[0-9]{2})/)[1] : '',
+          date: targetStr.match(/([0-9]{4}-[0-9]{2}-[0-9]{2})/) ? targetStr.match(/([0-9]{4}-[0-9]{2}-[0-9]{2})/)[1] : '', // targetから日付を抽出 (簡易)
+          time: targetStr.match(/([0-9]{2}:[0-9]{2})/) ? targetStr.match(/([0-9]{2}:[0-9]{2})/)[1] : '',
           count: r.count,
           type: r.type,
-          resType: r.target.indexOf('[スタジオ予約]') > -1 ? 'studio' : 'bar',
-          duration: r.target.match(/\(([0-9]+)時間\)/) ? r.target.match(/\(([0-9]+)時間\)/)[1] : '2' // 簡易抽出
+          resType: targetStr.indexOf('[スタジオ予約]') > -1 ? 'studio' : 'bar',
+          duration: targetStr.match(/\(([0-9]+)時間\)/) ? targetStr.match(/\(([0-9]+)時間\)/)[1] : '2' // 簡易抽出
         };
       });
       
@@ -191,7 +192,7 @@ function getOrCreateSheet(ss, name, headers) {
 }
 
 function getRowsAsJson(sheet) {
-  var data = sheet.getDataRange().getValues();
+  var data = sheet.getDataRange().getDisplayValues();
   var headers = data[0];
   var rows = [];
   for (var i = 1; i < data.length; i++) {
