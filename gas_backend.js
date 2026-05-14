@@ -13,24 +13,42 @@
  */
 var ADMIN_PASSWORD = "lala_secret_pass";
 
-/**
- * データの取得 (GETリクエスト)
- * スケジュール情報などをブラウザに返します
- */
 function doGet(e) {
-  // 認証チェック
-  if (e.parameter.password !== ADMIN_PASSWORD) {
-    return createJsonResponse({ "result": "error", "message": "Unauthorized" });
-  }
-
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title"]);
+    var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title", "description", "imageUrl"]);
     var reservationSheet = getOrCreateSheet(ss, "Reservations", ["submittedAt", "type", "target", "name", "email", "count", "message"]);
 
     var events = getRowsAsJson(eventSheet);
     var reservations = getRowsAsJson(reservationSheet);
 
+    var isAuth = (e.parameter.password === ADMIN_PASSWORD);
+
+    // 一般公開用のデータサニタイズ（個人情報を隠す）
+    if (!isAuth) {
+      // 予約データから個人情報を削除
+      var sanitizedReservations = reservations.map(function(r) {
+        return {
+          date: r.target.match(/([0-9]{4}-[0-9]{2}-[0-9]{2})/) ? r.target.match(/([0-9]{4}-[0-9]{2}-[0-9]{2})/)[1] : '', // targetから日付を抽出 (簡易)
+          time: r.target.match(/([0-9]{2}:[0-9]{2})/) ? r.target.match(/([0-9]{2}:[0-9]{2})/)[1] : '',
+          count: r.count,
+          type: r.type,
+          resType: r.target.indexOf('[スタジオ予約]') > -1 ? 'studio' : 'bar',
+          duration: r.target.match(/\(([0-9]+)時間\)/) ? r.target.match(/\(([0-9]+)時間\)/)[1] : '2' // 簡易抽出
+        };
+      });
+      
+      // GASの仕様上、doGetは一般ユーザーからもアクセスされる
+      var data = {
+        events: events,
+        reservations: sanitizedReservations
+      };
+      
+      return ContentService.createTextOutput(JSON.stringify(data))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 管理者用のフルデータ
     var data = {
       events: events,
       reservations: reservations
@@ -57,14 +75,41 @@ function doPost(e) {
       if (e.parameter.password !== ADMIN_PASSWORD) {
         return createJsonResponse({ "result": "error", "message": "Unauthorized" });
       }
-      var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title"]);
+      var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title", "description", "imageUrl"]);
       eventSheet.appendRow([
         e.parameter.id || Date.now(),
         e.parameter.date,
         e.parameter.time,
         e.parameter.event_type, // 'LIVE' or 'NEWS'
-        e.parameter.title
+        e.parameter.title,
+        e.parameter.description || '',
+        e.parameter.imageUrl || ''
       ]);
+      return createJsonResponse({ "result": "success" });
+    }
+
+    if (type === 'edit_event') {
+      if (e.parameter.password !== ADMIN_PASSWORD) {
+        return createJsonResponse({ "result": "error", "message": "Unauthorized" });
+      }
+      var eventSheet = ss.getSheetByName("Events");
+      if (eventSheet) {
+        var id = e.parameter.id;
+        var data = eventSheet.getDataRange().getValues();
+        for (var i = 1; i < data.length; i++) {
+          if (data[i][0].toString() === id.toString()) {
+            // Update row (Adding 1 to i because arrays are 0-indexed and rows are 1-indexed, but getValues returns 0-indexed. Actually sheet row is i+1.
+            var rowNum = i + 1;
+            eventSheet.getRange(rowNum, 2).setValue(e.parameter.date);
+            eventSheet.getRange(rowNum, 3).setValue(e.parameter.time);
+            eventSheet.getRange(rowNum, 4).setValue(e.parameter.event_type);
+            eventSheet.getRange(rowNum, 5).setValue(e.parameter.title);
+            eventSheet.getRange(rowNum, 6).setValue(e.parameter.description || '');
+            eventSheet.getRange(rowNum, 7).setValue(e.parameter.imageUrl || '');
+            break;
+          }
+        }
+      }
       return createJsonResponse({ "result": "success" });
     }
 
@@ -195,7 +240,12 @@ function sendConfirmationEmail(type, name, email, count, message, resDate, resTi
          + "当日は会場でお会いできるのを心より楽しみにしております！\n\n";
   }
 
-  body += "※このメールは送信専用アドレスから自動送信されています。\n"
+  body += "==================================================\n"
+       + "【キャンセル・ご予約内容の変更について】\n"
+       + "ご予約のキャンセル・変更はこちらにお問い合わせください。\n"
+       + "（※電話番号につきましては現在準備中です）\n"
+       + "==================================================\n\n"
+       + "※このメールは送信専用アドレスから自動送信されています。\n"
        + "lala Official Web Site";
 
   try {

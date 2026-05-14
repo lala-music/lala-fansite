@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 確認モーダルを表示
             showConfirmModal(details, (onComplete) => {
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbyrM_Fz6WFo5kT0UYbYj8Z7WS8bHhCcTrL06aUDr3u0tR-GbxL98qt0Z7MWY5Al7zt-/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycby35VmqgOb5QOsJWzJTUGov940TGB3nLYut06xRp48dapz12WXuiPQXTvoY_q1JoZIm/exec';
                 
                 const formData = new URLSearchParams();
                 formData.append('type', 'ticket'); // GAS側にチケット予約だと伝える
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.append('message', document.getElementById('userMessage').value);
 
                 if (GAS_URL === 'ここに発行されたURLを貼り付けます') {
-                    saveToLocalStorage(liveNameInput.value);
+                    saveToLocalStorage(liveNameInput.value, submitBtn);
                     onComplete();
                 } else {
                     fetch(GAS_URL, {
@@ -186,12 +186,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: formData.toString()
                     }).then(() => {
-                        saveToLocalStorage(liveNameInput.value);
+                        saveToLocalStorage(liveNameInput.value, submitBtn);
                         onComplete();
                     }).catch(error => {
                         console.error('GAS URL CORS Redirect Error (Safe to ignore):', error.message);
-                        // GASの仕様上、リダイレクトによりCORSエラーが投げられてもPOST自体は成功しているため成功処理に進む
-                        saveToLocalStorage(liveNameInput.value);
+                        saveToLocalStorage(liveNameInput.value, submitBtn);
                         onComplete();
                     });
                 }
@@ -199,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
             // --- ローカルストレージ（管理者画面用）への保存処理を関数化 ---
-            function saveToLocalStorage(liveNameText) {
+            function saveToLocalStorage(liveNameText, submitBtn) {
                 const reservationData = {
                     id: Date.now(),
                     date: new Date().toLocaleString('ja-JP'),
@@ -218,8 +217,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 formSuccessMessage.style.display = 'block';
                 
                 // ボタンの表示をリセット
-                submitBtn.textContent = '予約を申し込む';
-                submitBtn.disabled = false;
+                if (submitBtn) {
+                    submitBtn.textContent = '予約を申し込む';
+                    submitBtn.disabled = false;
+                }
             }
     }
 
@@ -228,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const dynamicNewsList = document.getElementById('dynamicNewsList');
     const dynamicLiveList = document.getElementById('dynamicLiveList');
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyrM_Fz6WFo5kT0UYbYj8Z7WS8bHhCcTrL06aUDr3u0tR-GbxL98qt0Z7MWY5Al7zt-/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycby35VmqgOb5QOsJWzJTUGov940TGB3nLYut06xRp48dapz12WXuiPQXTvoY_q1JoZIm/exec';
 
     async function updateDynamicUI() {
         if (!dynamicNewsList || !dynamicLiveList) return;
@@ -237,9 +238,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(GAS_URL);
             const data = await response.json();
             const events = data.events || [];
+            const reservations = data.reservations || [];
             
             // ローカルキャッシュも更新
             localStorage.setItem('admin_events', JSON.stringify(events));
+            localStorage.setItem('lala_bar_reservations', JSON.stringify(reservations));
 
             renderEventsUI(events);
         } catch (e) {
@@ -259,10 +262,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // NEWSレンダリング
         if (newsEvents.length > 0) {
             dynamicNewsList.innerHTML = newsEvents.map(ev => `
-                <div class="news-item" style="border-left: 3px solid #f39c12;">
+                <div class="news-item" style="border-left: 3px solid #f39c12; cursor: pointer;" class="open-event-detail" data-id="${ev.id}">
                     <div class="news-date" style="color: #f39c12;">${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}</div>
                     <div class="news-category tag-info" style="border-color:#f39c12; color:#f39c12;">NEWS</div>
-                    <div class="news-title">
+                    <div class="news-title" style="text-decoration: underline;">
                         ${ev.title}
                     </div>
                 </div>
@@ -272,15 +275,91 @@ document.addEventListener('DOMContentLoaded', () => {
         // LIVEレンダリング
         if (liveEvents.length > 0) {
             dynamicLiveList.innerHTML = liveEvents.map(ev => `
-                <div class="news-item">
+                <div class="news-item" style="cursor: pointer;" class="open-event-detail" data-id="${ev.id}">
                     <div class="news-date">${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}</div>
                     <div class="news-category tag-live">LIVE</div>
-                    <div class="news-title">
-                        <a href="#" class="open-ticket-modal" data-title="${ev.title}">${ev.title} <span style="font-size: 0.8rem; color: var(--primary-color);">[予約受付中]</span></a>
+                    <div class="news-title" style="text-decoration: underline;">
+                        ${ev.title} <span style="font-size: 0.8rem; color: var(--primary-color);">[予約・詳細]</span>
                     </div>
                 </div>
             `).join('');
         }
+
+        // Add event listeners for the items
+        document.querySelectorAll('#dynamicNewsList .news-item, #dynamicLiveList .news-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = item.getAttribute('data-id');
+                const ev = events.find(e => e.id.toString() === id.toString());
+                if (ev) {
+                    openEventDetailModal(ev);
+                }
+            });
+        });
+    }
+
+    function openEventDetailModal(ev) {
+        const modal = document.getElementById('eventDetailModal');
+        if (!modal) return;
+        
+        document.getElementById('detailCategory').textContent = ev.type === 'NEWS' ? 'NEWS' : 'LIVE';
+        document.getElementById('detailCategory').style.color = ev.type === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
+        document.getElementById('detailCategory').style.borderColor = ev.type === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
+        
+        document.getElementById('detailTitle').textContent = ev.title;
+        document.getElementById('detailDate').textContent = `${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}`;
+        
+        const imgContainer = document.getElementById('detailImageContainer');
+        const img = document.getElementById('detailImage');
+        if (ev.imageUrl) {
+            img.src = ev.imageUrl;
+            imgContainer.style.display = 'block';
+        } else {
+            imgContainer.style.display = 'none';
+        }
+        
+        const desc = document.getElementById('detailDescription');
+        if (ev.description) {
+            desc.textContent = ev.description;
+            desc.style.display = 'block';
+        } else {
+            desc.style.display = 'none';
+        }
+        
+        const actionContainer = document.getElementById('detailActionContainer');
+        if (ev.type === 'LIVE' || !ev.type) {
+            actionContainer.style.display = 'block';
+            const reserveBtn = document.getElementById('detailReserveBtn');
+            reserveBtn.onclick = () => {
+                modal.style.display = 'none';
+                // Trigger the ticket modal
+                const ticketModal = document.getElementById('ticketModal');
+                if (ticketModal) {
+                    document.getElementById('modalLiveTitle').textContent = ev.title;
+                    document.getElementById('liveNameInput').value = ev.title;
+                    ticketModal.style.display = 'flex';
+                    document.getElementById('formSuccessMessage').style.display = 'none';
+                    document.getElementById('ticketForm').style.display = 'block';
+                    document.getElementById('ticketForm').reset();
+                }
+            };
+        } else {
+            actionContainer.style.display = 'none';
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    const closeEventDetailBtn = document.getElementById('closeEventDetailBtn');
+    if (closeEventDetailBtn) {
+        closeEventDetailBtn.addEventListener('click', () => {
+            document.getElementById('eventDetailModal').style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('eventDetailModal')) {
+                document.getElementById('eventDetailModal').style.display = 'none';
+            }
+        });
     }
 
     if (dynamicNewsList && dynamicLiveList) {
@@ -338,6 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // 日付文字列を YYYY-MM-DD 形式で作成
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            const thisDate = new Date(year, month, i);
             
             // クリックでタイムテーブルモーダルを開く
             dayDiv.href = '#';
@@ -356,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dateSpan.textContent = i;
             dayDiv.appendChild(dateSpan);
 
-            const thisDate = new Date(year, month, i);
             if (thisDate.getDay() === 0) dayDiv.classList.add('sunday');
             if (thisDate.getDay() === 6) dayDiv.classList.add('saturday');
 
@@ -679,7 +758,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdAt: new Date().toLocaleString('ja-JP')
                 };
 
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbyrM_Fz6WFo5kT0UYbYj8Z7WS8bHhCcTrL06aUDr3u0tR-GbxL98qt0Z7MWY5Al7zt-/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycby35VmqgOb5QOsJWzJTUGov940TGB3nLYut06xRp48dapz12WXuiPQXTvoY_q1JoZIm/exec';
                 const formData = new URLSearchParams();
                 formData.append('type', 'bar'); // GAS側にまとめて予約だと伝えるが、後でgas_backendで判別する
                 formData.append('resType', resType); // 'bar' or 'studio'
@@ -733,4 +812,48 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ==========================================
+    // 6. 共有ボタン (Web Share API)
+    // ==========================================
+    const shareBtn = document.getElementById('floatingShareBtn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', async () => {
+            const shareData = {
+                title: document.title,
+                text: 'lala Official Site をチェック！',
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.log('Share canceled or failed', err);
+                }
+            } else {
+                // Web Share API非対応の場合はクリップボードにコピー
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    showToast('URLをコピーしました！');
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                }
+            }
+        });
+    }
+
+    function showToast(message) {
+        let toast = document.getElementById('toastNotification');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toastNotification';
+            toast.className = 'toast-notification';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
 });

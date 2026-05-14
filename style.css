@@ -766,6 +766,71 @@ footer {
     padding: 30px 10px;
 }
 
+/* --- Floating Share Button --- */
+.footer-sns svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    transition: var(--transition);
+}
+
+.footer-sns svg:hover {
+    fill: var(--primary-color);
+}
+
+#floatingShareBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    cursor: pointer;
+    z-index: 1000;
+    transition: var(--transition);
+}
+
+#floatingShareBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(40, 212, 212, 0.5);
+}
+
+#floatingShareBtn svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+/* --- Share Notification Toast --- */
+.toast-notification {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 1001;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @media (max-width: 768px) {
     .calendar-wrapper { padding: 10px; }
     .calendar-grid { gap: 3px; }
@@ -774,4 +839,15 @@ footer {
     .cal-date { font-size: 0.8rem; margin-bottom: 2px; }
     .cal-status { width: 8px; height: 8px; margin-top: 2px; }
     .cal-event { font-size: 0.6rem; padding: 1px 2px; margin-top: 2px; line-height: 1.2; }
+    
+    #floatingShareBtn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    #floatingShareBtn svg {
+        width: 20px;
+        height: 20px;
+    }
 }

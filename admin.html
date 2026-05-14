@@ -216,6 +216,7 @@
                 style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.3); padding: 30px; border-radius: 8px; border: var(--glass-border);">
                 <h2 style="margin-bottom: 20px; color: var(--primary-color);">Calendar Event Management</h2>
                 <form id="adminEventForm" style="margin-bottom: 20px;">
+                    <input type="hidden" id="eventId">
                     <div style="display:flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                         <input type="date" id="eventDate" required
                             style="padding: 10px; width: 140px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
@@ -228,7 +229,18 @@
                         </select>
                         <input type="text" id="eventTitle" placeholder="イベントタイトル" required
                             style="padding: 10px; flex: 1; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
-                        <button type="submit" class="btn primary-btn" style="padding: 10px 20px;">追加</button>
+                    </div>
+                    <div style="display:flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                        <textarea id="eventDescription" placeholder="イベント詳細・ニュース内容"
+                            style="padding: 10px; flex: 2; height: 80px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); resize: vertical;"></textarea>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+                            <input type="text" id="eventImageUrl" placeholder="画像/フライヤーURL"
+                                style="padding: 10px; width: 100%; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+                            <div style="display: flex; gap: 5px;">
+                                <button type="submit" id="eventSubmitBtn" class="btn primary-btn" style="flex: 1; padding: 10px;">追加</button>
+                                <button type="button" id="eventCancelEditBtn" class="btn outline-btn" style="padding: 10px; display: none;">取消</button>
+                            </div>
+                        </div>
                     </div>
                 </form>
                 <div style="max-height: 200px; overflow-y: auto;">

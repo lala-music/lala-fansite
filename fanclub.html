@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lala Official Fanclub</title>
+    <title>lala Premium Fanclub</title>
     <!-- OGP & Favicon Tags -->
-    <meta property="og:title" content="lala Official Fanclub | lala Official Fan Site">
-    <meta property="og:description" content="lala Official Fanclubへようこそ。特別なコンテンツをお届けします。">
+    <meta property="og:title" content="lala Premium Fanclub | lala Official Fan Site">
+    <meta property="og:description" content="lalaの素顔と音楽の裏側に触れる、特別なVIPメンバーシップ。">
     <meta property="og:image" content="images/LINE_ALBUM_アー写厳選_lala編集_260409_9.jpg">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
@@ -16,17 +16,125 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
+        /* ファンクラブ特設ページの独自スタイル */
         .subpage-header { padding: 20px 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 100; }
         .back-btn { color: #fff; font-size: 0.9rem; letter-spacing: 0.1em; opacity: 0.8; }
         .back-btn:hover { opacity: 1; color: var(--primary-color); }
-        .subpage-hero { height: 40vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, rgba(8,16,23,0.3), var(--bg-color));}
-        .content-area { padding: 60px 0 100px; }
-        .plan-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px;}
-        .plan-card { background: var(--surface-color); border: var(--glass-border); padding: 40px; border-radius: 12px; text-align: center; }
-        .plan-card h3 { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 20px; font-family: var(--font-heading);}
-        .price { font-size: 2rem; margin-bottom: 20px; }
-        .plan-features { text-align: left; margin-bottom: 30px; }
-        .plan-features li { margin-bottom: 10px; font-size: 0.9rem; border-bottom: 1px dotted rgba(255,255,255,0.1); padding-bottom: 5px;}
+        
+        .fc-hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to bottom, rgba(8,16,23,0.5), var(--bg-color)), url('images/LINE_ALBUM_アー写厳選_lala編集_260409_1.jpg') no-repeat center center/cover;
+            position: relative;
+        }
+        
+        .fc-hero-content {
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .fc-hero-title {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            color: var(--primary-color);
+            letter-spacing: 0.15em;
+            margin-bottom: 20px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+        }
+        
+        .fc-hero-subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .benefit-section {
+            padding: 80px 0;
+            background: url('images/noise-texture.png') repeat;
+        }
+        
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .benefit-card {
+            background: rgba(26, 35, 45, 0.5);
+            border: 1px solid rgba(40, 212, 212, 0.2);
+            padding: 40px 30px;
+            border-radius: 12px;
+            text-align: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(40, 212, 212, 0.1);
+        }
+        
+        .benefit-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .benefit-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .benefit-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .signup-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(8,16,23,1) 0%, rgba(26,35,45,1) 100%);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .form-box { 
+            background: rgba(0,0,0,0.6); 
+            border: 1px solid rgba(40, 212, 212, 0.3); 
+            padding: 50px; 
+            border-radius: 12px; 
+            max-width: 600px;
+            margin: 0 auto;
+            backdrop-filter: blur(20px);
+        }
+        
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 10px; color: var(--primary-color); font-size: 0.9rem;}
+        .form-group input, .form-group textarea { 
+            width: 100%; padding: 15px; 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            color: #fff; border-radius: 4px; outline: none; font-family: var(--font-body);
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--primary-color); }
+        
+        .price-badge {
+            background: var(--primary-color);
+            color: #000;
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YFWFWJ7SNN"></script>
@@ -42,43 +150,100 @@
         <a href="index.html" class="back-btn">← Back to Home</a>
     </header>
 
-    <div class="subpage-hero fade-in">
-        <h1 class="hero-title" style="font-size: 3rem;">Fanclub</h1>
+    <div class="fc-hero fade-in">
+        <div class="fc-hero-content">
+            <h1 class="fc-hero-title">lala Premium VIP</h1>
+            <p class="fc-hero-subtitle">lalaの素顔と音楽の裏側に触れる、限られた大人のためのメンバーシップ。</p>
+        </div>
     </div>
 
-    <section class="content-area fade-in-up delay-1">
-        <div class="container" style="max-width: 900px;">
-            <p class="text-center" style="line-height: 1.8;">
-                lala Official Fanclubへようこそ。<br><br>
-                ここでしか見られない限定写真や動画、<br>
-                ライブチケットの最速先行受付など、<br>
-                特別なコンテンツをお届けします。
-            </p>
+    <section class="benefit-section fade-in-up delay-1">
+        <div class="container">
+            <div class="text-center" style="max-width: 800px; margin: 0 auto 60px;">
+                <h2 class="section-title">Membership <span>Benefits</span></h2>
+                <p style="color: var(--text-muted); line-height: 1.8;">
+                    私たちが提供するのは、単なる「お知らせ」ではありません。<br>
+                    ライブバーという濃密な空間で生まれる音楽の息遣いや、<br>
+                    普段は見せない等身大のlalaの姿を、一番特等席でお楽しみいただけます。
+                </p>
+            </div>
 
-            <div class="plan-cards">
-                <!-- 無料プラン -->
-                <div class="plan-card">
-                    <h3>Common Member</h3>
-                    <!-- <div class="price">¥550<span style="font-size: 1rem;">/月</span></div> -->
-                    <ul class="plan-features">
-                        <li>メールマガジン購読</li>
-                        <li>一部の無料公開ニュース閲覧</li>
-                    </ul>
-                    <a href="#" class="btn secondary-btn">登録する</a>
+            <div class="benefit-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎵</div>
+                    <h3 class="benefit-title">Secret Live Streaming</h3>
+                    <p class="benefit-desc">Live Barの営業中や、リハーサルスタジオから不定期に行われる会員限定のシークレット生配信にご招待。お酒を片手に、極上のプライベートライブを。</p>
                 </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎫</div>
+                    <h3 class="benefit-title">Priority Tickets</h3>
+                    <p class="benefit-desc">全てのワンマンライブや特別イベントのチケットを、一般発売に先駆けて最速で優先確保いたします。もう、ソールドアウトの心配はありません。</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📸</div>
+                    <h3 class="benefit-title">Backstage Gallery</h3>
+                    <p class="benefit-desc">SNSでは絶対に公開されない、レコーディング風景やミュージックビデオのオフショット、日常の飾らない瞬間を捉えたプレミアムギャラリー。</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎁</div>
+                    <h3 class="benefit-title">VIP Merch & Birthday</h3>
+                    <p class="benefit-desc">会員証や限定グッズの購入権に加え、あなたのお誕生日にはlala本人からの特別なメッセージ動画が届きます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <!-- プレミアムプラン -->
-                <div class="plan-card" style="border-color: var(--primary-color); position: relative;">
-                    <div style="position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); background: var(--primary-color); color: #000; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; letter-spacing: 0.05em;">RECOMMENDED</div>
-                    <h3>Premium Member</h3>
-                    <div class="price" style="color: var(--primary-color); font-size: 2.2rem; margin-bottom: 25px;">¥1,500<span style="font-size: 1rem; color: #aaa;"> /月</span></div>
-                    <ul class="plan-features">
-                        <li style="color: var(--primary-color); font-weight: bold;">🔴 Live Barからの限定生配信視聴権</li>
-                        <li>ライブチケット等の最速先行受付</li>
-                        <li>限定写真・動画・ブログの閲覧</li>
-                        <li>バースデーメール & 会員限定グッズ購入権</li>
-                    </ul>
-                    <a href="#" class="btn primary-btn">入会する (Square)</a>
+    <section class="signup-section" id="join">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title" style="margin-bottom: 20px;">Join the <span>Premium</span></h2>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">ファンクラブへご入会いただくには、以下のフォームへ入力し、<br>次画面のSquare（スクエア）決済にてお手続きを完了させてください。</p>
+                <div class="price-badge">月額 ¥1,500 (税込)</div>
+            </div>
+
+            <div class="form-box">
+                <!-- 入会フォーム -->
+                <form id="fcSignupForm">
+                    <div class="form-group">
+                        <label>お名前 (フルネーム) *</label>
+                        <input type="text" id="fcName" placeholder="例：山田 太郎" required>
+                    </div>
+                    <div class="form-group">
+                        <label>メールアドレス *</label>
+                        <input type="email" id="fcEmail" placeholder="例：info@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>お電話番号 *</label>
+                        <input type="tel" id="fcPhone" placeholder="例：090-1234-5678" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ご住所 *</label>
+                        <input type="text" id="fcAddress" placeholder="例：東京都渋谷区神南1-2-3 lalaマンション101" required>
+                    </div>
+                    <div class="text-center mt-4" style="margin-top: 40px;">
+                        <button type="submit" class="btn primary-btn" style="width: 100%; font-size: 1.1rem; padding: 15px;">入会手続き（決済画面）へ進む</button>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 20px;">
+                        ※送信後、クレジットカード決済用の画面が表示されます。
+                    </p>
+                </form>
+
+                <!-- 送信後の決済リンク表示エリア（formの外に配置） -->
+                <div id="fcSuccessMessage" style="display: none; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">✨</div>
+                    <p style="color: var(--primary-color); font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">
+                        ご入力ありがとうございます！</p>
+                    <p style="font-size: 0.9rem; margin-bottom: 30px; color: var(--text-main);">
+                        ファンクラブの登録を完了させるため、<br>以下のボタンより初回決済（Square）をお願いいたします。</p>
+
+                    <!-- ここにSquareのリンクを貼ります -->
+                    <a href="https://square.link/YOUR_LINK_HERE" target="_blank" class="btn primary-btn"
+                        style="width: 100%; text-align: center; padding: 15px; font-size: 1.1rem;">Squareで安全に決済する</a>
+                        
+                    <p style="font-size: 0.8rem; margin-top: 20px; color: var(--text-muted);">
+                        ※別ウィンドウで安全なSquare決済画面が開きます。<br>
+                        ※決済完了後、ご登録のメールアドレス宛に入会完了のご案内をお送りいたします。
+                    </p>
                 </div>
             </div>
         </div>
@@ -113,18 +278,43 @@
         </div>
     </footer>
 
-    <!-- 簡易アニメーション用のスクリプト -->
+    <!-- スクリプトの読み込み -->
+    <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
-            setTimeout(() => {
-                faders.forEach(fader => fader.classList.add('appear'));
-            }, 100);
+            const fcForm = document.getElementById('fcSignupForm');
+            const fcSuccess = document.getElementById('fcSuccessMessage');
+
+            if(fcForm) {
+                fcForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    // 送信ボタンの無効化（二重送信防止）
+                    const submitBtn = fcForm.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '送信中...';
+
+                    // 1秒後に成功画面へ切り替え（実際にはここでGAS等へ送信処理）
+                    setTimeout(() => {
+                        fcForm.style.display = 'none';
+                        fcSuccess.style.display = 'block';
+                        
+                        // 入力内容をキャッシュに保存（デモ用）
+                        const fcData = {
+                            name: document.getElementById('fcName').value,
+                            email: document.getElementById('fcEmail').value,
+                            phone: document.getElementById('fcPhone').value,
+                            address: document.getElementById('fcAddress').value,
+                            date: new Date().toLocaleString()
+                        };
+                        let members = JSON.parse(localStorage.getItem('lala_fanclub_members') || '[]');
+                        members.push(fcData);
+                        localStorage.setItem('lala_fanclub_members', JSON.stringify(members));
+
+                    }, 1000);
+                });
+            }
         });
     </script>
-    <script src="script.js"></script>
-    <div id="floatingShareBtn" title="ページをシェアする">
-        <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
-    </div>
 </body>
 </html>

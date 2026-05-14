@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyrM_Fz6WFo5kT0UYbYj8Z7WS8bHhCcTrL06aUDr3u0tR-GbxL98qt0Z7MWY5Al7zt-/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycby35VmqgOb5QOsJWzJTUGov940TGB3nLYut06xRp48dapz12WXuiPQXTvoY_q1JoZIm/exec';
 
     // --- 要素の取得 ---
     const ticketAccordionContainer = document.getElementById('ticketAccordionContainer');
@@ -197,39 +197,82 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${ev.time || '-'}</td>
                 <td>${typeLabel}</td>
                 <td>${ev.title}</td>
-                <td><button class="delete-btn" data-id="${ev.id}">削除</button></td>
+                <td>
+                    <button class="edit-btn outline-btn" style="padding: 5px 10px; font-size: 0.8rem; margin-right: 5px;" data-id="${ev.id}">編集</button>
+                    <button class="delete-btn" data-id="${ev.id}">削除</button>
+                </td>
             `;
             eventTableBody.appendChild(tr);
         });
 
-        // 削除ボタンのイベントハンドラ
+        // 削除・編集ボタンのイベントハンドラ
         document.querySelectorAll('.delete-btn[data-id]').forEach(btn => {
             btn.onclick = () => deleteEvent(btn.getAttribute('data-id'));
+        });
+        document.querySelectorAll('.edit-btn[data-id]').forEach(btn => {
+            btn.onclick = () => editEvent(btn.getAttribute('data-id'));
+        });
+    }
+
+    function editEvent(id) {
+        const events = JSON.parse(localStorage.getItem('admin_events') || '[]');
+        const ev = events.find(e => e.id.toString() === id.toString());
+        if (!ev) return;
+
+        document.getElementById('eventId').value = ev.id;
+        document.getElementById('eventDate').value = ev.date;
+        if (document.getElementById('eventTime')) document.getElementById('eventTime').value = ev.time || '';
+        if (document.getElementById('eventCategory')) document.getElementById('eventCategory').value = ev.type || 'LIVE';
+        document.getElementById('eventTitle').value = ev.title;
+        document.getElementById('eventDescription').value = ev.description || '';
+        document.getElementById('eventImageUrl').value = ev.imageUrl || '';
+
+        document.getElementById('eventSubmitBtn').textContent = '更新';
+        document.getElementById('eventCancelEditBtn').style.display = 'inline-block';
+        
+        // フォームまでスクロール
+        document.getElementById('adminEventForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const eventCancelEditBtn = document.getElementById('eventCancelEditBtn');
+    if (eventCancelEditBtn) {
+        eventCancelEditBtn.addEventListener('click', () => {
+            document.getElementById('adminEventForm').reset();
+            document.getElementById('eventId').value = '';
+            document.getElementById('eventSubmitBtn').textContent = '追加';
+            eventCancelEditBtn.style.display = 'none';
         });
     }
 
     if (adminEventForm) {
         adminEventForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const submitBtn = adminEventForm.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('eventSubmitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = '保存中...';
 
+            const eventId = document.getElementById('eventId').value;
+            const isEdit = eventId !== '';
+            
             const date = document.getElementById('eventDate').value;
             const time = document.getElementById('eventTime') ? document.getElementById('eventTime').value : '';
             const category = document.getElementById('eventCategory') ? document.getElementById('eventCategory').value : 'LIVE';
             const title = document.getElementById('eventTitle').value;
-            const id = Date.now();
+            const description = document.getElementById('eventDescription').value;
+            const imageUrl = document.getElementById('eventImageUrl').value;
+            const id = isEdit ? eventId : Date.now();
             
             // GASへ保存
             const formData = new URLSearchParams();
-            formData.append('type', 'event');
+            formData.append('type', isEdit ? 'edit_event' : 'event');
             formData.append('password', adminToken);
             formData.append('id', id);
             formData.append('date', date);
             formData.append('time', time);
             formData.append('event_type', category);
             formData.append('title', title);
+            formData.append('description', description);
+            formData.append('imageUrl', imageUrl);
 
             try {
                 await fetch(GAS_URL, {
@@ -239,24 +282,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 // フェールセーフ：GASの同期が失敗してもローカルで反映されるように直接保存する
-                const localEvents = JSON.parse(localStorage.getItem('admin_events') || '[]');
-                localEvents.push({
+                let localEvents = JSON.parse(localStorage.getItem('admin_events') || '[]');
+                
+                const eventData = {
                     id: id.toString(),
                     date: date,
                     time: time,
                     type: category,
-                    title: title
-                });
+                    title: title,
+                    description: description,
+                    imageUrl: imageUrl
+                };
+
+                if (isEdit) {
+                    localEvents = localEvents.map(e => e.id.toString() === id.toString() ? eventData : e);
+                } else {
+                    localEvents.push(eventData);
+                }
+                
                 localStorage.setItem('admin_events', JSON.stringify(localEvents));
 
                 // 成功を想定してフォームをリセットし再描画
                 adminEventForm.reset();
+                document.getElementById('eventId').value = '';
+                if (document.getElementById('eventCancelEditBtn')) {
+                    document.getElementById('eventCancelEditBtn').style.display = 'none';
+                }
                 loadAllFromLocal(); // ローカルの最新データを描画
                 
                 // その後、可能ならGASから最新状態を同期する
                 fetchAllDataFromGAS();
             } catch (error) {
-                console.error("Add Event Error:", error);
+                console.error("Add/Edit Event Error:", error);
                 alert("保存に失敗しました。");
             } finally {
                 submitBtn.disabled = false;
