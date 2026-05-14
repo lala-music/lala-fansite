@@ -168,3 +168,16 @@ a:hover { opacity: 0.8; }
     cursor: pointer;
 }
 .modal-close:hover { color: var(--primary-color); }
+
+/* SVG Icon Fix */
+.footer-sns svg {
+    width: 24px;
+    height: 24px;
+    transition: color 0.3s ease;
+}
+.footer-sns a {
+    color: var(--text-muted);
+}
+.footer-sns a:hover svg {
+    color: var(--primary-color);
+}
