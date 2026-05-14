@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!adminToken) return;
         if (refreshBtn) refreshBtn.textContent = '同期中...';
         try {
-            const response = await fetch(GAS_URL + "?password=" + encodeURIComponent(adminToken));
+            const response = await fetch(GAS_URL + "?password=" + encodeURIComponent(adminToken) + "&t=" + Date.now());
             const data = await response.json();
             
             if (data.events) {
@@ -400,6 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 await fetch(GAS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: formData.toString()
                 });
                 
@@ -433,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadAllFromLocal(); // ローカルの最新データを描画
                 
                 // その後、可能ならGASから最新状態を同期する
-                fetchAllDataFromGAS();
+                setTimeout(() => fetchAllDataFromGAS(), 1500);
             } catch (error) {
                 console.error("Add/Edit Event Error:", error);
                 alert("保存に失敗しました。");
@@ -455,9 +456,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 await fetch(GAS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: formData.toString()
                 });
-                fetchAllDataFromGAS();
+                // ローカルも更新
+                let localEvents = JSON.parse(localStorage.getItem('admin_events') || '[]');
+                localEvents = localEvents.filter(e => e.id.toString() !== id.toString());
+                localStorage.setItem('admin_events', JSON.stringify(localEvents));
+                loadAllFromLocal();
+                
+                setTimeout(() => fetchAllDataFromGAS(), 1000);
             } catch (error) {
                 console.error("Delete Event Error:", error);
                 alert("削除に失敗しました。");
@@ -495,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
             authErrorMsg.style.display = 'none';
             
             try {
-                const response = await fetch(GAS_URL + "?password=" + encodeURIComponent(pass));
+                const response = await fetch(GAS_URL + "?password=" + encodeURIComponent(pass) + "&t=" + Date.now());
                 const data = await response.json();
                 
                 if (data.result === 'error' && data.message === 'Unauthorized') {

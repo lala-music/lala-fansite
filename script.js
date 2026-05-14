@@ -232,10 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5_hLiUKG65eSWuH5IvvdswsRYxkI_g722-GKakdA6ntBRt5hv4z6eDvDipWl2RA_Y/exec';
 
     async function updateDynamicUI() {
-        if (!dynamicNewsList || !dynamicLiveList) return;
-
         try {
-            const response = await fetch(GAS_URL);
+            const response = await fetch(GAS_URL + "?t=" + Date.now());
             const data = await response.json();
             const events = data.events || [];
             const reservations = data.reservations || [];
@@ -244,11 +242,29 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('admin_events', JSON.stringify(events));
             localStorage.setItem('lala_bar_reservations', JSON.stringify(reservations));
 
-            renderEventsUI(events);
+            if (dynamicNewsList || dynamicLiveList) {
+                renderEventsUI(events);
+            }
+            
+            // 再度カレンダーを描画して最新のイベントを反映させる
+            const currentDate = new Date();
+            const monthYearSpan = document.getElementById('calendarMonthYear');
+            if (monthYearSpan) {
+                const parts = monthYearSpan.textContent.split('.');
+                if (parts.length === 2) {
+                    currentDate.setFullYear(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, 1);
+                }
+            }
+            if (typeof renderCalendar === 'function') {
+                renderCalendar(currentDate);
+            }
+            
         } catch (e) {
             console.warn("GAS Fetch failed, using local cache:", e);
-            const events = JSON.parse(localStorage.getItem('admin_events') || '[]');
-            renderEventsUI(events);
+            if (dynamicNewsList || dynamicLiveList) {
+                const events = JSON.parse(localStorage.getItem('admin_events') || '[]');
+                renderEventsUI(events);
+            }
         }
     }
 
