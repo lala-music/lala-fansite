@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5_hLiUKG65eSWuH5IvvdswsRYxkI_g722-GKakdA6ntBRt5hv4z6eDvDipWl2RA_Y/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyzfpa9agwqFjMxwvjXkWjASxMvHmwCATl8Tffy7JaYnZFnjvAYBh2YtfIKsO254yxM/exec';
 
     // --- 要素の取得 ---
     const ticketAccordionContainer = document.getElementById('ticketAccordionContainer');
@@ -385,23 +385,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = isEdit ? eventId : Date.now();
             
             // GASへ保存
-            const formData = new URLSearchParams();
-            formData.append('type', isEdit ? 'edit_event' : 'event');
-            formData.append('password', adminToken);
-            formData.append('id', id);
-            formData.append('date', date);
-            formData.append('time', time);
-            formData.append('event_type', category);
-            formData.append('title', title);
-            formData.append('description', description);
-            formData.append('imageUrl', imageUrl);
+            const payload = {
+                type: isEdit ? 'edit_event' : 'event',
+                password: adminToken,
+                id: id,
+                date: date,
+                time: time,
+                event_type: category,
+                title: title,
+                description: description,
+                imageUrl: imageUrl
+            };
 
             try {
                 await fetch(GAS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData.toString()
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
                 });
                 
                 // フェールセーフ：GASの同期が失敗してもローカルで反映されるように直接保存する
@@ -447,17 +448,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function deleteEvent(id) {
         if (confirm("このイベントを削除しますか？")) {
-            const formData = new URLSearchParams();
-            formData.append('type', 'delete_event');
-            formData.append('password', adminToken);
-            formData.append('id', id);
+            const payload = {
+                type: 'delete_event',
+                password: adminToken,
+                id: id
+            };
 
             try {
                 await fetch(GAS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData.toString()
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
                 });
                 // ローカルも更新
                 let localEvents = JSON.parse(localStorage.getItem('admin_events') || '[]');

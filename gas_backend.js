@@ -68,44 +68,58 @@ function doGet(e) {
 function doPost(e) {
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var type = e.parameter.type;
+    
+    // JSON形式で送信された場合のフォールバック処理
+    var params = e.parameter;
+    if (e.postData && e.postData.contents) {
+      try {
+        var parsed = JSON.parse(e.postData.contents);
+        if (parsed.type) {
+          params = parsed;
+        }
+      } catch (err) {
+        // パース失敗時はそのまま e.parameter を使用
+      }
+    }
+    
+    var type = params.type;
 
     // 1. スケジュール(イベント)の管理
     if (type === 'event') {
-      if (e.parameter.password !== ADMIN_PASSWORD) {
+      if (params.password !== ADMIN_PASSWORD) {
         return createJsonResponse({ "result": "error", "message": "Unauthorized" });
       }
       var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title", "description", "imageUrl"]);
       eventSheet.appendRow([
-        e.parameter.id || Date.now(),
-        e.parameter.date,
-        e.parameter.time,
-        e.parameter.event_type, // 'LIVE' or 'NEWS'
-        e.parameter.title,
-        e.parameter.description || '',
-        e.parameter.imageUrl || ''
+        params.id || Date.now(),
+        params.date,
+        params.time,
+        params.event_type, // 'LIVE' or 'NEWS'
+        params.title,
+        params.description || '',
+        params.imageUrl || ''
       ]);
       return createJsonResponse({ "result": "success" });
     }
 
     if (type === 'edit_event') {
-      if (e.parameter.password !== ADMIN_PASSWORD) {
+      if (params.password !== ADMIN_PASSWORD) {
         return createJsonResponse({ "result": "error", "message": "Unauthorized" });
       }
       var eventSheet = ss.getSheetByName("Events");
       if (eventSheet) {
-        var id = e.parameter.id;
+        var id = params.id;
         var data = eventSheet.getDataRange().getValues();
         for (var i = 1; i < data.length; i++) {
           if (data[i][0].toString() === id.toString()) {
             // Update row (Adding 1 to i because arrays are 0-indexed and rows are 1-indexed, but getValues returns 0-indexed. Actually sheet row is i+1.
             var rowNum = i + 1;
-            eventSheet.getRange(rowNum, 2).setValue(e.parameter.date);
-            eventSheet.getRange(rowNum, 3).setValue(e.parameter.time);
-            eventSheet.getRange(rowNum, 4).setValue(e.parameter.event_type);
-            eventSheet.getRange(rowNum, 5).setValue(e.parameter.title);
-            eventSheet.getRange(rowNum, 6).setValue(e.parameter.description || '');
-            eventSheet.getRange(rowNum, 7).setValue(e.parameter.imageUrl || '');
+            eventSheet.getRange(rowNum, 2).setValue(params.date);
+            eventSheet.getRange(rowNum, 3).setValue(params.time);
+            eventSheet.getRange(rowNum, 4).setValue(params.event_type);
+            eventSheet.getRange(rowNum, 5).setValue(params.title);
+            eventSheet.getRange(rowNum, 6).setValue(params.description || '');
+            eventSheet.getRange(rowNum, 7).setValue(params.imageUrl || '');
             break;
           }
         }
@@ -114,12 +128,12 @@ function doPost(e) {
     }
 
     if (type === 'delete_event') {
-      if (e.parameter.password !== ADMIN_PASSWORD) {
+      if (params.password !== ADMIN_PASSWORD) {
         return createJsonResponse({ "result": "error", "message": "Unauthorized" });
       }
       var eventSheet = ss.getSheetByName("Events");
       if (eventSheet) {
-        var id = e.parameter.id;
+        var id = params.id;
         var data = eventSheet.getDataRange().getValues();
         for (var i = 1; i < data.length; i++) {
           if (data[i][0].toString() === id.toString()) {
