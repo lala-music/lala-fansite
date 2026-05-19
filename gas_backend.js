@@ -188,11 +188,8 @@ function getOrCreateSheet(ss, name, headers) {
     sheet = ss.insertSheet(name);
     sheet.appendRow(headers);
   } else {
-    // 既存のシートに見出しが足りない場合、自動的に追加・修正する
-    var lastCol = sheet.getLastColumn();
-    if (lastCol < headers.length) {
-      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-    }
+    // 既存のシートの見出しを強制的に上書きして、空のキーを防ぐ
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   }
   return sheet;
 }

@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 確認モーダルを表示
             showConfirmModal(details, (onComplete) => {
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbwIvYlHziAFa9tGOOaKJ1TMF3YdgYTiGQ6ukr-GSVmQxvjBfIHK_Hy6Y4WebklHeifE/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzTsHlJjR_TqQGtgJbngh9JVYmV9SRdRyNk6FzjteAyysK2cTwk8Bl8EU1yIPTul5r2/exec';
                 
                 const formData = new URLSearchParams();
                 formData.append('type', 'ticket'); // GAS側にチケット予約だと伝える
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const dynamicNewsList = document.getElementById('dynamicNewsList');
     const dynamicLiveList = document.getElementById('dynamicLiveList');
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwIvYlHziAFa9tGOOaKJ1TMF3YdgYTiGQ6ukr-GSVmQxvjBfIHK_Hy6Y4WebklHeifE/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzTsHlJjR_TqQGtgJbngh9JVYmV9SRdRyNk6FzjteAyysK2cTwk8Bl8EU1yIPTul5r2/exec';
 
     async function updateDynamicUI() {
         try {
@@ -785,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdAt: new Date().toLocaleString('ja-JP')
                 };
 
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbwIvYlHziAFa9tGOOaKJ1TMF3YdgYTiGQ6ukr-GSVmQxvjBfIHK_Hy6Y4WebklHeifE/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzTsHlJjR_TqQGtgJbngh9JVYmV9SRdRyNk6FzjteAyysK2cTwk8Bl8EU1yIPTul5r2/exec';
                 const formData = new URLSearchParams();
                 formData.append('type', 'bar'); // GAS側にまとめて予約だと伝えるが、後でgas_backendで判別する
                 formData.append('resType', resType); // 'bar' or 'studio'
