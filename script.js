@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 確認モーダルを表示
             showConfirmModal(details, (onComplete) => {
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzxcrH96p8mr4Jdre99qyBSN0Qq8HVpeJbR78MUtKptc1WM47teqb_rSvWOXJ5TTWFK/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbwIvYlHziAFa9tGOOaKJ1TMF3YdgYTiGQ6ukr-GSVmQxvjBfIHK_Hy6Y4WebklHeifE/exec';
                 
                 const formData = new URLSearchParams();
                 formData.append('type', 'ticket'); // GAS側にチケット予約だと伝える
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const dynamicNewsList = document.getElementById('dynamicNewsList');
     const dynamicLiveList = document.getElementById('dynamicLiveList');
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzxcrH96p8mr4Jdre99qyBSN0Qq8HVpeJbR78MUtKptc1WM47teqb_rSvWOXJ5TTWFK/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwIvYlHziAFa9tGOOaKJ1TMF3YdgYTiGQ6ukr-GSVmQxvjBfIHK_Hy6Y4WebklHeifE/exec';
 
     async function updateDynamicUI() {
         try {
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="news-item" style="border-left: 3px solid #f39c12; cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
                     ${thumb}
                     <div style="flex-grow: 1;">
-                        <div class="news-date" style="color: #f39c12;">${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}</div>
+                        <div class="news-date" style="color: #f39c12;">${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}</div>
                         <div class="news-category tag-info" style="border-color:#f39c12; color:#f39c12;">NEWS</div>
                         <div class="news-title" style="text-decoration: underline;">
                             ${ev.title}
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="news-item" style="cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
                     ${thumb}
                     <div style="flex-grow: 1;">
-                        <div class="news-date">${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}</div>
+                        <div class="news-date">${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}</div>
                         <div class="news-category tag-live">LIVE</div>
                         <div class="news-title" style="text-decoration: underline;">
                             ${ev.title} <span style="font-size: 0.8rem; color: var(--primary-color);">[予約・詳細]</span>
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('detailCategory').style.borderColor = ev.type === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
         
         document.getElementById('detailTitle').textContent = ev.title;
-        document.getElementById('detailDate').textContent = `${String(ev.date).replace(/-/g, '.').split('T')[0]} ${ev.time || ''}`;
+        document.getElementById('detailDate').textContent = `${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}`;
         
         const imgContainer = document.getElementById('detailImageContainer');
         const img = document.getElementById('detailImage');
@@ -473,7 +473,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // イベントがあれば表示
             const eventsForDay = adminEvents.filter(e => {
-                const eDate = String(e.date).split('T')[0];
+                let eDate = String(e.date).split('T')[0];
+                eDate = eDate.replace(/\//g, '-'); // Google Sheetsの日付（2026/05/15）をYYYY-MM-DDに変換
                 return eDate === dateStr;
             });
             eventsForDay.forEach(ev => {
@@ -784,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdAt: new Date().toLocaleString('ja-JP')
                 };
 
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzxcrH96p8mr4Jdre99qyBSN0Qq8HVpeJbR78MUtKptc1WM47teqb_rSvWOXJ5TTWFK/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbwIvYlHziAFa9tGOOaKJ1TMF3YdgYTiGQ6ukr-GSVmQxvjBfIHK_Hy6Y4WebklHeifE/exec';
                 const formData = new URLSearchParams();
                 formData.append('type', 'bar'); // GAS側にまとめて予約だと伝えるが、後でgas_backendで判別する
                 formData.append('resType', resType); // 'bar' or 'studio'

@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzxcrH96p8mr4Jdre99qyBSN0Qq8HVpeJbR78MUtKptc1WM47teqb_rSvWOXJ5TTWFK/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwIvYlHziAFa9tGOOaKJ1TMF3YdgYTiGQ6ukr-GSVmQxvjBfIHK_Hy6Y4WebklHeifE/exec';
 
     // --- 要素の取得 ---
     const ticketAccordionContainer = document.getElementById('ticketAccordionContainer');
