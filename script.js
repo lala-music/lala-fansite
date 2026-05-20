@@ -279,52 +279,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderEventsUI(events, showAll = false) {
-        // 日付の新しい順（降順）にソート
-        events.sort((a,b) => new Date(b.date) - new Date(a.date));
+    let eventCurrentPage = 1;
+    const EVENTS_PER_PAGE = 5;
+    let isEventViewAll = false;
 
+    function renderEventsUI(events, mode = 'init', animClass = '') {
+        if (mode === 'viewAll') {
+            isEventViewAll = true;
+            eventCurrentPage = 1;
+        } else if (mode === 'next') {
+            eventCurrentPage++;
+        } else if (mode === 'prev') {
+            eventCurrentPage--;
+        }
+
+        events.sort((a,b) => new Date(b.date) - new Date(a.date));
         const newsEvents = events.filter(e => e.type === 'NEWS');
         const liveEvents = events.filter(e => e.type === 'LIVE' || !e.type); 
 
-        const MAX_EVENTS = 3;
-        const displayNews = showAll ? newsEvents : newsEvents.slice(0, MAX_EVENTS);
-        const displayLive = showAll ? liveEvents : liveEvents.slice(0, MAX_EVENTS);
+        let displayNews, displayLive;
+        const maxPages = Math.max(
+            Math.ceil(newsEvents.length / EVENTS_PER_PAGE),
+            Math.ceil(liveEvents.length / EVENTS_PER_PAGE)
+        );
 
-        // NEWSレンダリング
-        if (displayNews.length > 0) {
-            dynamicNewsList.innerHTML = displayNews.map(ev => {
+        if (isEventViewAll) {
+            const startIdx = (eventCurrentPage - 1) * EVENTS_PER_PAGE;
+            displayNews = newsEvents.slice(startIdx, startIdx + EVENTS_PER_PAGE);
+            displayLive = liveEvents.slice(startIdx, startIdx + EVENTS_PER_PAGE);
+        } else {
+            displayNews = newsEvents.slice(0, 3);
+            displayLive = liveEvents.slice(0, 3);
+        }
+
+        const renderItems = (items, category) => {
+            return items.map(ev => {
                 const thumb = ev.imageUrl ? `<div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 4px; overflow: hidden; flex-shrink: 0;"><img src="${ev.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>` : '';
+                const tagClass = category === 'NEWS' ? 'tag-info' : 'tag-live';
+                const tagColor = category === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
+                const dateStr = `${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}`;
+                const liveExtra = category === 'LIVE' ? ` <span style="font-size: 0.8rem; color: var(--primary-color);">[予約・詳細]</span>` : '';
+                
                 return `
-                <div class="news-item" style="border-left: 3px solid #f39c12; cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
+                <div class="news-item ${animClass}" style="${category === 'NEWS' ? 'border-left: 3px solid #f39c12; ' : ''}cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
                     ${thumb}
                     <div style="flex-grow: 1;">
-                        <div class="news-date" style="color: #f39c12;">${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}</div>
-                        <div class="news-category tag-info" style="border-color:#f39c12; color:#f39c12;">NEWS</div>
+                        <div class="news-date" style="color: ${tagColor};">${dateStr}</div>
+                        <div class="news-category ${tagClass}" ${category === 'NEWS' ? 'style="border-color:#f39c12; color:#f39c12;"' : ''}>${category}</div>
                         <div class="news-title" style="text-decoration: underline;">
-                            ${ev.title}
+                            ${ev.title}${liveExtra}
                         </div>
                     </div>
                 </div>
-            `}).join('');
-        }
+                `;
+            }).join('');
+        };
 
-        // LIVEレンダリング
-        if (displayLive.length > 0) {
-            dynamicLiveList.innerHTML = displayLive.map(ev => {
-                const thumb = ev.imageUrl ? `<div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 4px; overflow: hidden; flex-shrink: 0;"><img src="${ev.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>` : '';
-                return `
-                <div class="news-item" style="cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
-                    ${thumb}
-                    <div style="flex-grow: 1;">
-                        <div class="news-date">${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}</div>
-                        <div class="news-category tag-live">LIVE</div>
-                        <div class="news-title" style="text-decoration: underline;">
-                            ${ev.title} <span style="font-size: 0.8rem; color: var(--primary-color);">[予約・詳細]</span>
-                        </div>
-                    </div>
-                </div>
-            `}).join('');
-        }
+        if (displayNews.length > 0) dynamicNewsList.innerHTML = renderItems(displayNews, 'NEWS');
+        if (displayLive.length > 0) dynamicLiveList.innerHTML = renderItems(displayLive, 'LIVE');
 
         // Add event listeners for the items
         document.querySelectorAll('#dynamicNewsList .news-item, #dynamicLiveList .news-item').forEach(item => {
@@ -332,27 +344,62 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 const id = item.getAttribute('data-id');
                 const ev = events.find(e => e.id.toString() === id.toString());
-                if (ev) {
-                    openEventDetailModal(ev);
-                }
+                if (ev) openEventDetailModal(ev);
             });
         });
 
-        // View All Button Logic
+        // View All Button Logic & Pagination
         const viewAllBtn = document.getElementById('viewAllEventsBtn');
-        if (viewAllBtn) {
-            // Remove previous event listeners by cloning
-            const newBtn = viewAllBtn.cloneNode(true);
-            viewAllBtn.parentNode.replaceChild(newBtn, viewAllBtn);
-            
-            if (newsEvents.length <= MAX_EVENTS && liveEvents.length <= MAX_EVENTS) {
-                newBtn.style.display = 'none'; // No need for button
-            } else {
-                newBtn.style.display = showAll ? 'none' : 'inline-block';
+        let paginationContainer = document.getElementById('eventsPagination');
+
+        if (!isEventViewAll) {
+            if (viewAllBtn) {
+                viewAllBtn.style.display = (newsEvents.length <= 3 && liveEvents.length <= 3) ? 'none' : 'inline-block';
+                const newBtn = viewAllBtn.cloneNode(true);
+                viewAllBtn.parentNode.replaceChild(newBtn, viewAllBtn);
                 newBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    renderEventsUI(events, true);
+                    renderEventsUI(events, 'viewAll', 'slide-in-right');
                 });
+            }
+            if (paginationContainer) paginationContainer.style.display = 'none';
+        } else {
+            if (viewAllBtn) viewAllBtn.style.display = 'none';
+            if (!paginationContainer) {
+                paginationContainer = document.createElement('div');
+                paginationContainer.id = 'eventsPagination';
+                paginationContainer.style.textAlign = 'center';
+                paginationContainer.style.marginTop = '20px';
+                paginationContainer.style.display = 'flex';
+                paginationContainer.style.justifyContent = 'center';
+                paginationContainer.style.alignItems = 'center';
+                paginationContainer.style.gap = '15px';
+                
+                const btnContainer = document.getElementById('viewAllEventsBtn')?.parentNode;
+                if (btnContainer) {
+                    btnContainer.appendChild(paginationContainer);
+                }
+            }
+            paginationContainer.style.display = 'flex';
+            
+            paginationContainer.innerHTML = `
+                <button id="eventsPrevBtn" class="btn outline-btn" style="padding: 5px 15px; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: white;" ${eventCurrentPage === 1 ? 'disabled' : ''}>&lt;</button>
+                <span style="color: var(--text-muted);">${eventCurrentPage} / ${maxPages}</span>
+                <button id="eventsNextBtn" class="btn outline-btn" style="padding: 5px 15px; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: white;" ${eventCurrentPage === maxPages ? 'disabled' : ''}>&gt;</button>
+            `;
+            
+            if (eventCurrentPage > 1) {
+                document.getElementById('eventsPrevBtn').onclick = () => renderEventsUI(events, 'prev', 'slide-in-left');
+            } else {
+                document.getElementById('eventsPrevBtn').style.opacity = '0.5';
+                document.getElementById('eventsPrevBtn').style.cursor = 'not-allowed';
+            }
+
+            if (eventCurrentPage < maxPages) {
+                document.getElementById('eventsNextBtn').onclick = () => renderEventsUI(events, 'next', 'slide-in-right');
+            } else {
+                document.getElementById('eventsNextBtn').style.opacity = '0.5';
+                document.getElementById('eventsNextBtn').style.cursor = 'not-allowed';
             }
         }
     }
