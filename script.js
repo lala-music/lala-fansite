@@ -375,7 +375,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 paginationContainer.style.alignItems = 'center';
                 paginationContainer.style.gap = '15px';
                 
-                const btnContainer = document.getElementById('viewAllEventsBtn')?.parentNode;
+                const viewBtnEl = document.getElementById('viewAllEventsBtn');
+                const btnContainer = viewBtnEl ? viewBtnEl.parentNode : null;
                 if (btnContainer) {
                     btnContainer.appendChild(paginationContainer);
                 }
