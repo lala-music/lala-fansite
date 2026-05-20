@@ -442,8 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 loadAllFromLocal(); // ローカルの最新データを描画
                 
-                // その後、可能ならGASから最新状態を同期する
-                setTimeout(() => fetchAllDataFromGAS(), 1500);
+                // 削除: setTimeout(() => fetchAllDataFromGAS(), 1500); // GASの反映遅延によるイベント消失を防ぐため自動リロードを無効化
             } catch (error) {
                 console.error("Add/Edit Event Error:", error);
                 alert("保存に失敗しました。");
@@ -475,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('admin_events', JSON.stringify(localEvents));
                 loadAllFromLocal();
                 
-                setTimeout(() => fetchAllDataFromGAS(), 1000);
+                // 削除: setTimeout(() => fetchAllDataFromGAS(), 1000); // GASの反映遅延による消失を防ぐため自動リロード無効化
             } catch (error) {
                 console.error("Delete Event Error:", error);
                 alert("削除に失敗しました。");
