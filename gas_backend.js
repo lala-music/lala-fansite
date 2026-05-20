@@ -100,6 +100,7 @@ function doPost(e) {
         params.description || '',
         params.imageUrl || ''
       ]);
+      SpreadsheetApp.flush(); // 即座に変更を反映
       return createJsonResponse({ "result": "success" });
     }
 
@@ -121,6 +122,7 @@ function doPost(e) {
             eventSheet.getRange(rowNum, 5).setValue(params.title);
             eventSheet.getRange(rowNum, 6).setValue(params.description || '');
             eventSheet.getRange(rowNum, 7).setValue(params.imageUrl || '');
+            SpreadsheetApp.flush(); // 即座に変更を反映
             break;
           }
         }
@@ -139,6 +141,7 @@ function doPost(e) {
         for (var i = 1; i < data.length; i++) {
           if (data[i][0].toString() === id.toString()) {
             eventSheet.deleteRow(i + 1);
+            SpreadsheetApp.flush(); // 即座に変更を反映
             break;
           }
         }
@@ -196,12 +199,14 @@ function getOrCreateSheet(ss, name, headers) {
 
 function getRowsAsJson(sheet) {
   var data = sheet.getDataRange().getDisplayValues();
-  var headers = data[0];
+  if (data.length < 2) return [];
+  var isEventSheet = (sheet.getName() === 'Events');
+  var headers = isEventSheet ? ["id", "date", "time", "type", "title", "description", "imageUrl"] : data[0];
   var rows = [];
   for (var i = 1; i < data.length; i++) {
     var obj = {};
     for (var j = 0; j < headers.length; j++) {
-      obj[headers[j]] = data[i][j];
+      obj[headers[j]] = data[i][j] !== undefined ? data[i][j] : '';
     }
     rows.push(obj);
   }

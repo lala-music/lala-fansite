@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 確認モーダルを表示
             showConfirmModal(details, (onComplete) => {
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzTsHlJjR_TqQGtgJbngh9JVYmV9SRdRyNk6FzjteAyysK2cTwk8Bl8EU1yIPTul5r2/exec';
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbyjBeKpEQlYyNNzLFw85vkHe6FrQCN4sORrkoihtDfoDhUS8BV2su33O276HnNa3vdASA/exec';
                 
                 const formData = new URLSearchParams();
                 formData.append('type', 'ticket'); // GAS側にチケット予約だと伝える
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const dynamicNewsList = document.getElementById('dynamicNewsList');
     const dynamicLiveList = document.getElementById('dynamicLiveList');
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzTsHlJjR_TqQGtgJbngh9JVYmV9SRdRyNk6FzjteAyysK2cTwk8Bl8EU1yIPTul5r2/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyjBeKpEQlYyNNzLFw85vkHe6FrQCN4sORrkoihtDfoDhUS8BV2su33O276HnNa3vdASA/exec';
 
     async function updateDynamicUI() {
         try {
@@ -268,16 +268,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderEventsUI(events) {
+    function renderEventsUI(events, showAll = false) {
         // 日付の新しい順（降順）にソート
         events.sort((a,b) => new Date(b.date) - new Date(a.date));
 
         const newsEvents = events.filter(e => e.type === 'NEWS');
         const liveEvents = events.filter(e => e.type === 'LIVE' || !e.type); 
 
+        const MAX_EVENTS = 3;
+        const displayNews = showAll ? newsEvents : newsEvents.slice(0, MAX_EVENTS);
+        const displayLive = showAll ? liveEvents : liveEvents.slice(0, MAX_EVENTS);
+
         // NEWSレンダリング
-        if (newsEvents.length > 0) {
-            dynamicNewsList.innerHTML = newsEvents.map(ev => {
+        if (displayNews.length > 0) {
+            dynamicNewsList.innerHTML = displayNews.map(ev => {
                 const thumb = ev.imageUrl ? `<div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 4px; overflow: hidden; flex-shrink: 0;"><img src="${ev.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>` : '';
                 return `
                 <div class="news-item" style="border-left: 3px solid #f39c12; cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
@@ -294,8 +298,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // LIVEレンダリング
-        if (liveEvents.length > 0) {
-            dynamicLiveList.innerHTML = liveEvents.map(ev => {
+        if (displayLive.length > 0) {
+            dynamicLiveList.innerHTML = displayLive.map(ev => {
                 const thumb = ev.imageUrl ? `<div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 4px; overflow: hidden; flex-shrink: 0;"><img src="${ev.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>` : '';
                 return `
                 <div class="news-item" style="cursor: pointer; display: flex; align-items: center;" data-id="${ev.id}">
@@ -322,6 +326,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+
+        // View All Button Logic
+        const viewAllBtn = document.getElementById('viewAllEventsBtn');
+        if (viewAllBtn) {
+            // Remove previous event listeners by cloning
+            const newBtn = viewAllBtn.cloneNode(true);
+            viewAllBtn.parentNode.replaceChild(newBtn, viewAllBtn);
+            
+            if (newsEvents.length <= MAX_EVENTS && liveEvents.length <= MAX_EVENTS) {
+                newBtn.style.display = 'none'; // No need for button
+            } else {
+                newBtn.style.display = showAll ? 'none' : 'inline-block';
+                newBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    renderEventsUI(events, true);
+                });
+            }
+        }
     }
 
     function openEventDetailModal(ev) {
