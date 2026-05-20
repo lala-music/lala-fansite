@@ -130,22 +130,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalLiveTitle.textContent = liveTitle;
                 liveNameInput.value = liveTitle;
                 ticketModal.style.display = 'flex';
-                // 成功メッセージなどをリセット
+                document.body.classList.add('no-scroll');
+                // メッセージなどをリセット
                 formSuccessMessage.style.display = 'none';
                 ticketForm.style.display = 'block';
                 ticketForm.reset();
             }
         });
 
-        // モーダルを閉じる（✕ボタン）
+        // モーダル閉じる(×ボタン)
         closeModalBtn.addEventListener('click', () => {
             ticketModal.style.display = 'none';
+            document.body.classList.remove('no-scroll');
         });
 
-        // モーダルを閉じる（枠外クリック）
+        // モーダル閉じる(外側クリック)
         window.addEventListener('click', (e) => {
             if (e.target === ticketModal) {
                 ticketModal.style.display = 'none';
+                document.body.classList.remove('no-scroll');
             }
         });
 
@@ -244,6 +247,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (dynamicNewsList || dynamicLiveList) {
                 renderEventsUI(events);
+                
+                // URLパラメータでイベント指定があれば開く
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('eventId')) {
+                    const evId = params.get('eventId');
+                    const targetEv = events.find(e => e.id.toString() === evId);
+                    if (targetEv) openEventDetailModal(targetEv);
+                }
             }
             
             // 再度カレンダーを描画して最新のイベントを反映させる
@@ -386,6 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('modalLiveTitle').textContent = ev.title;
                     document.getElementById('liveNameInput').value = ev.title;
                     ticketModal.style.display = 'flex';
+                    document.body.classList.add('no-scroll');
                     document.getElementById('formSuccessMessage').style.display = 'none';
                     document.getElementById('ticketForm').style.display = 'block';
                     document.getElementById('ticketForm').reset();
@@ -395,6 +407,35 @@ document.addEventListener('DOMContentLoaded', () => {
             actionContainer.style.display = 'none';
         }
 
+
+
+        const shareCopyBtn = document.getElementById('shareCopyBtn');
+        const shareXBtn = document.getElementById('shareXBtn');
+        const shareLineBtn = document.getElementById('shareLineBtn');
+
+        if (shareCopyBtn) {
+            shareCopyBtn.onclick = () => {
+                const url = window.location.href.split('?')[0] + '?eventId=' + ev.id;
+                navigator.clipboard.writeText(url).then(() => {
+                    alert("URLをコピーしました！");
+                });
+            };
+        }
+        if (shareXBtn) {
+            shareXBtn.onclick = () => {
+                const url = encodeURIComponent(window.location.href.split('?')[0] + '?eventId=' + ev.id);
+                const text = encodeURIComponent(`【lala - ${ev.type === 'NEWS' ? 'NEWS' : 'LIVE'}】${ev.title}\n`);
+                window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+            };
+        }
+        if (shareLineBtn) {
+            shareLineBtn.onclick = () => {
+                const url = encodeURIComponent(window.location.href.split('?')[0] + '?eventId=' + ev.id);
+                window.open(`https://social-plugins.line.me/lineit/share?url=${url}`, '_blank');
+            };
+        }
+
+        document.body.classList.add('no-scroll');
         modal.style.display = 'flex';
     }
 
@@ -402,10 +443,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeEventDetailBtn) {
         closeEventDetailBtn.addEventListener('click', () => {
             document.getElementById('eventDetailModal').style.display = 'none';
+            document.body.classList.remove('no-scroll');
         });
         window.addEventListener('click', (e) => {
             if (e.target === document.getElementById('eventDetailModal')) {
                 document.getElementById('eventDetailModal').style.display = 'none';
+                document.body.classList.remove('no-scroll');
             }
         });
     }
