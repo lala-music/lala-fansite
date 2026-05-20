@@ -405,17 +405,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 imageUrl: imageUrl
             };
 
+            const formData = new URLSearchParams();
+            for (const key in payload) {
+                formData.append(key, payload[key]);
+            }
+
             try {
-                await fetch(GAS_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                });
-                
-                // フェールセーフ：GASの同期が失敗してもローカルで反映されるように直接保存する
+                // 先にローカルのUIを更新する（フェールセーフ）
                 let localEvents = JSON.parse(localStorage.getItem('admin_events') || '[]');
-                
                 const eventData = {
                     id: id.toString(),
                     date: date,
@@ -433,19 +430,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 localStorage.setItem('admin_events', JSON.stringify(localEvents));
-
-                // 成功を想定してフォームをリセットし再描画
                 adminEventForm.reset();
                 document.getElementById('eventId').value = '';
                 if (document.getElementById('eventCancelEditBtn')) {
                     document.getElementById('eventCancelEditBtn').style.display = 'none';
                 }
-                loadAllFromLocal(); // ローカルの最新データを描画
-                
-                // 削除: setTimeout(() => fetchAllDataFromGAS(), 1500); // GASの反映遅延によるイベント消失を防ぐため自動リロードを無効化
+                loadAllFromLocal();
+
+                // バックグラウンドでGASへ送信
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                });
             } catch (error) {
                 console.error("Add/Edit Event Error:", error);
-                alert("保存に失敗しました。");
+                // alert("保存に失敗しました。"); // Safariなどでエラーが出てもローカル保存できているのでアラートは出さない
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = '追加';
@@ -461,23 +462,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: id
             };
 
+            const formData = new URLSearchParams();
+            for (const key in payload) {
+                formData.append(key, payload[key]);
+            }
+
             try {
-                await fetch(GAS_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                });
-                // ローカルも更新
+                // 先にローカルのUIを更新
                 let localEvents = JSON.parse(localStorage.getItem('admin_events') || '[]');
                 localEvents = localEvents.filter(e => e.id.toString() !== id.toString());
                 localStorage.setItem('admin_events', JSON.stringify(localEvents));
                 loadAllFromLocal();
-                
-                // 削除: setTimeout(() => fetchAllDataFromGAS(), 1000); // GASの反映遅延による消失を防ぐため自動リロード無効化
+
+                // バックグラウンドでGASへ送信
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                });
             } catch (error) {
                 console.error("Delete Event Error:", error);
-                alert("削除に失敗しました。");
             }
         }
     };
