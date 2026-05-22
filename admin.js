@@ -1,9 +1,14 @@
-// admin.js
+﻿// admin.js
 // 管理者画面用のスクリプト（GASとの同期機能付き）
+
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyoAKvYOM0dUayWLktYFwltELb0e0Yz2LOFxKBW7I1YknxlIStsFP93hjOqWRsfElGe/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyQfxhzVbPL54lSAU4fFlscDeg9Go3TpBAwGLaFEr_5P6b6wir7XIJZ7u3H3-wXsDZm/exec';
 
     // --- 要素の取得 ---
     const ticketAccordionContainer = document.getElementById('ticketAccordionContainer');
@@ -229,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `
                 <tr>
                     <td style="font-size: 0.8rem; color: var(--text-muted);">${dateStr}</td>
-                    <td>${res.name}</td>
+                    <td>${escapeHTML(res.name)}</td>
                     <td>${res.email}</td>
                     <td>${res.count}名</td>
                     <td style="font-size: 0.85rem;">${safeMsg}</td>
@@ -269,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${timeStr}〜</td>
                     <td style="font-size: 0.8rem; color: var(--text-muted);">${dateStr}</td>
                     <td>${res.count}名</td>
-                    <td>${res.name}<br><span style="font-size:0.8rem;color:var(--text-muted);">${res.email}</span></td>
+                    <td>${escapeHTML(res.name)}<br><span style="font-size:0.8rem;color:var(--text-muted);">${res.email}</span></td>
                     <td style="font-size: 0.85rem;">${safeMsg}</td>
                 </tr>
             `;
@@ -300,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${ev.date}</td>
                 <td>${ev.time || '-'}</td>
                 <td>${typeLabel}</td>
-                <td>${ev.title}</td>
+                <td>${escapeHTML(ev.title)}</td>
                 <td>
                     <button class="edit-btn outline-btn" style="padding: 5px 10px; font-size: 0.8rem; margin-right: 5px;" data-id="${ev.id}">編集</button>
                     <button class="delete-btn" data-id="${ev.id}">削除</button>
@@ -578,3 +583,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+

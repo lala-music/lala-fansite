@@ -86,10 +86,31 @@ function doPost(e) {
     var type = params.type;
 
     // 1. スケジュール(イベント)の管理
-    if (type === 'event') {
-      if (params.password !== ADMIN_PASSWORD) {
-        return createJsonResponse({ "result": "error", "message": "Unauthorized" });
+    if (type === 'event' || type === 'edit_event' || type === 'delete_event') {
+      var cache = CacheService.getScriptCache();
+      var lockoutKey = "admin_lockout";
+      var attemptKey = "admin_auth_attempts";
+
+      if (cache.get(lockoutKey)) {
+        return createJsonResponse({ "result": "error", "message": "Too many failed attempts. Locked out for 10 minutes." });
       }
+
+      if (params.password !== ADMIN_PASSWORD) {
+        var attempts = parseInt(cache.get(attemptKey) || '0', 10);
+        attempts++;
+        if (attempts >= 5) {
+          cache.put(lockoutKey, 'true', 600); // 10分ロック
+          cache.remove(attemptKey);
+        } else {
+          cache.put(attemptKey, attempts.toString(), 600);
+        }
+        return createJsonResponse({ "result": "error", "message": "Unauthorized" });
+      } else {
+        cache.remove(attemptKey); // 成功したらリセット
+      }
+    }
+
+    if (type === 'event') {
       var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title", "description", "imageUrl"]);
       eventSheet.appendRow([
         params.id || Date.now(),
@@ -105,9 +126,6 @@ function doPost(e) {
     }
 
     if (type === 'edit_event') {
-      if (params.password !== ADMIN_PASSWORD) {
-        return createJsonResponse({ "result": "error", "message": "Unauthorized" });
-      }
       var eventSheet = ss.getSheetByName("Events");
       if (eventSheet) {
         var id = params.id;
@@ -131,9 +149,6 @@ function doPost(e) {
     }
 
     if (type === 'delete_event') {
-      if (params.password !== ADMIN_PASSWORD) {
-        return createJsonResponse({ "result": "error", "message": "Unauthorized" });
-      }
       var eventSheet = ss.getSheetByName("Events");
       if (eventSheet) {
         var id = params.id;
@@ -151,6 +166,15 @@ function doPost(e) {
 
     // 2. 予約の管理 (既存の機能)
     if (type === 'ticket' || type === 'bar') {
+      // 簡易スパム防止（全体で1分間に10回までの予約に制限）
+      var cache = CacheService.getScriptCache();
+      var resCountKey = "global_res_count";
+      var resCount = parseInt(cache.get(resCountKey) || '0', 10);
+      if (resCount >= 10) {
+        return createJsonResponse({ "result": "error", "message": "ただいまアクセスが集中しています。しばらく待ってから再度お試しください。" });
+      }
+      cache.put(resCountKey, (resCount + 1).toString(), 60);
+
       var resSheet = getOrCreateSheet(ss, "Reservations", ["submittedAt", "type", "target", "name", "email", "count", "message"]);
       var submittedDate = new Date();
       var name = e.parameter.name || '名称未設定';

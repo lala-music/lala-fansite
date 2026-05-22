@@ -1,5 +1,19 @@
-// script.js
-// サイトのアニメーションや動作を制御するスクリプト
+﻿// script.js
+// サイトとアニメーションの動作を制御するスクリプト
+
+const GLOBAL_GAS_URL = 'https://script.google.com/macros/s/AKfycbyQfxhzVbPL54lSAU4fFlscDeg9Go3TpBAwGLaFEr_5P6b6wir7XIJZ7u3H3-wXsDZm/exec';
+const ADMIN_EMAIL = 'info@lala-official.com';
+
+// XSS対策用ヘルパー関数
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -34,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const detailsDiv = document.getElementById('confirmDetails');
-        detailsDiv.innerHTML = details.map(d => `<div style="display: flex; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px 0;"><span style="color:var(--text-muted); width: 100px; flex-shrink: 0;">${d.label}:</span> <strong style="color:#fff; word-break: break-all;">${d.value || '-'}</strong></div>`).join('');
+        detailsDiv.innerHTML = details.map(d => `<div style="display: flex; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px 0;"><span style="color:var(--text-muted); width: 100px; flex-shrink: 0;">${escapeHTML(d.label)}:</span> <strong style="color:#fff; word-break: break-all;">${escapeHTML(d.value || '-')}</strong></div>`).join('');
 
         confirmModal.style.display = 'flex';
 
@@ -169,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 確認モーダルを表示
             showConfirmModal(details, (onComplete) => {
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbyjBeKpEQlYyNNzLFw85vkHe6FrQCN4sORrkoihtDfoDhUS8BV2su33O276HnNa3vdASA/exec';
+                
                 
                 const formData = new URLSearchParams();
                 formData.append('type', 'ticket'); // GAS側にチケット予約だと伝える
@@ -179,11 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.append('count', document.getElementById('ticketCount').value);
                 formData.append('message', document.getElementById('userMessage').value);
 
-                if (GAS_URL === 'ここに発行されたURLを貼り付けます') {
+                if (GLOBAL_GAS_URL === 'ここに発行されたURLを貼り付けます') {
                     saveToLocalStorage(liveNameInput.value, submitBtn);
                     onComplete();
                 } else {
-                    fetch(GAS_URL, {
+                    fetch(GLOBAL_GAS_URL, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -232,11 +246,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const dynamicNewsList = document.getElementById('dynamicNewsList');
     const dynamicLiveList = document.getElementById('dynamicLiveList');
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyoAKvYOM0dUayWLktYFwltELb0e0Yz2LOFxKBW7I1YknxlIStsFP93hjOqWRsfElGe/exec';
+    
 
     async function updateDynamicUI() {
         try {
-            const response = await fetch(GAS_URL + "?t=" + Date.now());
+            const response = await fetch(GLOBAL_GAS_URL + "?t=" + Date.now());
             const data = await response.json();
             const events = data.events || [];
             const reservations = data.reservations || [];
@@ -314,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const renderItems = (items, category) => {
             return items.map(ev => {
-                const thumb = ev.imageUrl ? `<div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 4px; overflow: hidden; flex-shrink: 0;"><img src="${ev.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>` : '';
+                const thumb = ev.imageUrl ? `<div style="width: 60px; height: 60px; margin-right: 15px; border-radius: 4px; overflow: hidden; flex-shrink: 0;"><img src="${escapeHTML(ev.imageUrl)}" style="width: 100%; height: 100%; object-fit: cover;"></div>` : '';
                 const tagClass = category === 'NEWS' ? 'tag-info' : 'tag-live';
                 const tagColor = category === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
                 const dateStr = `${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}`;
@@ -327,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="news-date" style="color: ${tagColor};">${dateStr}</div>
                         <div class="news-category ${tagClass}" ${category === 'NEWS' ? 'style="border-color:#f39c12; color:#f39c12;"' : ''}>${category}</div>
                         <div class="news-title" style="text-decoration: underline;">
-                            ${ev.title}${liveExtra}
+                            ${escapeHTML(ev.title)}${liveExtra}
                         </div>
                     </div>
                 </div>
@@ -472,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (shareXBtn) {
             shareXBtn.onclick = () => {
                 const url = encodeURIComponent(window.location.href.split('?')[0] + '?eventId=' + ev.id);
-                const text = encodeURIComponent(`【lala - ${ev.type === 'NEWS' ? 'NEWS' : 'LIVE'}】${ev.title}\n`);
+                const text = encodeURIComponent(`【lala - ${ev.type === 'NEWS' ? 'NEWS' : 'LIVE'}】${escapeHTML(ev.title)}\n`);
                 window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
             };
         }
@@ -898,7 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdAt: new Date().toLocaleString('ja-JP')
                 };
 
-                const GAS_URL = 'https://script.google.com/macros/s/AKfycbzTsHlJjR_TqQGtgJbngh9JVYmV9SRdRyNk6FzjteAyysK2cTwk8Bl8EU1yIPTul5r2/exec';
+                
                 const formData = new URLSearchParams();
                 formData.append('type', 'bar'); // GAS側にまとめて予約だと伝えるが、後でgas_backendで判別する
                 formData.append('resType', resType); // 'bar' or 'studio'
@@ -933,10 +947,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     onComplete();
                 };
 
-                if (GAS_URL === 'ここに発行されたURLを貼り付けます') {
+                if (GLOBAL_GAS_URL === 'ここに発行されたURLを貼り付けます') {
                     showSuccess();
                 } else {
-                    fetch(GAS_URL, {
+                    fetch(GLOBAL_GAS_URL, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -997,3 +1011,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 });
+
+
