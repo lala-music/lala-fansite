@@ -525,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(GAS_URL + "?password=" + encodeURIComponent(pass) + "&t=" + Date.now());
                 const data = await response.json();
                 
-                if (data.result === 'error' && data.message === 'Unauthorized') {
+                if (data.result === 'error' || data.auth !== true) {
                     authErrorMsg.style.display = 'block';
                     authLoginBtn.textContent = 'ログイン';
                 } else {
@@ -583,5 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
 
 

@@ -1,4 +1,4 @@
-// =========================================================================
+﻿// =========================================================================
 // lala Fan Site - Google Apps Script (GAS) バックエンドコード (高度な同期版)
 //
 // 【使い方】
@@ -40,7 +40,7 @@ function doGet(e) {
       });
       
       // GASの仕様上、doGetは一般ユーザーからもアクセスされる
-      var data = {
+      var data = { auth: isAuth,
         events: events,
         reservations: sanitizedReservations
       };
@@ -50,7 +50,7 @@ function doGet(e) {
     }
 
     // 管理者用のフルデータ
-    var data = {
+    var data = { auth: isAuth,
       events: events,
       reservations: reservations
     };
@@ -307,3 +307,4 @@ function sendConfirmationEmail(type, name, email, count, message, resDate, resTi
     console.log("Email error: " + e.message);
   }
 }
+
