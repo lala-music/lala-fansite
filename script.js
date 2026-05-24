@@ -248,6 +248,96 @@ document.addEventListener('DOMContentLoaded', () => {
     const dynamicLiveList = document.getElementById('dynamicLiveList');
     
 
+    function initArchiveModal(events) {
+        const viewArchiveBtn = document.getElementById('viewArchiveBtn');
+        const archiveModal = document.getElementById('archiveModal');
+        const closeArchiveModalBtn = document.getElementById('closeArchiveModalBtn');
+        const archiveYearSelect = document.getElementById('archiveYearSelect');
+        const archiveMonthSelect = document.getElementById('archiveMonthSelect');
+        const searchArchiveBtn = document.getElementById('searchArchiveBtn');
+        const archiveContent = document.getElementById('archiveContent');
+
+        if (!viewArchiveBtn || !archiveModal) return;
+
+        // Populate dropdowns based on available events
+        const availableDates = new Set();
+        events.forEach(ev => {
+            if (ev.date) {
+                const parts = ev.date.split('T')[0].split('-');
+                if (parts.length >= 2) {
+                    availableDates.add(parts[0] + '-' + parts[1]);
+                }
+            }
+        });
+
+        const sortedDates = Array.from(availableDates).sort((a,b) => b.localeCompare(a)); // Descending
+        
+        // Extract unique years
+        const years = Array.from(new Set(sortedDates.map(d => d.split('-')[0])));
+        
+        archiveYearSelect.innerHTML = years.map(y => <option value="+y+">+y+年</option>).join('');
+        
+        function updateMonthDropdown() {
+            const selectedYear = archiveYearSelect.value;
+            const months = sortedDates.filter(d => d.startsWith(selectedYear)).map(d => d.split('-')[1]);
+            archiveMonthSelect.innerHTML = months.map(m => <option value="+m+">+parseInt(m)+月</option>).join('');
+        }
+        
+        if (years.length > 0) {
+            updateMonthDropdown();
+        }
+
+        archiveYearSelect.addEventListener('change', updateMonthDropdown);
+
+        viewArchiveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            archiveContent.innerHTML = ''; // Clear previous
+            archiveModal.style.display = 'flex';
+        });
+
+        closeArchiveModalBtn.addEventListener('click', () => {
+            archiveModal.style.display = 'none';
+        });
+
+        searchArchiveBtn.addEventListener('click', () => {
+            const y = archiveYearSelect.value;
+            const m = archiveMonthSelect.value;
+            const prefix = y + '-' + m;
+            
+            const filtered = events.filter(ev => ev.date && ev.date.startsWith(prefix));
+            filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+            
+            if (filtered.length === 0) {
+                archiveContent.innerHTML = '<p style="text-align:center; color:var(--text-muted);">該当する記事はありません</p>';
+                return;
+            }
+            
+            archiveContent.innerHTML = filtered.map(ev => {
+                const tagClass = ev.type === 'NEWS' ? 'tag-info' : 'tag-live';
+                const tagColor = ev.type === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
+                const dateStr = String(ev.date).replace(/-/g, '.').split('T')[0];
+                return 
+                <div class="news-item" style="border-left: 3px solid +tagColor+; cursor: pointer; margin-bottom: 15px;" data-id="+ev.id+">
+                    <div style="flex-grow: 1;">
+                        <div class="news-date" style="color: +tagColor+;">+dateStr+</div>
+                        <div class="news-category +tagClass+" style="border-color:+tagColor+; color:+tagColor+;">+(ev.type||'LIVE')+</div>
+                        <div class="news-title" style="text-decoration: underline;">+escapeHTML(ev.title)+</div>
+                    </div>
+                </div>;
+            }).join('');
+            
+            // Add click listeners to open detail modal
+            archiveContent.querySelectorAll('.news-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const id = item.getAttribute('data-id');
+                    const ev = events.find(e => e.id.toString() === id.toString());
+                    if (ev) openEventDetailModal(ev);
+                });
+            });
+        });
+    }
+
     async function updateDynamicUI() {
         try {
             const response = await fetch(GLOBAL_GAS_URL + "?t=" + Date.now());
@@ -261,6 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (dynamicNewsList || dynamicLiveList) {
                 renderEventsUI(events);
+                initArchiveModal(events);
                 
                 // URLパラメータでイベント指定があれば開く
                 const params = new URLSearchParams(window.location.search);
@@ -289,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dynamicNewsList || dynamicLiveList) {
                 const events = JSON.parse(localStorage.getItem('admin_events') || '[]');
                 renderEventsUI(events);
+                initArchiveModal(events);
             }
         }
     }
@@ -428,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('detailCategory').style.borderColor = ev.type === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
         
         document.getElementById('detailTitle').textContent = ev.title;
-        document.getElementById('detailDate').textContent = `${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}`;
+        document.getElementById('detailDate').textContent = ${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ;
         
         const imgContainer = document.getElementById('detailImageContainer');
         const img = document.getElementById('detailImage');
@@ -451,6 +543,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ev.type === 'LIVE' || !ev.type) {
             actionContainer.style.display = 'block';
             const reserveBtn = document.getElementById('detailReserveBtn');
+            
+            // Check capacity
+            const capacity = parseInt(ev.capacity, 10) || 50;
+            const reservations = JSON.parse(localStorage.getItem('lala_bar_reservations') || '[]');
+            const currentCount = reservations.filter(r => r.type === 'ticket' && r.target === ev.title).reduce((sum, r) => sum + (parseInt(r.count, 10) || 0), 0);
+            
+            if (currentCount >= capacity) {
+                document.getElementById('detailTitle').innerHTML = <span class="tag-soldout" style="background: red; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.8em; margin-right: 5px;">SOLD OUT</span> + escapeHTML(ev.title);
+                reserveBtn.style.pointerEvents = 'none';
+                reserveBtn.style.opacity = '0.5';
+                reserveBtn.textContent = 'SOLD OUT';
+            } else {
+                document.getElementById('detailTitle').textContent = ev.title;
+                reserveBtn.style.pointerEvents = 'auto';
+                reserveBtn.style.opacity = '1';
+                reserveBtn.textContent = '予約する';
+            }
+
             reserveBtn.onclick = () => {
                 modal.style.display = 'none';
                 // Trigger the ticket modal
@@ -468,8 +578,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             actionContainer.style.display = 'none';
         }
-
-
 
         const shareCopyBtn = document.getElementById('shareCopyBtn');
         const shareXBtn = document.getElementById('shareXBtn');
@@ -604,12 +712,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 eDate = eDate.replace(/\//g, '-'); // Google Sheetsの日付（2026/05/15）をYYYY-MM-DDに変換
                 return eDate === dateStr;
             });
-            eventsForDay.forEach(ev => {
+            if (eventsForDay.length > 0) {
                 const evDiv = document.createElement('div');
                 evDiv.className = 'cal-event';
-                evDiv.textContent = ev.title;
+                let title = eventsForDay[0].title;
+                if (title.length > 8) title = title.substring(0, 8) + '...';
+                evDiv.textContent = title;
                 dayDiv.appendChild(evDiv);
-            });
+                
+                if (eventsForDay.length > 1) {
+                    const moreDiv = document.createElement('div');
+                    moreDiv.className = 'cal-event more-events';
+                    moreDiv.textContent = `他${eventsForDay.length - 1}件`;
+                    moreDiv.style.backgroundColor = 'transparent';
+                    moreDiv.style.color = 'var(--primary-color)';
+                    moreDiv.style.textAlign = 'right';
+                    moreDiv.style.padding = '0';
+                    dayDiv.appendChild(moreDiv);
+                }
+            }
 
             // 予約の混雑度計算
             if (thisDate >= today) {
@@ -1011,5 +1132,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 });
+
+
+
+
 
 

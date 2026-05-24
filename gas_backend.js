@@ -16,8 +16,8 @@ var ADMIN_PASSWORD = "lala_secret_pass";
 function doGet(e) {
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title", "description", "imageUrl"]);
-    var reservationSheet = getOrCreateSheet(ss, "Reservations", ["submittedAt", "type", "target", "name", "email", "count", "message"]);
+    var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title", "description", "imageUrl", "capacity"]);
+    var reservationSheet = getOrCreateSheet(ss, "Reservations", ["submittedAt", "type", "target", "name", "email", "count", "message", "paid"]);
 
     var events = getRowsAsJson(eventSheet);
     var reservations = getRowsAsJson(reservationSheet);
@@ -35,6 +35,7 @@ function doGet(e) {
           count: r.count,
           type: r.type,
           resType: targetStr.indexOf('[スタジオ予約]') > -1 ? 'studio' : 'bar',
+          target: r.type === 'ticket' ? r.target : '',
           duration: targetStr.match(/\(([0-9]+)時間\)/) ? targetStr.match(/\(([0-9]+)時間\)/)[1] : '2' // 簡易抽出
         };
       });
@@ -111,7 +112,7 @@ function doPost(e) {
     }
 
     if (type === 'event') {
-      var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title", "description", "imageUrl"]);
+      var eventSheet = getOrCreateSheet(ss, "Events", ["id", "date", "time", "type", "title", "description", "imageUrl", "capacity"]);
       eventSheet.appendRow([
         params.id || Date.now(),
         params.date,
@@ -119,7 +120,8 @@ function doPost(e) {
         params.event_type, // 'LIVE' or 'NEWS'
         params.title,
         params.description || '',
-        params.imageUrl || ''
+        params.imageUrl || '',
+        params.capacity || '50'
       ]);
       SpreadsheetApp.flush(); // 即座に変更を反映
       return createJsonResponse({ "result": "success" });
@@ -140,6 +142,7 @@ function doPost(e) {
             eventSheet.getRange(rowNum, 5).setValue(params.title);
             eventSheet.getRange(rowNum, 6).setValue(params.description || '');
             eventSheet.getRange(rowNum, 7).setValue(params.imageUrl || '');
+            eventSheet.getRange(rowNum, 8).setValue(params.capacity || '50');
             SpreadsheetApp.flush(); // 即座に変更を反映
             break;
           }
@@ -164,6 +167,26 @@ function doPost(e) {
       return createJsonResponse({ "result": "success" });
     }
 
+    if (type === 'toggle_paid') {
+      if (params.password !== ADMIN_PASSWORD) {
+        return createJsonResponse({ "result": "error", "message": "Unauthorized" });
+      }
+      var resSheet = ss.getSheetByName("Reservations");
+      if (resSheet) {
+        var data = resSheet.getDataRange().getValues();
+        // Match by submittedAt and email since there is no ID
+        for (var i = 1; i < data.length; i++) {
+          if (data[i][0].toString() === params.submittedAt.toString() && data[i][4].toString() === params.email.toString()) {
+            var rowNum = i + 1;
+            resSheet.getRange(rowNum, 8).setValue(params.paid); // 8th column is 'paid'
+            SpreadsheetApp.flush();
+            break;
+          }
+        }
+      }
+      return createJsonResponse({ "result": "success" });
+    }
+
     // 2. 予約の管理 (既存の機能)
     if (type === 'ticket' || type === 'bar') {
       // 簡易スパム防止（全体で1分間に10回までの予約に制限）
@@ -175,7 +198,7 @@ function doPost(e) {
       }
       cache.put(resCountKey, (resCount + 1).toString(), 60);
 
-      var resSheet = getOrCreateSheet(ss, "Reservations", ["submittedAt", "type", "target", "name", "email", "count", "message"]);
+      var resSheet = getOrCreateSheet(ss, "Reservations", ["submittedAt", "type", "target", "name", "email", "count", "message", "paid"]);
       var submittedDate = new Date();
       var name = e.parameter.name || '名称未設定';
       var email = e.parameter.email || '';
@@ -192,7 +215,7 @@ function doPost(e) {
           targetName = e.parameter.liveTitle;
       }
 
-      resSheet.appendRow([submittedDate, type, targetName, name, email, count, message]);
+      resSheet.appendRow([submittedDate, type, targetName, name, email, count, message, false]);
 
       // 自動返信メール送信
       sendConfirmationEmail(type, name, email, count, message, e.parameter.date, e.parameter.time, e.parameter.liveTitle, e.parameter.resType, e.parameter.duration);
@@ -225,7 +248,7 @@ function getRowsAsJson(sheet) {
   var data = sheet.getDataRange().getDisplayValues();
   if (data.length < 2) return [];
   var isEventSheet = (sheet.getName() === 'Events');
-  var headers = isEventSheet ? ["id", "date", "time", "type", "title", "description", "imageUrl"] : data[0];
+  var headers = isEventSheet ? ["id", "date", "time", "type", "title", "description", "imageUrl", "capacity"] : data[0];
   var rows = [];
   for (var i = 1; i < data.length; i++) {
     var obj = {};
@@ -307,4 +330,5 @@ function sendConfirmationEmail(type, name, email, count, message, resDate, resTi
     console.log("Email error: " + e.message);
   }
 }
+
 

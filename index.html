@@ -132,6 +132,7 @@
             </div>
             <div class="text-center mt-4 fade-in-up delay-2">
                 <a href="#" id="viewAllEventsBtn" class="btn outline-btn">View All</a>
+                <a href="#" id="viewArchiveBtn" class="btn outline-btn" style="margin-left: 10px;">過去のアーカイブを見る</a>
             </div>
         </div>
     </section>
@@ -388,6 +389,22 @@
             
             <div id="timetableActionContainer" style="text-align: center;">
                 <a href="#" id="timetableReserveBtn" class="btn primary-btn" style="width: 100%;">この日で予約する</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Archive Modal -->
+    <div id="archiveModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="modal-close" id="closeArchiveModalBtn">&times;</span>
+            <h2 style="font-family: var(--font-heading); color: var(--primary-color); margin-bottom: 20px; text-align: center;">過去のアーカイブ</h2>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; justify-content: center;">
+                <select id="archiveYearSelect" class="form-control" style="width: auto;"></select>
+                <select id="archiveMonthSelect" class="form-control" style="width: auto;"></select>
+                <button id="searchArchiveBtn" class="btn primary-btn" style="padding: 10px 20px;">表示</button>
+            </div>
+            <div id="archiveContent" style="max-height: 400px; overflow-y: auto;">
+                <!-- アーカイブリストがここに表示されます -->
             </div>
         </div>
     </div>
