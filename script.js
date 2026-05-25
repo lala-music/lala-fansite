@@ -275,12 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Extract unique years
         const years = Array.from(new Set(sortedDates.map(d => d.split('-')[0])));
         
-        archiveYearSelect.innerHTML = years.map(y => <option value="+y+">+y+年</option>).join('');
+        archiveYearSelect.innerHTML = years.map(y => `<option value="${y}">${y}年</option>`).join('');
         
         function updateMonthDropdown() {
             const selectedYear = archiveYearSelect.value;
             const months = sortedDates.filter(d => d.startsWith(selectedYear)).map(d => d.split('-')[1]);
-            archiveMonthSelect.innerHTML = months.map(m => <option value="+m+">+parseInt(m)+月</option>).join('');
+            archiveMonthSelect.innerHTML = months.map(m => `<option value="${m}">${parseInt(m)}月</option>`).join('');
         }
         
         if (years.length > 0) {
@@ -316,14 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const tagClass = ev.type === 'NEWS' ? 'tag-info' : 'tag-live';
                 const tagColor = ev.type === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
                 const dateStr = String(ev.date).replace(/-/g, '.').split('T')[0];
-                return 
-                <div class="news-item" style="border-left: 3px solid +tagColor+; cursor: pointer; margin-bottom: 15px;" data-id="+ev.id+">
+                return `
+                <div class="news-item" style="border-left: 3px solid ${tagColor}; cursor: pointer; margin-bottom: 15px;" data-id="${ev.id}">
                     <div style="flex-grow: 1;">
-                        <div class="news-date" style="color: +tagColor+;">+dateStr+</div>
-                        <div class="news-category +tagClass+" style="border-color:+tagColor+; color:+tagColor+;">+(ev.type||'LIVE')+</div>
-                        <div class="news-title" style="text-decoration: underline;">+escapeHTML(ev.title)+</div>
+                        <div class="news-date" style="color: ${tagColor};">${dateStr}</div>
+                        <div class="news-category ${tagClass}" style="border-color:${tagColor}; color:${tagColor};">${(ev.type||'LIVE')}</div>
+                        <div class="news-title" style="text-decoration: underline;">${escapeHTML(ev.title)}</div>
                     </div>
-                </div>;
+                </div>`;
             }).join('');
             
             // Add click listeners to open detail modal
