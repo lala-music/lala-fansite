@@ -1,4 +1,4 @@
-﻿// script.js
+// script.js
 // サイトとアニメーションの動作を制御するスクリプト
 
 const GLOBAL_GAS_URL = 'https://script.google.com/macros/s/AKfycbyQfxhzVbPL54lSAU4fFlscDeg9Go3TpBAwGLaFEr_5P6b6wir7XIJZ7u3H3-wXsDZm/exec';
@@ -520,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('detailCategory').style.borderColor = ev.type === 'NEWS' ? '#f39c12' : 'var(--primary-color)';
         
         document.getElementById('detailTitle').textContent = ev.title;
-        document.getElementById('detailDate').textContent = ${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ;
+        document.getElementById('detailDate').textContent = `${String(ev.date).replace(/-/g, '.').replace(/\//g, '.').split('T')[0]} ${ev.time || ''}`;
         
         const imgContainer = document.getElementById('detailImageContainer');
         const img = document.getElementById('detailImage');
@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentCount = reservations.filter(r => r.type === 'ticket' && r.target === ev.title).reduce((sum, r) => sum + (parseInt(r.count, 10) || 0), 0);
             
             if (currentCount >= capacity) {
-                document.getElementById('detailTitle').innerHTML = <span class="tag-soldout" style="background: red; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.8em; margin-right: 5px;">SOLD OUT</span> + escapeHTML(ev.title);
+                document.getElementById('detailTitle').innerHTML = `<span class="tag-soldout" style="background: red; color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.8em; margin-right: 5px;">SOLD OUT</span>` + escapeHTML(ev.title);
                 reserveBtn.style.pointerEvents = 'none';
                 reserveBtn.style.opacity = '0.5';
                 reserveBtn.textContent = 'SOLD OUT';
