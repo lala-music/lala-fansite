@@ -655,10 +655,10 @@ footer {
 
 .cal-day {
     aspect-ratio: 1;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 8px;
-    padding: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -667,10 +667,10 @@ footer {
     cursor: pointer;
     position: relative;
     text-decoration: none;
-    min-width: 0; /* Flexbox・Gridで中のテキストが親を押し広げるのを防ぐ */
+    min-width: 0; /* FlexboxやGridでのテキストはみ出しを防ぐ */
 }
 .cal-day:hover {
-    background: rgba(40, 212, 212, 0.1);
+    background: rgba(40, 212, 212, 0.2);
     transform: translateY(-2px);
     border-color: var(--primary-color);
 }
