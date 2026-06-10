@@ -284,8 +284,8 @@ function sendConfirmationEmail(type, name, email, count, message, resDate, resTi
          + "【メッセージ】\n" + message + "\n"
          + "--------------------------------------------------\n\n"
          + "★事前決済でお得！★\n"
-         + "お手数ですが、以下の決済リンク(Square)よりお支払いをお願いいたします。\n"
-         + "https://square.link/YOUR_LINK_HERE\n\n"
+         + "お手数ですが、以下の決済リンク(決済に進む)よりお支払いをお願いいたします。\n"
+         + "https://決済に進む.link/YOUR_LINK_HERE\n\n"
          + "ご利用を心よりお待ち申し上げております。\n\n";
   } else if (type === 'bar') {
     subject = "【Live Bar Visca】ご予約完了のお知らせ";

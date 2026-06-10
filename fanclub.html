@@ -1,12 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lala Premium Fanclub</title>
-    <!-- OGP & Favicon Tags -->
-    <meta property="og:title" content="lala Premium Fanclub | lala Official Fan Site">
-    <meta property="og:description" content="lalaの素顔と音楽の裏側に触れる、特別なVIPメンバーシップ。">
+    <title>lala Fanclub Membership</title>
+    <meta property="og:title" content="lala Fanclub | lala Official Fan Site">
+    <meta property="og:description" content="lalaの素顔と音楽の裏側に触れるメンバーシップ。">
     <meta property="og:image" content="images/LINE_ALBUM_アー写厳選_lala編集_260409_9.jpg">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
@@ -16,7 +15,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style-v4.css">
     <style>
-        /* ファンクラブ特設ページの独自スタイル */
         .subpage-header { padding: 20px 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 100; }
         .back-btn { color: #fff; font-size: 0.9rem; letter-spacing: 0.1em; opacity: 0.8; }
         .back-btn:hover { opacity: 1; color: var(--primary-color); }
@@ -50,100 +48,165 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
-        .benefit-section {
-            padding: 80px 0;
+        .plans-section {
+            padding: 100px 0;
             background: url('images/noise-texture.png') repeat;
         }
-        
-        .benefit-grid {
+
+        .plans-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 50px auto 0;
         }
-        
-        .benefit-card {
-            background: rgba(26, 35, 45, 0.5);
+
+        .plan-card {
+            background: rgba(26, 35, 45, 0.7);
             border: 1px solid rgba(40, 212, 212, 0.2);
-            padding: 40px 30px;
-            border-radius: 12px;
+            border-radius: 16px;
+            padding: 50px 30px;
             text-align: center;
-            transition: var(--transition);
+            position: relative;
             backdrop-filter: blur(10px);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        
-        .benefit-card:hover {
+
+        .plan-card:hover {
             transform: translateY(-10px);
-            border-color: var(--primary-color);
-            box-shadow: 0 10px 30px rgba(40, 212, 212, 0.1);
+            box-shadow: 0 15px 40px rgba(40, 212, 212, 0.15);
+        }
+
+        .plan-card.premium {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, rgba(26, 35, 45, 0.9) 0%, rgba(40, 30, 10, 0.9) 100%);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffd700;
+            color: #000;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .plan-title {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 10px;
         }
         
-        .benefit-icon {
-            font-size: 3rem;
+        .plan-price {
+            font-size: 2.5rem;
             color: var(--primary-color);
+            font-weight: bold;
             margin-bottom: 20px;
         }
-        
-        .benefit-title {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #fff;
+
+        .plan-card.premium .plan-price {
+            color: #ffd700;
         }
-        
-        .benefit-desc {
-            font-size: 0.9rem;
-            color: var(--text-muted);
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+            text-align: left;
+            color: #ccc;
+            font-size: 0.95rem;
             line-height: 1.8;
         }
 
-        .signup-section {
-            padding: 100px 0;
-            background: linear-gradient(135deg, rgba(8,16,23,1) 0%, rgba(26,35,45,1) 100%);
-            border-top: 1px solid rgba(255,255,255,0.05);
+        .plan-features li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 25px;
         }
 
-        .form-box { 
-            background: rgba(0,0,0,0.6); 
-            border: 1px solid rgba(40, 212, 212, 0.3); 
-            padding: 50px; 
-            border-radius: 12px; 
-            max-width: 600px;
-            margin: 0 auto;
-            backdrop-filter: blur(20px);
+        .plan-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
         }
-        
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 10px; color: var(--primary-color); font-size: 0.9rem;}
-        .form-group input, .form-group textarea { 
-            width: 100%; padding: 15px; 
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
-            color: #fff; border-radius: 4px; outline: none; font-family: var(--font-body);
-            transition: border-color 0.3s;
+
+        .plan-card.premium .plan-features li::before {
+            color: #ffd700;
         }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--primary-color); }
-        
-        .price-badge {
+
+        .btn-join {
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
             background: var(--primary-color);
             color: #000;
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
+            text-decoration: none;
             font-weight: bold;
-            margin-bottom: 30px;
+            font-size: 1.1rem;
+            transition: opacity 0.3s;
+        }
+
+        .plan-card.premium .btn-join {
+            background: #ffd700;
+        }
+
+        .btn-join:hover {
+            opacity: 0.8;
+        }
+
+        .login-section {
+            padding: 60px 0;
+            background: var(--bg-color);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+
+        .login-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-login-entrance {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            border-radius: 30px;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-login-entrance.premium {
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .btn-login-entrance:hover {
+            background: var(--primary-color);
+            color: #000;
+        }
+
+        .btn-login-entrance.premium:hover {
+            background: #ffd700;
+            color: #000;
         }
 
     </style>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YFWFWJ7SNN"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-YFWFWJ7SNN');
-    </script>
 </head>
 <body>
     <header class="subpage-header">
@@ -152,106 +215,77 @@
 
     <div class="fc-hero fade-in">
         <div class="fc-hero-content">
-            <h1 class="fc-hero-title">lala Premium VIP</h1>
-            <p class="fc-hero-subtitle">lalaの素顔と音楽の裏側に触れる、限られた大人のためのメンバーシップ。</p>
+            <h1 class="fc-hero-title">lala Fanclub</h1>
+            <p class="fc-hero-subtitle">lalaの素顔と音楽の裏側に触れるメンバーシップ。</p>
         </div>
     </div>
 
-    <section class="benefit-section fade-in-up delay-1">
+    <section class="plans-section fade-in-up delay-1">
         <div class="container">
-            <div class="text-center" style="max-width: 800px; margin: 0 auto 60px;">
-                <h2 class="section-title">Membership <span>Benefits</span></h2>
-                <p style="color: var(--text-muted); line-height: 1.8;">
-                    私たちが提供するのは、単なる「お知らせ」ではありません。<br>
-                    ライブバーという濃密な空間で生まれる音楽の息遣いや、<br>
-                    普段は見せない等身大のlalaの姿を、一番特等席でお楽しみいただけます。
-                </p>
+            <div class="text-center">
+                <h2 class="section-title">Membership <span>Plans</span></h2>
+                <p style="color: var(--text-muted); margin-top: 15px;">ご希望のプランを選択してください</p>
             </div>
 
-            <div class="benefit-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎵</div>
-                    <h3 class="benefit-title">Secret Live Streaming</h3>
-                    <p class="benefit-desc">Live Barの営業中や、リハーサルスタジオから不定期に行われる会員限定のシークレット生配信にご招待。お酒を片手に、極上のプライベートライブを。</p>
+            <div class="plans-grid">
+                
+                <!-- 月額会員プラン -->
+                <div class="plan-card">
+                    <h3 class="plan-title">Monthly Member</h3>
+                    <div class="plan-price">¥300<span style="font-size: 1rem;"> / 月</span></div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">まずはここから。lalaの日常と限定コンテンツを楽しみましょう。</p>
+                    
+                    <ul class="plan-features">
+                        <li>✔️ 限定オフショット動画視聴</li>
+                        <li>✔️ FC限定ブログ（ダイアリー）</li>
+                        <li>✔️ 限定オンラインストアへのアクセス</li>
+                        <li>✔️ デジタル会員証発行</li>
+                    </ul>
+                    <a href="fc-register.html?tier=monthly" class="btn-join">月額プランに入会する</a>
                 </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎫</div>
-                    <h3 class="benefit-title">Priority Tickets</h3>
-                    <p class="benefit-desc">全てのワンマンライブや特別イベントのチケットを、一般発売に先駆けて最速で優先確保いたします。もう、ソールドアウトの心配はありません。</p>
+
+                <!-- 年額プレミア会員プラン -->
+                <div class="plan-card premium">
+                    <div class="plan-badge">RECOMMENDED</div>
+                    <h3 class="plan-title">Premier Member</h3>
+                    <div class="plan-price">¥10,000<span style="font-size: 1rem;"> / 年</span></div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">lalaの活動を一番近くで応援する、究極のVIPプラン。</p>
+                    
+                    <ul class="plan-features">
+                        <li>月額プランの全特典が利用可能</li>
+                        <li><strong>【年1回】年賀状のお届け</strong></li>
+                        <li><strong>【年1回】お誕生日に直筆（または特別な）手紙のお届け</strong></li>
+                        <li><strong>プレミアメンバー限定ライブへの参加権</strong>（年1回開催予定）</li>
+                        <li><strong>限定ライブ終演後のMeet&Greet、ツーショット撮影、サイン会</strong></li>
+                        <li>プレミア専用デザインのデジタル会員証</li>
+                        <li>プレミア限定グッズのプレゼント</li>
+                    </ul>
+
+                    <a href="#" class="btn-join" onclick="alert('Stripeの年額課金画面へ遷移します'); return false;">プレミアプランに入会する</a>
                 </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">📸</div>
-                    <h3 class="benefit-title">Backstage Gallery</h3>
-                    <p class="benefit-desc">SNSでは絶対に公開されない、レコーディング風景やミュージックビデオのオフショット、日常の飾らない瞬間を捉えたプレミアムギャラリー。</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎁</div>
-                    <h3 class="benefit-title">VIP Merch & Birthday</h3>
-                    <p class="benefit-desc">会員証や限定グッズの購入権に加え、あなたのお誕生日にはlala本人からの特別なメッセージ動画が届きます。</p>
-                </div>
+
             </div>
         </div>
     </section>
 
-    <section class="signup-section" id="join">
+    <!-- ログイン窓口セクション -->
+    <section class="login-section">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="section-title" style="margin-bottom: 20px;">Join the <span>Premium</span></h2>
-                <p style="color: var(--text-muted); margin-bottom: 30px;">ファンクラブへご入会いただくには、以下のフォームへ入力し、<br>次画面のSquare（スクエア）決済にてお手続きを完了させてください。</p>
-                <div class="price-badge">月額 ¥1,500 (税込)</div>
-            </div>
-
-            <div class="form-box">
-                <!-- 入会フォーム -->
-                <form id="fcSignupForm">
-                    <div class="form-group">
-                        <label>お名前 (フルネーム) *</label>
-                        <input type="text" id="fcName" placeholder="例：山田 太郎" required>
-                    </div>
-                    <div class="form-group">
-                        <label>メールアドレス *</label>
-                        <input type="email" id="fcEmail" placeholder="例：info@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>お電話番号 *</label>
-                        <input type="tel" id="fcPhone" placeholder="例：090-1234-5678" required>
-                    </div>
-                    <div class="form-group">
-                        <label>ご住所 *</label>
-                        <input type="text" id="fcAddress" placeholder="例：東京都渋谷区神南1-2-3 lalaマンション101" required>
-                    </div>
-                    <div class="text-center mt-4" style="margin-top: 40px;">
-                        <button type="submit" class="btn primary-btn" style="width: 100%; font-size: 1.1rem; padding: 15px;">入会手続き（決済画面）へ進む</button>
-                    </div>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 20px;">
-                        ※送信後、クレジットカード決済用の画面が表示されます。
-                    </p>
-                </form>
-
-                <!-- 送信後の決済リンク表示エリア（formの外に配置） -->
-                <div id="fcSuccessMessage" style="display: none; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 20px;">✨</div>
-                    <p style="color: var(--primary-color); font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">
-                        ご入力ありがとうございます！</p>
-                    <p style="font-size: 0.9rem; margin-bottom: 30px; color: var(--text-main);">
-                        ファンクラブの登録を完了させるため、<br>以下のボタンより初回決済（Square）をお願いいたします。</p>
-
-                    <!-- ここにSquareのリンクを貼ります -->
-                    <a href="https://square.link/YOUR_LINK_HERE" target="_blank" class="btn primary-btn"
-                        style="width: 100%; text-align: center; padding: 15px; font-size: 1.1rem;">Squareで安全に決済する</a>
-                        
-                    <p style="font-size: 0.8rem; margin-top: 20px; color: var(--text-muted);">
-                        ※別ウィンドウで安全なSquare決済画面が開きます。<br>
-                        ※決済完了後、ご登録のメールアドレス宛に入会完了のご案内をお送りいたします。
-                    </p>
-                </div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; color: #fff;">Already a Member?</h3>
+            <p style="color: var(--text-muted); margin-top: 10px;">すでに入会済みの方はこちらからログインしてください。</p>
+            
+            <div class="login-buttons">
+                <a href="fc-login-monthly.html" class="btn-login-entrance">
+                    👤 月額会員ログイン
+                </a>
+                <a href="fc-login-premier.html" class="btn-login-entrance premium">
+                    👑 プレミア会員ログイン
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- ==============================================
-         FOOTER
-    =============================================== -->
+    <!-- FOOTER -->
     <footer>
         <div class="container footer-content">
             <div class="footer-brand">
@@ -260,16 +294,16 @@
             </div>
             
             <div class="footer-links" style="display: flex; flex-direction: column; gap: 10px;">
-                <a href="law.html" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'">特定商取引法に基づく表記</a>
-                <a href="faq.html" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'">FAQ / お問い合わせ</a>
+                <a href="law.html" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">特定商取引法に基づく表記</a>
+                <a href="faq.html" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">FAQ / お問い合わせ</a>
             </div>
             
             <div class="footer-sns">
-                <a href="https://www.youtube.com/@lalachannnel" target="_blank" title="YouTube">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                <a href="https://lin.ee/w3CRUF5" target="_blank" title="LINE">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.945 8.94 9.53 9.61.378.077.892.238 1.02.607.114.331.074.848.034 1.189l-.16 1.002c-.05.313-.238 1.155 1.013.624 1.25-.53 6.745-3.978 9.383-6.932 2.05-2.296 3.18-4.665 3.18-6.1z"/></svg>
                 </a>
-                <a href="https://www.instagram.com/this_is_lala_music/" target="_blank" title="Instagram">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                <a href="https://www.threads.com/@this_is_lala_music?igshid=NTc4MTIwNjQ2YQ==" target="_blank" title="Threads">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10c2.613 0 5.093-.945 7.026-2.61l-1.344-1.344C16.142 19.345 14.167 20 12 20 7.582 20 4 16.418 4 12S7.582 4 12 4s8 3.582 8 8c0 2.223-1.855 4.02-4.103 3.977C14.07 15.94 12.552 14.71 12.552 13V9h-1.636v.938A3.488 3.488 0 0 0 9 9c-1.933 0-3.5 1.567-3.5 3.5S7.067 16 9 16c.866 0 1.656-.312 2.268-.83.673 1.576 2.203 2.65 4.148 2.677C18.665 17.865 21 15.303 21 12 21 6.477 16.523 2 12 2zm0 12.5c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"/></svg>
                 </a>
             </div>
         </div>
@@ -278,44 +312,12 @@
         </div>
     </footer>
 
-    <!-- スクリプトの読み込み -->
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const fcForm = document.getElementById('fcSignupForm');
-            const fcSuccess = document.getElementById('fcSuccessMessage');
-
-            if(fcForm) {
-                fcForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    
-                    // 送信ボタンの無効化（二重送信防止）
-                    const submitBtn = fcForm.querySelector('button[type="submit"]');
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = '送信中...';
-
-                    // 1秒後に成功画面へ切り替え（実際にはここでGAS等へ送信処理）
-                    setTimeout(() => {
-                        fcForm.style.display = 'none';
-                        fcSuccess.style.display = 'block';
-                        
-                        // 入力内容をキャッシュに保存（デモ用）
-                        const fcData = {
-                            name: document.getElementById('fcName').value,
-                            email: document.getElementById('fcEmail').value,
-                            phone: document.getElementById('fcPhone').value,
-                            address: document.getElementById('fcAddress').value,
-                            date: new Date().toLocaleString()
-                        };
-                        let members = JSON.parse(localStorage.getItem('lala_fanclub_members') || '[]');
-                        members.push(fcData);
-                        localStorage.setItem('lala_fanclub_members', JSON.stringify(members));
-
-                    }, 1000);
-                });
-            }
+            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
+            setTimeout(() => { faders.forEach(fader => fader.classList.add('appear')); }, 100);
         });
     </script>
 </body>
 </html>
-

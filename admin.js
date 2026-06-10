@@ -155,11 +155,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('admin_events', JSON.stringify(data.events));
             }
             if (data.reservations) {
-                // スプレッドシート側の予約データをローカルにキャッシュ
                 const tickets = data.reservations.filter(r => r.type === 'ticket');
                 const barRes = data.reservations.filter(r => r.type === 'bar');
-                localStorage.setItem('lala_reservations', JSON.stringify(tickets));
-                localStorage.setItem('lala_bar_reservations', JSON.stringify(barRes));
+                
+                let localTickets = JSON.parse(localStorage.getItem('lala_reservations') || '[]');
+                let localBar = JSON.parse(localStorage.getItem('lala_bar_reservations') || '[]');
+                
+                tickets.forEach(rt => {
+                   if (!localTickets.find(lt => lt.id == rt.id || (lt.name == rt.name && (lt.submittedAt == rt.submittedAt || lt.date == rt.date)))) {
+                       localTickets.push(rt);
+                   }
+                });
+                barRes.forEach(rb => {
+                   if (!localBar.find(lb => lb.id == rb.id || (lb.name == rb.name && (lb.createdAt == rb.createdAt || lb.date == rb.date)))) {
+                       localBar.push(rb);
+                   }
+                });
+                
+                localStorage.setItem('lala_reservations', JSON.stringify(localTickets));
+                localStorage.setItem('lala_bar_reservations', JSON.stringify(localBar));
             }
             console.log("GAS Data synchronized successfully.");
         } catch (error) {
@@ -708,8 +722,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data.reservations) {
                         const tickets = data.reservations.filter(r => r.type === 'ticket');
                         const barRes = data.reservations.filter(r => r.type === 'bar');
-                        localStorage.setItem('lala_reservations', JSON.stringify(tickets));
-                        localStorage.setItem('lala_bar_reservations', JSON.stringify(barRes));
+                        
+                        let localTickets = JSON.parse(localStorage.getItem('lala_reservations') || '[]');
+                        let localBar = JSON.parse(localStorage.getItem('lala_bar_reservations') || '[]');
+                        
+                        tickets.forEach(rt => {
+                           if (!localTickets.find(lt => lt.id == rt.id || (lt.name == rt.name && (lt.submittedAt == rt.submittedAt || lt.date == rt.date)))) {
+                               localTickets.push(rt);
+                           }
+                        });
+                        barRes.forEach(rb => {
+                           if (!localBar.find(lb => lb.id == rb.id || (lb.name == rb.name && (lb.createdAt == rb.createdAt || lb.date == rb.date)))) {
+                               localBar.push(rb);
+                           }
+                        });
+                        
+                        localStorage.setItem('lala_reservations', JSON.stringify(localTickets));
+                        localStorage.setItem('lala_bar_reservations', JSON.stringify(localBar));
                     }
                     
                     loadAllFromLocal();

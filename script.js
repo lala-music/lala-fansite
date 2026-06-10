@@ -1,7 +1,7 @@
 // script.js
 // サイトとアニメーションの動作を制御するスクリプト
 
-const GLOBAL_GAS_URL = 'https://script.google.com/macros/s/AKfycbyQfxhzVbPL54lSAU4fFlscDeg9Go3TpBAwGLaFEr_5P6b6wir7XIJZ7u3H3-wXsDZm/exec';
+const GLOBAL_GAS_URL = 'https://script.google.com/macros/s/AKfycbyp-y-m6EaJNA0m0472MNuv9S4lfllCq5zm1_u5flxj4VIW4V661SNoF0cG4QT3CZVPyg/exec';
 const ADMIN_EMAIL = 'info@lala-official.com';
 
 // XSS対策用ヘルパー関数
@@ -16,6 +16,15 @@ function escapeHTML(str) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- Inject Floating Home Button ---
+    const homeBtn = document.createElement('a');
+    homeBtn.id = 'floatingHomeBtn';
+    homeBtn.href = 'index.html';
+    homeBtn.title = 'ホームに戻る';
+    homeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>';
+    document.body.appendChild(homeBtn);
+
 
     // ==========================================
     // 共通: 予約確認モーダルの生成と表示機能
@@ -177,9 +186,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 { label: 'ライブ名', value: liveNameInput.value },
                 { label: 'お名前', value: document.getElementById('userName').value },
                 { label: 'Email', value: document.getElementById('userEmail').value },
-                { label: '予約人数', value: document.getElementById('ticketCount').value + ' 名' },
-                { label: 'メッセージ', value: document.getElementById('userMessage').value }
+                { label: '予約人数', value: document.getElementById('ticketCount').value + ' 名' }
             ];
+            
+            const timeEl = document.getElementById('reservationTime');
+            if (timeEl && timeEl.value) {
+                details.push({ label: '来店時間', value: timeEl.value });
+            }
+            details.push({ label: 'メッセージ', value: document.getElementById('userMessage').value });
 
             // 確認モーダルを表示
             showConfirmModal(details, (onComplete) => {
@@ -191,6 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.append('name', document.getElementById('userName').value);
                 formData.append('email', document.getElementById('userEmail').value);
                 formData.append('count', document.getElementById('ticketCount').value);
+                if (timeEl && timeEl.value) {
+                    formData.append('time', timeEl.value);
+                }
                 formData.append('message', document.getElementById('userMessage').value);
 
                 if (GLOBAL_GAS_URL === 'ここに発行されたURLを貼り付けます') {
@@ -216,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // --- ローカルストレージ（管理者画面用）への保存処理を関数化 ---
             function saveToLocalStorage(liveNameText, submitBtn) {
+                const timeEl = document.getElementById('reservationTime');
                 const reservationData = {
                     id: Date.now(),
                     date: new Date().toLocaleString('ja-JP'),
@@ -223,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     name: document.getElementById('userName').value,
                     email: document.getElementById('userEmail').value,
                     count: document.getElementById('ticketCount').value,
+                    time: (timeEl && timeEl.value) ? timeEl.value : '',
                     message: document.getElementById('userMessage').value
                 };
                 let reservations = JSON.parse(localStorage.getItem('lala_reservations') || '[]');
@@ -1060,7 +1079,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 下記のボタンからお支払い手続きをお願いいたします。<br>
                                 <span style="display:inline-block; margin-top:10px; color:#fff;">お支払い金額: ¥${price}</span>
                             </p>
-                            <a href="https://square.link/YOUR_LINK_HERE" target="_blank" class="btn outline-btn" style="margin-top: 20px; width: 100%; border-color: #fff; color: #fff;">Squareで決済する</a>
+                            <a href="https://決済に進む.link/YOUR_LINK_HERE" target="_blank" class="btn outline-btn" style="margin-top: 20px; width: 100%; border-color: #fff; color: #fff;">決済に進むで決済する</a>
                         `;
                     }
                     

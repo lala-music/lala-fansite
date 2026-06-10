@@ -1,0 +1,32 @@
+﻿
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月額会員 ログイン (デモ)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #111; color: #fff; font-family: "Noto Sans JP", sans-serif; }
+        .login-box { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 400px; }
+        h1 { font-family: "Cormorant Garamond", serif; color: #00d4d4; margin-bottom: 10px; }
+        p { color: #aaa; margin-bottom: 30px; font-size: 0.9rem; }
+        button { background: #00d4d4; color: #111; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; font-size: 1rem; }
+        button:hover { background: #fff; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>Monthly Member</h1>
+        <p>月額会員（300円/月）としてログインします。</p>
+        <button onclick="login()">ファンクラブへ入室</button>
+    </div>
+    <script>
+        function login() {
+            localStorage.setItem("lala_fc_tier", "monthly");
+            window.location.href = "fanclub-dashboard.html";
+        }
+    </script>
+</body>
+</html>
+

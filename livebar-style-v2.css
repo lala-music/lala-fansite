@@ -5,7 +5,7 @@
 
 :root {
     --primary-color: #28D4D4;
-    --bg-color: #120e0d; /* バ�Eらしく少し暖かみのある黁E*/
+    --bg-color: #120e0d; /* 繝舌・繧峨＠縺丞ｰ代＠證悶°縺ｿ縺ｮ縺ゅｋ鮟・*/
     --surface-color: rgba(30, 25, 24, 0.8);
     --text-main: #f5eedc;
     --text-muted: #b5a89e;
@@ -116,7 +116,7 @@ a:hover { opacity: 0.8; }
     padding-bottom: 10px;
 }
 
-.menu-list { list-style: none; }
+.menu-list { list-style: none; max-width: 500px; margin: 0 auto; }
 
 .menu-list li {
     display: flex;
@@ -237,7 +237,7 @@ a:hover { opacity: 0.8; }
     background: rgba(0,0,0,0.8);
     border: none;
     border-radius: 0;
-    padding: 8px;
+    padding: 4px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -246,12 +246,14 @@ a:hover { opacity: 0.8; }
     cursor: pointer;
     position: relative;
     text-decoration: none;
-    min-width: 0; /* FlexboxやGridでのチE��スト�Eみ出しを防ぁE*/
+    min-width: 0;
+    overflow: hidden;
 }
 .cal-day:hover {
     background: rgba(40, 212, 212, 0.2);
-    transform: translateY(-2px);
-    border-color: var(--primary-color);
+    transform: none;
+    border: 1px solid var(--primary-color);
+    z-index: 10;
 }
 .cal-day.empty {
     background: transparent;
@@ -285,14 +287,22 @@ a:hover { opacity: 0.8; }
     color: #000;
     font-size: 0.65rem;
     padding: 2px 4px;
-    border-radius: 3px;
-    margin-top: 5px;
+    border-radius: 2px;
+    margin-top: 2px;
     text-align: center;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-weight: bold;
+    box-sizing: border-box;
+}
+
+.cal-event-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    margin-top: 2px;
 }
 
 .legend-item {
@@ -419,3 +429,43 @@ a:hover { opacity: 0.8; }
 
 
 
+
+/* --- Floating Home Button --- */
+#floatingHomeBtn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    cursor: pointer;
+    z-index: 1000;
+    transition: var(--transition);
+}
+#floatingHomeBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(40, 212, 212, 0.5);
+}
+#floatingHomeBtn svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+@media (max-width: 768px) {
+    #floatingHomeBtn {
+        bottom: 20px;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    #floatingHomeBtn svg {
+        width: 20px;
+        height: 20px;
+    }
+}

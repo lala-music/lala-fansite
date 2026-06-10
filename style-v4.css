@@ -864,3 +864,43 @@ footer {
 
 
 
+
+/* --- Floating Home Button --- */
+#floatingHomeBtn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    cursor: pointer;
+    z-index: 1000;
+    transition: var(--transition);
+}
+#floatingHomeBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(40, 212, 212, 0.5);
+}
+#floatingHomeBtn svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+@media (max-width: 768px) {
+    #floatingHomeBtn {
+        bottom: 20px;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    #floatingHomeBtn svg {
+        width: 20px;
+        height: 20px;
+    }
+}
