@@ -781,6 +781,88 @@ document.addEventListener('DOMContentLoaded', () => {
             URL.revokeObjectURL(url);
         });
     }
+
+    // インポート機能 (JSON読み込み)
+    const importBtn = document.getElementById('importBtn');
+    const importFileInput = document.getElementById('importFileInput');
+    if (importBtn && importFileInput) {
+        importBtn.addEventListener('click', () => {
+            importFileInput.click();
+        });
+
+        importFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (!confirm('既存のデータは上書きされ、イベントは自動的にスプレッドシートへ送信されます。よろしいですか？')) {
+                        importFileInput.value = '';
+                        return;
+                    }
+
+                    importBtn.textContent = '復元中...';
+                    importBtn.disabled = true;
+
+                    // ローカルストレージに復元
+                    if (data.admin_events) localStorage.setItem('admin_events', JSON.stringify(data.admin_events));
+                    if (data.lala_reservations) localStorage.setItem('lala_reservations', JSON.stringify(data.lala_reservations));
+                    if (data.lala_bar_reservations) localStorage.setItem('lala_bar_reservations', JSON.stringify(data.lala_bar_reservations));
+
+                    // 画面の表示を更新
+                    loadAllFromLocal();
+
+                    // スプレッドシート（GAS）へイベントデータを送信
+                    if (data.admin_events && data.admin_events.length > 0) {
+                        for (const ev of data.admin_events) {
+                            const payload = {
+                                type: 'event',
+                                password: adminToken,
+                                id: ev.id || Date.now(),
+                                date: ev.date || '',
+                                time: ev.time || '',
+                                event_type: ev.type || 'LIVE',
+                                title: ev.title || '',
+                                description: ev.description || '',
+                                imageUrl: ev.imageUrl || '',
+                                capacity: ev.capacity || '50'
+                            };
+
+                            const formData = new URLSearchParams();
+                            for (const key in payload) {
+                                formData.append(key, payload[key]);
+                            }
+
+                            try {
+                                await fetch(GAS_URL, {
+                                    method: 'POST',
+                                    mode: 'no-cors',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: formData.toString()
+                                });
+                                // GASの負荷軽減のため少し待機
+                                await new Promise(resolve => setTimeout(resolve, 600));
+                            } catch (err) {
+                                console.error('GAS送信エラー:', err);
+                            }
+                        }
+                    }
+
+                    alert('データの復元が完了しました！\n（※予約データはローカルにのみ復元されます。イベントデータはスプレッドシートへ送信されました）');
+                } catch (err) {
+                    alert('JSONファイルの読み込みに失敗しました。正しいバックアップファイルか確認してください。');
+                    console.error(err);
+                } finally {
+                    importBtn.textContent = '📂 JSONからデータを復元';
+                    importBtn.disabled = false;
+                    importFileInput.value = '';
+                }
+            };
+            reader.readAsText(file);
+        });
+    }
 });
 
 
