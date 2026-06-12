@@ -8,7 +8,7 @@ function escapeHTML(str) {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyQfxhzVbPL54lSAU4fFlscDeg9Go3TpBAwGLaFEr_5P6b6wir7XIJZ7u3H3-wXsDZm/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxDAPTrb0Inv3lXp5HY4YYko2kKag9MTanHwNieWrDB8mde99vlijirlGwQCq32fTgk/exec';
 
     // --- 要素の取得 ---
     const ticketAccordionContainer = document.getElementById('ticketAccordionContainer');

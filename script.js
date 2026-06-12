@@ -1,7 +1,7 @@
 // script.js
 // サイトとアニメーションの動作を制御するスクリプト
 
-const GLOBAL_GAS_URL = 'https://script.google.com/macros/s/AKfycbyp-y-m6EaJNA0m0472MNuv9S4lfllCq5zm1_u5flxj4VIW4V661SNoF0cG4QT3CZVPyg/exec';
+const GLOBAL_GAS_URL = 'https://script.google.com/macros/s/AKfycbxDAPTrb0Inv3lXp5HY4YYko2kKag9MTanHwNieWrDB8mde99vlijirlGwQCq32fTgk/exec';
 const ADMIN_EMAIL = 'info@lala-official.com';
 
 // XSS対策用ヘルパー関数
