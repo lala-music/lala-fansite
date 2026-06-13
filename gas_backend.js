@@ -1,4 +1,4 @@
-﻿// =========================================================================
+// =========================================================================
 // lala Fan Site - Google Apps Script (GAS) バックエンドコード (高度な同期版)
 //
 // 【使い方】
@@ -324,7 +324,7 @@ function sendConfirmationEmail(type, name, email, count, message, resDate, resTi
       subject: subject,
       body: body,
       name: "lala Official / Live Bar Visca",
-      replyTo: "no-reply@lala-official.com"
+      replyTo: "livebarvisca@anthemys.jp"
     });
   } catch(e) {
     console.log("Email error: " + e.message);
