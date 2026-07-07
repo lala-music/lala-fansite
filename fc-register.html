@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lala Fanclub Registration</title>
+    <link rel="stylesheet" href="style-v4.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d0f12 0%, #1a252c 100%);
+            color: #fff;
+            font-family: 'Noto Sans JP', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        h2 { text-align: center; color: var(--primary-color); margin-bottom: 30px; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px;}
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #ccc; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; border-radius: 8px;
+            box-sizing: border-box; transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: var(--primary-color); background: rgba(255,255,255,0.1);
+        }
+        .btn-submit {
+            width: 100%; padding: 15px; border: none; border-radius: 8px;
+            background: var(--primary-color); color: #000; font-weight: bold;
+            font-size: 1rem; cursor: pointer; transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-submit:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40,212,212,0.4); }
+        .tier-selector { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tier-opt {
+            flex: 1; padding: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px; cursor: pointer; transition: all 0.3s;
+        }
+        .tier-opt.selected { background: rgba(40,212,212,0.1); border-color: var(--primary-color); color: var(--primary-color); }
+        .tier-opt.premier.selected { background: rgba(255,215,0,0.1); border-color: var(--premier-gold); color: var(--premier-gold); }
+
+        /* Email Modal Styles */
+        .email-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 1000;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .email-content {
+            background: #f5f6fa; color: #333; width: 90%; max-width: 600px;
+            border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            font-family: 'Noto Sans JP', sans-serif;
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .email-header { background: #1a252c; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center;}
+        .email-header h3 { margin: 0; font-size: 1.1rem; font-weight: 500;}
+        .email-body { padding: 30px; font-size: 0.95rem; line-height: 1.6;}
+        .email-footer { padding: 20px 30px; background: #e1e5ee; font-size: 0.8rem; color: #666; border-top: 1px solid #d1d5df;}
+        .close-email-btn { background: var(--primary-color); color: #000; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 20px; width: 100%; transition: all 0.2s;}
+        .close-email-btn:hover { background: #1ebdbd; }
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-card fade-in">
+        <h2>Fanclub Registration</h2>
+        <form id="regForm" onsubmit="handleRegister(event)">
+            <label style="display:block; margin-bottom:8px; color:#ccc; font-size:0.9rem;">ご希望のプラン</label>
+            <div class="tier-selector">
+                <div class="tier-opt selected" id="opt-monthly" onclick="selectTier('monthly')">
+                    <strong>月額プラン</strong><br><span style="font-size:0.8rem;">¥550/月</span>
+                </div>
+                <div class="tier-opt premier" id="opt-premier" onclick="selectTier('premier')">
+                    <strong>プレミアプラン</strong><br><span style="font-size:0.8rem;">¥12,000/年</span>
+                </div>
+            </div>
+            <input type="hidden" id="regTier" value="monthly">
+
+            <div class="form-group">
+                <label>お名前 (フルネーム)</label>
+                <input type="text" id="regName" required placeholder="例: 山田 花子">
+            </div>
+            <div class="form-group">
+                <label>メールアドレス</label>
+                <input type="email" id="regEmail" required placeholder="例: info@example.com">
+            </div>
+            <div class="form-group">
+                <label>電話番号</label>
+                <input type="tel" id="regPhone" required placeholder="例: 090-1234-5678">
+            </div>
+            <div class="form-group">
+                <label>郵便番号</label>
+                <input type="text" id="regZip" required placeholder="例: 150-0001">
+            </div>
+            <div class="form-group">
+                <label>ご住所</label>
+                <input type="text" id="regAddress" required placeholder="例: 東京都渋谷区神宮前1-1-1">
+            </div>
+            <button type="submit" class="btn-submit">登録して決済へ進む</button>
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="fanclub.html" style="color: #aaa; font-size: 0.85rem; text-decoration: none;">&lt; 戻る</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- 自動返信メールを模したモーダル -->
+    <div class="email-modal" id="emailModal">
+        <div class="email-content">
+            <div class="email-header">
+                <h3>件名: 【lala Official Fanclub】会員登録完了のお知らせ</h3>
+                <span style="font-size: 0.8rem; opacity: 0.8;">1分前</span>
+            </div>
+            <div class="email-body">
+                <p><span id="emailNameDisplay"></span> 様</p>
+                <p>この度は「lala Official Fanclub」にご入会いただき、誠にありがとうございます。</p>
+                <p>以下の内容で会員登録が完了いたしました。</p>
+                <div style="background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 6px; margin: 15px 0;">
+                    <strong>【登録内容】</strong><br>
+                    プラン: <span id="emailTierDisplay"></span><br>
+                    お名前: <span id="emailNameDetail"></span><br>
+                    登録日: <span id="emailDateDisplay"></span>
+                </div>
+                <p>会員限定コンテンツやチケット先行など、これからのFanclubライフを存分にお楽しみください。</p>
+                <p>さっそくマイページへログインして、デジタル会員証を確認しましょう！</p>
+                <button class="close-email-btn" onclick="closeEmailAndRedirect()">マイページへ移動する</button>
+            </div>
+            <div class="email-footer">
+                <p style="margin:0 0 5px 0;"><strong>送信元:</strong> lala Official Fanclub 運営事務局</p>
+                <p style="margin:0 0 5px 0;"><strong>Email:</strong> support@lala-official.example.com</p>
+                <p style="margin:0;"><strong>Web:</strong> https://lala-official.example.com</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Trigger fade-in animation
+            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
+            setTimeout(() => { faders.forEach(fader => fader.classList.add('appear')); }, 100);
+
+            const params = new URLSearchParams(window.location.search);
+            const tier = params.get('tier');
+            if (tier === 'premier') {
+                selectTier('premier');
+            } else {
+                selectTier('monthly');
+            }
+        });
+
+        function selectTier(tier) {
+            document.getElementById("opt-monthly").classList.remove("selected");
+            document.getElementById("opt-premier").classList.remove("selected");
+            document.getElementById("opt-" + tier).classList.add("selected");
+            document.getElementById("regTier").value = tier;
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById("regName").value;
+            const email = document.getElementById("regEmail").value;
+            const phone = document.getElementById("regPhone").value;
+            const zip = document.getElementById("regZip").value;
+            const address = document.getElementById("regAddress").value;
+            const tier = document.getElementById("regTier").value;
+            
+            let members = JSON.parse(localStorage.getItem("lala_fc_members")) || [];
+            const newId = Date.now();
+            const dateStr = new Date().toISOString().split("T")[0];
+            
+            const memberData = {
+                id: newId,
+                name: name,
+                email: email,
+                phone: phone,
+                zip: zip,
+                address: address,
+                tier: tier,
+                joinDate: dateStr,
+                status: "active"
+            };
+
+            members.push(memberData);
+            localStorage.setItem("lala_fc_members", JSON.stringify(members));
+            
+            localStorage.setItem("lala_fc_tier", tier);
+            localStorage.setItem("lala_fc_current_user", JSON.stringify({
+                id: newId,
+                name: name
+            }));
+            
+            // Show Email Simulation
+            document.getElementById('emailNameDisplay').textContent = name;
+            document.getElementById('emailNameDetail').textContent = name;
+            document.getElementById('emailTierDisplay').textContent = tier === 'premier' ? 'プレミアプラン (年額)' : '月額プラン';
+            document.getElementById('emailDateDisplay').textContent = dateStr.replace(/-/g, '/');
+            
+            document.getElementById('emailModal').style.display = 'flex';
+        }
+
+        function closeEmailAndRedirect() {
+            window.location.href = "fanclub-dashboard.html";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | lala Official Fanclub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-v4.css">
+    <style>
+        /* Override variables for a bright, cheerful, open theme */
+        :root {
+            --bg-color: #fcfcfc;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --surface-color: #ffffff;
+            --primary-color: #00d4d4;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            background-image: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            border: 1px solid #f0f0f0;
+        }
+
+        .fc-brand {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .login-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        /* LINE Login Button */
+        .btn-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #06C755;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: opacity 0.3s;
+            margin-bottom: 30px;
+        }
+        
+        .btn-line:hover {
+            opacity: 0.8;
+            color: #fff;
+        }
+
+        .btn-line svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .divider:not(:empty)::before {
+            margin-right: .25em;
+        }
+        
+        .divider:not(:empty)::after {
+            margin-left: .25em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-login {
+            background-color: var(--text-main);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-login:hover {
+            background-color: #000;
+        }
+
+        .extra-links {
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+
+        .extra-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .extra-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body class="fade-in">
+
+    <div class="login-container">
+        <div class="fc-brand">lala Fanclub</div>
+        <p class="login-desc">ファンクラブ限定コンテンツへようこそ</p>
+
+        <!-- Shared Password Login -->
+        <div class="form-group">
+            <label for="fcPassword">ファンクラブ共通パスワード</label>
+            <input type="password" id="fcPassword" required placeholder="••••••••" onkeypress="if(event.key === 'Enter') handleLogin()">
+        </div>
+        <button onclick="handleLogin()" class="btn-login">ログイン</button>
+        <p id="loginError" style="color: #ff4d4d; margin-top: 10px; display: none; font-size: 0.9rem;">パスワードが違います</p>
+
+        <div class="extra-links">
+            <span style="color: #999;">新規入会をご希望の方は <a href="fanclub.html">こちら</a></span>
+        </div>
+        
+        <a href="index.html" class="back-link">← 一般サイトに戻る</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('appear');
+        });
+
+        function handleLogin() {
+            const pwd = document.getElementById('fcPassword').value;
+            const errorMsg = document.getElementById('loginError');
+            
+            // シンプルな共通パスワード判定
+            if (pwd === 'visca2026') {
+                localStorage.setItem('lala_fc_tier', 'monthly');
+                window.location.href = 'fanclub-dashboard.html';
+            } else if (pwd === 'lalaVIP06') {
+                localStorage.setItem('lala_fc_tier', 'premier');
+                window.location.href = 'fanclub-dashboard.html';
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Bar Visca | 箱貸し・スタジオ</title>
+    <meta property="og:title" content="Live Bar Visca | 箱貸し・スタジオ">
+    <meta property="og:description" content="ライブイベント・リハーサル・各種パーティーにご利用いただけます。宮崎市橘通西、ライオンタワービルB1F。">
+    <meta property="og:image" content="https://lala-official.jp/images/LINE_ALBUM_アー写厳選_lala編集_260409_9.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="livebar-style-v2.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YFWFWJ7SNN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YFWFWJ7SNN');
+    </script>
+    <style>
+        /* ========== 箱貸しページ専用スタイル ========== */
+        .plan-section { padding: 70px 0; }
+        .plan-section .section-title {
+            text-align: center;
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .plan-section .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 50px;
+        }
+
+        /* プランカード */
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+        .plan-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 32px 28px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .plan-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-4px);
+        }
+        .plan-card.featured {
+            border-color: var(--primary-color);
+            background: rgba(40,212,212,0.05);
+        }
+        .plan-badge {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #000;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+        .plan-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .plan-time {
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            margin-bottom: 18px;
+            letter-spacing: 0.05em;
+        }
+        .plan-price {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .plan-price span { font-size: 1rem; color: var(--text-muted); }
+        .plan-price-note {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        .plan-divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin: 20px 0;
+        }
+        .plan-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+        }
+        .plan-desc li {
+            list-style: none;
+            padding-left: 1.2em;
+            position: relative;
+            margin-bottom: 6px;
+        }
+        .plan-desc li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        /* 17時までセクション */
+        .daytime-section {
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 50px;
+        }
+        .daytime-section h3 {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.05em;
+        }
+        .daytime-section .daytime-lead {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 28px;
+        }
+        .daytime-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 640px) { .daytime-grid { grid-template-columns: 1fr; } }
+        .daytime-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 24px;
+        }
+        .daytime-card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .daytime-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+        .daytime-row .price-em {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        /* 機材・注意事項 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+        @media (max-width: 700px) { .info-grid { grid-template-columns: 1fr; } }
+        .info-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 10px;
+            padding: 28px;
+        }
+        .info-box h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .info-box ul { padding: 0; margin: 0; }
+        .info-box li {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding: 5px 0 5px 1.2em;
+            position: relative;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            line-height: 1.6;
+        }
+        .info-box li::before {
+            content: "・";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+        .info-box.caution { border-color: rgba(180,60,60,0.4); }
+        .info-box.caution h3 { color: #e07070; }
+        .info-box.caution li::before { color: #e07070; }
+
+        /* キャンセルポリシー */
+        .cancel-box {
+            background: rgba(180,60,60,0.07);
+            border: 1px solid rgba(180,60,60,0.3);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-top: 14px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        .cancel-box strong { color: #e07070; }
+
+        /* お問い合わせCTA */
+        .contact-cta {
+            text-align: center;
+            padding: 50px 20px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            margin-top: 10px;
+        }
+        .contact-cta h3 {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 14px;
+        }
+        .contact-cta p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 600px) {
+            .plan-price { font-size: 2rem; }
+            .daytime-section { padding: 28px 20px; }
+        }
+        @media (max-width: 600px) {
+            .form-row { flex-direction: column; gap: 15px !important; }
+        }
+        #barReservationForm select option { color: #000; }
+    </style>
+</head>
+
+<body>
+
+    <header class="bar-header">
+        <a href="index.html" class="back-link">← Back to lala Fan Site</a>
+    </header>
+
+    <!-- ヒーロー -->
+    <section class="bar-hero">
+        <div class="hero-content fade-in">
+            <h1 class="bar-logo">Live Bar Visca</h1>
+            <p class="bar-catchphrase">ライブイベント・リハーサル・各種パーティーにご利用いただけます</p>
+        </div>
+    </section>
+
+    <!-- 基本情報 -->
+    <section class="bar-info fade-in-up">
+        <div class="container">
+            <div class="info-card">
+                <h2>About the Space</h2>
+                <p>
+                    宮崎市中心部に位置するライブスペース。<br>
+                    バンドライブからアコースティックセット、各種イベントまで幅広くご対応いたします。
+                </p>
+                <div class="details">
+                    <div class="detail-item">
+                        <strong>住所</strong><br>
+                        〒880-0001 宮崎県宮崎市橘通西３丁目2-24<br>ライオンタワービル B1F
+                    </div>
+                    <div class="detail-item">
+                        <strong>利用時間</strong><br>
+                        12:00〜22:00（箱貸し終日）<br>
+                        スタジオは10:00〜のご利用も応相談
+                    </div>
+                    <div class="detail-item">
+                        <strong>お問い合わせ</strong><br>
+                        <a href="mailto:livebarvisca@anthemys.jp" style="color: var(--primary-color);">livebarvisca@anthemys.jp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 箱貸しシステム ========== -->
+    <section class="plan-section fade-in-up">
+        <div class="container">
+            <h2 class="section-title">箱貸しのシステム</h2>
+            <p class="section-subtitle">ライブイベント・リハーサル・各種パーティーにご利用いただけます</p>
+
+            <!-- メイン3プラン -->
+            <div class="plan-grid">
+
+                <!-- 終日貸切 -->
+                <div class="plan-card featured">
+                    <div class="plan-badge">FULL DAY</div>
+                    <div class="plan-name">終日貸切</div>
+                    <div class="plan-time">12:00〜22:00</div>
+                    <div class="plan-price">¥60,000<span>（税込）</span></div>
+                    <div class="plan-price-note">PA 別途要相談</div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>1日を通してご利用いただけます</li>
+                        <li>搬入・設営・リハーサル・本番まで一括利用可</li>
+                        <li>PAシステムの使用はお気軽にご相談ください</li>
+                    </ul>
+                </div>
+
+                <!-- ショートプラン -->
+                <div class="plan-card">
+                    <div class="plan-badge">SHORT</div>
+                    <div class="plan-name">ショートプラン</div>
+                    <div class="plan-time">17:00までに完全撤収できる場合</div>
+                    <div class="plan-price">¥30,000<span>（税込）</span></div>
+                    <div class="plan-price-note">PA 別途要相談</div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>搬入・設営・リハーサル含め17:00までに完全撤収が条件</li>
+                        <li>日中の短時間イベントに最適</li>
+                        <li>PAシステムの使用はお気軽にご相談ください</li>
+                    </ul>
+                </div>
+
+                <!-- スタジオ利用 -->
+                <div class="plan-card">
+                    <div class="plan-badge">STUDIO</div>
+                    <div class="plan-name">スタジオ利用</div>
+                    <div class="plan-time">1時間単位でご利用</div>
+                    <div class="plan-price">¥2,000<span>（税込 / 1時間）</span></div>
+                    <div class="plan-price-note">個人練習：¥500（税込）</div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>バンド練習・個人練習などにご利用いただけます</li>
+                        <li>個人練習は特別料金 ¥500/時間</li>
+                        <li>ドラム・ギターアンプ・ベースアンプ完備</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- 〜17:00 サウンドシステムを使わない箱貸し -->
+            <div class="daytime-section">
+                <h3>〜17:00までのサウンドシステムを使わない箱貸し</h3>
+                <p class="daytime-lead">通常のバーシステムと同じです。ご利用形態に応じて下記の料金となります。</p>
+                <div class="daytime-grid">
+                    <div class="daytime-card">
+                        <div class="daytime-card-title">飲み物の提供がある場合</div>
+                        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.75; margin:0;">
+                            通常のバーシステムと同様<br>
+                            飲食の提供がある場合は、通常のバー営業と同じ料金・条件となります。
+                        </p>
+                    </div>
+                    <div class="daytime-card">
+                        <div class="daytime-card-title">飲み物の提供が不要な場合</div>
+                        <div class="daytime-row">
+                            <span>非営利の場合 ・ 1時間</span>
+                            <span class="price-em">¥1,000<small style="font-size:0.75rem; font-weight:400; color:var(--text-muted);">（税込）</small></span>
+                        </div>
+                        <div class="daytime-row">
+                            <span>営利目的の場合 ・ 1時間</span>
+                            <span class="price-em">¥2,000<small style="font-size:0.75rem; font-weight:400; color:var(--text-muted);">（税込）</small></span>
+                        </div>
+                        <p style="font-size:0.78rem; color:var(--text-muted); margin-top:10px; margin-bottom:0;">事前に利用目的をお知らせください。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 利用可能機材 & 注意事項 -->
+            <div class="info-grid">
+                <div class="info-box">
+                    <h3>利用可能機材（一部）</h3>
+                    <ul>
+                        <li>ドラム　TAMAバスドラム 18インチ</li>
+                        <li>シンバルスタンド　2台</li>
+                        <li>JAZZ Chorus 120（ギターアンプ）</li>
+                        <li>アンペグ RB-112（ベースアンプ）</li>
+                        <li>上記以外の機材はご相談ください</li>
+                    </ul>
+                </div>
+                <div class="info-box caution">
+                    <h3>注意事項</h3>
+                    <ul>
+                        <li>音量制限がございます。近隣への配慮をお願いいたします。</li>
+                        <li>機材・備品の破損・汚損は、実費にてご請求させていただく場合があります。</li>
+                        <li>ゴミは各自でお持ち帰りをお願いいたします。</li>
+                        <li>火気の使用はできません。</li>
+                        <li>壁・床・備品等への貼り紙・釘打ち等はご遠慮ください。</li>
+                        <li>公序良俗に反する行為、法令に違反する行為は禁止します。</li>
+                        <li>ご利用の際は、事前の打ち合わせ・予約が必要です。</li>
+                    </ul>
+                    <div class="cancel-box">
+                        <strong>キャンセル料</strong><br>
+                        ご利用日の7日前〜2日前：利用料金の <strong>50%</strong><br>
+                        ご利用日の前日・当日：利用料金の <strong>100%</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- お問い合わせCTA -->
+            <div class="contact-cta">
+                <h3>🎤 ライブ出演・イベント開催をご希望の方へ</h3>
+                <p>
+                    当バーでは、アコースティックライブの出演者や、箱貸し（貸切イベント）の開催をご希望のアーティスト様・イベンター様を随時募集しております。<br>
+                    システムや機材、料金に関する詳細はお気軽にお問い合わせください。<br>
+                    <small style="color:#888;">※内容は予告なく変更になる場合がございます。あらかじめご了承ください。</small>
+                </p>
+                <a href="faq.html" class="btn outline-btn" style="padding: 12px 36px; font-size:1rem;">出演・ご予約のお問い合わせはこちら</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ========== ドリンクメニュー ========== -->
+    <section class="plan-section fade-in-up" id="drink" style="border-top: 1px solid rgba(255,255,255,0.06);">
+        <div class="container">
+            <h2 class="section-title">SYSTEMS　1 HOUR</h2>
+            <p class="section-subtitle">飲み放題プランは1時間制です。延長は同料金で承ります。</p>
+
+            <!-- 3プランカード -->
+            <div class="plan-grid" style="margin-bottom: 36px;">
+
+                <!-- COMMON -->
+                <div class="plan-card">
+                    <div class="plan-badge">COMMON</div>
+                    <div class="plan-name">Common Plan</div>
+                    <div class="plan-time">通常プラン飲み放題 1時間</div>
+                    <div class="plan-price">¥2,000<span>（税込）</span></div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>ハイボール各種</li>
+                        <li>焼酎（芋・麦）</li>
+                        <li>ソフトドリンク全種</li>
+                        <li>一部カクテル</li>
+                    </ul>
+                </div>
+
+                <!-- BETTER -->
+                <div class="plan-card featured">
+                    <div class="plan-badge">BETTER</div>
+                    <div class="plan-name">Better Plan</div>
+                    <div class="plan-time">イケてるプラン飲み放題 1時間</div>
+                    <div class="plan-price">¥3,000<span>（税込）</span></div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>Commonプランの全メニュー</li>
+                        <li>瓶ビール（飲み放題追加）</li>
+                        <li>ウイスキー（種類拡大）</li>
+                        <li>焼酎（銘柄拡大）</li>
+                    </ul>
+                </div>
+
+                <!-- PREMIUM -->
+                <div class="plan-card" style="border-color: #c8a96e;">
+                    <div class="plan-badge" style="background: #c8a96e;">PREMIUM</div>
+                    <div class="plan-name" style="color: #c8a96e;">Premium Plan</div>
+                    <div class="plan-time">プレミアムプラン飲み放題 1時間</div>
+                    <div class="plan-price" style="color: #c8a96e;">¥4,000<span>（税込）</span></div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>Betterプランの全メニュー</li>
+                        <li>一部高級酒を除く全種類</li>
+                        <li>スパークリング・シャンパン</li>
+                        <li>プレミアムカクテル各種</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- SHOT / チャージ -->
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; padding: 28px 32px; margin-bottom: 20px;">
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; text-align: center;">
+                    <div>
+                        <div style="font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 6px;">SHOT</div>
+                        <div style="font-size: 1.6rem; color: #fff; font-weight: 700;">オーダー制</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">単品注文承ります</div>
+                    </div>
+                    <div style="width: 1px; background: rgba(255,255,255,0.08);"></div>
+                    <div>
+                        <div style="font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 6px;">CHARGE</div>
+                        <div style="font-size: 1.6rem; color: #fff; font-weight: 700;">¥700</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">テーブルチャージ</div>
+                    </div>
+                    <div style="width: 1px; background: rgba(255,255,255,0.08);"></div>
+                    <div>
+                        <div style="font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 6px;">DRINK</div>
+                        <div style="font-size: 1.6rem; color: #fff; font-weight: 700;">¥500〜</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">単品ドリンク</div>
+                    </div>
+                </div>
+            </div>
+
+            <p style="text-align: center; font-size: 0.82rem; color: var(--text-muted); line-height: 1.8;">
+                WE HAVE WINE BOTTLES PLEASE ASK<br>
+                ワイン・シャンパン各種ご用意しております。スタッフにお尋ねください。
+            </p>
+        </div>
+    </section>
+
+    <!-- ========== メンバーシップ ========== -->
+    <section class="plan-section fade-in-up" id="membership" style="background: linear-gradient(to bottom, transparent, rgba(40,212,212,0.04), transparent); border-top: 1px solid rgba(255,255,255,0.06);">
+        <div class="container">
+            <h2 class="section-title">Visca Membership</h2>
+            <p class="section-subtitle">Live Bar Viscaをもっとお得に、もっと深く楽しむための月額制メンバーシップ。</p>
+
+            <div class="plan-grid">
+
+                <!-- ① Regular -->
+                <div class="plan-card">
+                    <div class="plan-badge">REGULAR</div>
+                    <div class="plan-name">Regular</div>
+                    <div class="plan-price" style="font-size: 2rem;">¥1,000<span>/ 月</span></div>
+                    <div class="plan-price-note">なんとなく行きつけにしたい方向け</div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>テーブルチャージ（¥700）が<strong style="color:#fff;">何度来ても永久無料</strong></li>
+                        <li>来店スタンプカード特典（詳細は店頭にて）</li>
+                        <li>入会・解約はいつでも可能</li>
+                    </ul>
+                    <div style="margin-top: 24px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 6px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                        月2回来店でチャージ分（¥1,400）の元が取れます
+                    </div>
+                </div>
+
+                <!-- ② Visca Pass -->
+                <div class="plan-card featured" style="position: relative;">
+                    <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: #000; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; padding: 4px 16px; border-radius: 20px; white-space: nowrap;">MOST POPULAR</div>
+                    <div class="plan-badge" style="margin-top: 8px;">VISCA PASS</div>
+                    <div class="plan-name">Visca Pass</div>
+                    <div class="plan-price" style="font-size: 2rem;">¥5,000<span>/ 月</span></div>
+                    <div class="plan-price-note">常連・lalaファン向けのお得なパス</div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>テーブルチャージ永久無料</li>
+                        <li><strong style="color: var(--primary-color);">飲み放題プランが毎回1ランク自動格上げ</strong><br>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">Common→Better / Better→Premium</span></li>
+                        <li>lalaライブ・イベントの優先予約権</li>
+                        <li>入会・解約はいつでも可能</li>
+                    </ul>
+                    <div style="margin-top: 24px; padding: 12px; background: rgba(40,212,212,0.06); border-radius: 6px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                        Commonを注文するだけでBetterに（差額¥1,000をカバー）。月5回来ても会費の範囲内。
+                    </div>
+                </div>
+
+                <!-- ③ Owner -->
+                <div class="plan-card" style="border-color: #c8a96e;">
+                    <div class="plan-badge" style="background: #c8a96e;">OWNER</div>
+                    <div class="plan-name" style="color: #c8a96e;">Visca Owner</div>
+                    <div class="plan-price" style="font-size: 2rem; color: #c8a96e;">¥10,000<span>/ 月</span></div>
+                    <div class="plan-price-note">lalaの活動を最も近くで支えるパトロン枠</div>
+                    <hr class="plan-divider">
+                    <ul class="plan-desc">
+                        <li>Visca Passの全特典</li>
+                        <li>月1回開催・完全非公開シークレットライブにご招待</li>
+                        <li>バー内に「オーナー証」としてお名前を掲示（希望者のみ）</li>
+                        <li>lalaとの来店時撮影権</li>
+                        <li>新メニュー・イベントの先行情報</li>
+                    </ul>
+                    <div style="margin-top: 24px; padding: 12px; background: rgba(200,169,110,0.05); border: 1px solid rgba(200,169,110,0.2); border-radius: 6px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                        枠数限定。満員の場合はウェイティングリストへのご登録をお願いします。
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- メンバーシップ比較表 -->
+            <div style="overflow-x: auto; margin-top: 40px; margin-bottom: 16px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 500px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.15);">
+                            <th style="text-align: left; padding: 12px 16px; color: var(--text-muted); font-weight: 400;">特典</th>
+                            <th style="text-align: center; padding: 12px 8px; color: #fff;">Regular</th>
+                            <th style="text-align: center; padding: 12px 8px; color: var(--primary-color);">Visca Pass</th>
+                            <th style="text-align: center; padding: 12px 8px; color: #c8a96e;">Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 11px 16px; color: var(--text-muted);">テーブルチャージ無料</td>
+                            <td style="text-align: center; color: var(--primary-color);">✓</td>
+                            <td style="text-align: center; color: var(--primary-color);">✓</td>
+                            <td style="text-align: center; color: #c8a96e;">✓</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 11px 16px; color: var(--text-muted);">飲み放題1ランク格上げ</td>
+                            <td style="text-align: center; color: var(--text-muted);">—</td>
+                            <td style="text-align: center; color: var(--primary-color);">✓</td>
+                            <td style="text-align: center; color: #c8a96e;">✓</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 11px 16px; color: var(--text-muted);">ライブ優先予約権</td>
+                            <td style="text-align: center; color: var(--text-muted);">—</td>
+                            <td style="text-align: center; color: var(--primary-color);">✓</td>
+                            <td style="text-align: center; color: #c8a96e;">✓</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 11px 16px; color: var(--text-muted);">シークレットライブ招待</td>
+                            <td style="text-align: center; color: var(--text-muted);">—</td>
+                            <td style="text-align: center; color: var(--text-muted);">—</td>
+                            <td style="text-align: center; color: #c8a96e;">✓</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 11px 16px; color: var(--text-muted);">ネームプレート掲示</td>
+                            <td style="text-align: center; color: var(--text-muted);">—</td>
+                            <td style="text-align: center; color: var(--text-muted);">—</td>
+                            <td style="text-align: center; color: #c8a96e;">✓</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 11px 16px; color: var(--text-muted);">lala撮影権・先行情報</td>
+                            <td style="text-align: center; color: var(--text-muted);">—</td>
+                            <td style="text-align: center; color: var(--text-muted);">—</td>
+                            <td style="text-align: center; color: #c8a96e;">✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); line-height: 1.8;">
+                ※ メンバーシップのお申し込みは店頭またはお問い合わせにてご案内いたします。<br>
+                ※ 内容は予告なく変更になる場合がございます。
+            </p>
+        </div>
+    </section>
+
+    <!-- ========== イベント情報 ========== -->
+    <section class="bar-events fade-in-up" id="events" style="padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div class="container">
+            <h2 class="section-title" style="text-align:center; font-family:var(--font-heading); color:var(--primary-color); font-size:2rem; margin-bottom:10px;">LALA Events in Visca</h2>
+            <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-bottom:36px;">開催予定のイベント・ライブ情報</p>
+            <div id="barEventList" style="max-width:800px; margin:0 auto;"></div>
+        </div>
+    </section>
+
+    <!-- ========== 予約セクション ========== -->
+    <section class="bar-reservation fade-in-up" id="reservation">
+        <div class="container">
+            <div class="reservation-card" style="background:rgba(0,0,0,0.5); padding:40px; border-radius:12px; border:1px solid var(--primary-color);">
+                <h2 style="font-family:var(--font-heading); color:var(--primary-color); margin-bottom:20px; text-align:center;">Reservation</h2>
+
+                <!-- カレンダー -->
+                <div style="margin-bottom:40px;">
+                    <p style="text-align:center; color:var(--text-muted); margin-bottom:20px; font-size:0.9rem;">
+                        ※日付をタップすると空き状況を確認できます。<br>
+                        <span class="legend-item"><span class="legend-color" style="background:#2ecc71; width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px;"></span>空きあり</span>
+                        <span class="legend-item"><span class="legend-color" style="background:#f39c12; width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px; margin-left:10px;"></span>残りわずか</span>
+                        <span class="legend-item"><span class="legend-color" style="background:#e74c3c; width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px; margin-left:10px;"></span>満席</span>
+                    </p>
+                    <div class="calendar-wrapper" style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); padding:20px; border-radius:8px;">
+                        <div class="calendar-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                            <button id="prevMonth" class="btn outline-btn" style="padding:5px 15px;">&lt;</button>
+                            <h3 id="calendarMonthYear" style="margin:0; color:var(--primary-color);"></h3>
+                            <button id="nextMonth" class="btn outline-btn" style="padding:5px 15px;">&gt;</button>
+                        </div>
+                        <div class="calendar-grid calendar-weekdays" style="display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-weight:bold; margin-bottom:10px; font-size:0.9rem;">
+                            <div style="color:#e74c3c;">Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div style="color:#3498db;">Sat</div>
+                        </div>
+                        <div class="calendar-grid" id="calendarDays" style="display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4);"></div>
+                    </div>
+                </div>
+
+                <!-- 予約フォーム -->
+                <div>
+                    <h3 style="border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:20px; color:var(--text-main);">予約フォーム</h3>
+
+                    <form id="barReservationForm">
+                        <div class="form-group" style="margin-bottom:20px;">
+                            <label style="display:block; margin-bottom:8px; color:var(--text-main); font-size:0.9rem;">ご予約の種類 *</label>
+                            <select id="resType" required style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px;">
+                                <option value="bar">BAR テーブル予約（18:00〜 2時間制）</option>
+                                <option value="studio">スタジオ利用（バンド練習 ¥2,000/h・個人練習 ¥500/h）</option>
+                            </select>
+                        </div>
+
+                        <div id="resDurationGroup" style="display:none; margin-bottom:20px;">
+                            <label style="display:block; margin-bottom:8px; color:var(--text-main); font-size:0.9rem;">ご利用時間 *</label>
+                            <select id="resDuration" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px;">
+                                <option value="1">1時間</option>
+                                <option value="2">2時間</option>
+                                <option value="3">3時間</option>
+                                <option value="4">4時間</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row" style="display:flex; gap:20px; margin-bottom:20px;">
+                            <div class="form-group" style="flex:1;">
+                                <label style="display:block; margin-bottom:8px; color:var(--text-main); font-size:0.9rem;">日付 *</label>
+                                <input type="date" id="resDate" required style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px;">
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label style="display:block; margin-bottom:8px; color:var(--text-main); font-size:0.9rem;">開始時間 *</label>
+                                <select id="resTime" required style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px;">
+                                    <option value="">選択してください</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="10:30">10:30</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="11:30">11:30</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="12:30">12:30</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="13:30">13:30</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="14:30">14:30</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="15:30">15:30</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="16:30">16:30</option>
+                                    <option value="17:00">17:00</option>
+                                    <option value="17:30">17:30</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="18:30">18:30</option>
+                                    <option value="19:00">19:00</option>
+                                    <option value="19:30">19:30</option>
+                                    <option value="20:00">20:00</option>
+                                    <option value="20:30">20:30</option>
+                                    <option value="21:00">21:00</option>
+                                    <option value="21:30">21:30</option>
+                                    <option value="22:00">22:00</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:20px;">
+                            <label style="display:block; margin-bottom:8px; color:var(--text-main); font-size:0.9rem;">予約人数 *</label>
+                            <select id="resCount" required style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px;">
+                                <option value="1">1名</option>
+                                <option value="2">2名</option>
+                                <option value="3">3名</option>
+                                <option value="4">4名</option>
+                                <option value="5">5名</option>
+                                <option value="6">6名以上（要相談）</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:20px;">
+                            <label style="display:block; margin-bottom:8px; color:var(--text-main); font-size:0.9rem;">お名前 *</label>
+                            <input type="text" id="resName" required placeholder="例: 山田 太郎" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:20px;">
+                            <label style="display:block; margin-bottom:8px; color:var(--text-main); font-size:0.9rem;">メールアドレス *</label>
+                            <input type="email" id="resEmail" required placeholder="例: info@example.com" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:30px;">
+                            <label style="display:block; margin-bottom:8px; color:var(--text-main); font-size:0.9rem;">備考・メッセージ</label>
+                            <textarea id="resMessage" rows="3" placeholder="ご要望などがあればご記入ください" style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:4px;"></textarea>
+                        </div>
+
+                        <div id="resError" style="color:#e74c3c; margin-bottom:20px; text-align:center; display:none;"></div>
+
+                        <div style="text-align:center;">
+                            <button type="submit" class="btn primary-btn" style="width:100%; max-width:300px; padding:15px; font-size:1.1rem; background-color:var(--primary-color); border:none; cursor:pointer; border-radius:4px;">予約を確定する</button>
+                        </div>
+                    </form>
+
+                    <div id="resSuccessMessage" style="display:none; padding-top:30px; text-align:center;">
+                        <h3 style="color:var(--primary-color); margin-bottom:15px;">ご予約完了しました！</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem;">
+                            ご来店をお待ちしております。<br>キャンセルをご希望の場合は、直接店舗までご連絡ください。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMETABLE MODAL -->
+    <div id="timetableModal" class="modal-overlay">
+        <div class="modal-content" style="max-width:500px;">
+            <span class="modal-close" id="closeTimetableModalBtn">&times;</span>
+            <h2 id="modalTimetableTitle" style="font-family:var(--font-heading); color:var(--primary-color); margin-bottom:5px; text-align:center;">YYYY.MM.DD</h2>
+            <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">本日の営業・空き状況</p>
+            <div id="timetableContent" style="background:rgba(0,0,0,0.3); border-radius:8px; border:var(--glass-border); padding:15px; max-height:400px; overflow-y:auto; margin-bottom:20px;"></div>
+            <div id="timetableActionContainer" style="text-align:center;">
+                <a href="#reservation" id="timetableReserveBtn" class="btn primary-btn" style="width:100%;">この日で予約する</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <h3>lala</h3>
+                <p>Official Site</p>
+            </div>
+            <div class="footer-links" style="display:flex; flex-direction:column; gap:10px;">
+                <a href="law.html" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none; transition:color 0.3s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'">特定商取引法に基づく表記</a>
+                <a href="faq.html" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none; transition:color 0.3s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'">FAQ / お問い合わせ</a>
+            </div>
+            <div class="footer-sns">
+                <a href="https://www.youtube.com/@lalachannnel" target="_blank" title="YouTube">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/this_is_lala_music/" target="_blank" title="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://lin.ee/w3CRUF5" target="_blank" title="LINE">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.945 8.94 9.53 9.61.378.077.892.238 1.02.607.114.331.074.848.034 1.189l-.16 1.002c-.05.313-.238 1.155 1.013.624 1.25-.53 6.745-3.978 9.383-6.932 2.05-2.296 3.18-4.665 3.18-6.1z"/></svg>
+                </a>
+                <a href="https://www.threads.com/@this_is_lala_music?igshid=NTc4MTIwNjQ2YQ==" target="_blank" title="Threads">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10c2.613 0 5.093-.945 7.026-2.61l-1.344-1.344C16.142 19.345 14.167 20 12 20 7.582 20 4 16.418 4 12S7.582 4 12 4s8 3.582 8 8c0 2.223-1.855 4.02-4.103 3.977C14.07 15.94 12.552 14.71 12.552 13V9h-1.636v.938A3.488 3.488 0 0 0 9 9c-1.933 0-3.5 1.567-3.5 3.5S7.067 16 9 16c.866 0 1.656-.312 2.268-.83.673 1.576 2.203 2.65 4.148 2.677C18.665 17.865 21 15.303 21 12 21 6.477 16.523 2 12 2zm0 12.5c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"/></svg>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 lala Official. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="floatingShareBtn" title="ページをシェアする">
+        <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+    </div>
+
+    <!-- TICKET MODAL -->
+    <div class="modal-overlay" id="ticketModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModalBtn">&times;</span>
+            <h2 style="font-family:var(--font-heading); color:var(--primary-color); margin-bottom:20px;">Live Ticket Reservation</h2>
+            <p id="modalLiveTitle" style="margin-bottom:20px; font-weight:bold; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;"></p>
+            <form id="ticketForm">
+                <input type="hidden" id="liveNameInput" name="liveName">
+                <div class="form-group">
+                    <label>お名前 (Name) *</label>
+                    <input type="text" id="userName" required placeholder="例: 山田 太郎">
+                </div>
+                <div class="form-group">
+                    <label>メールアドレス (Email) *</label>
+                    <input type="email" id="userEmail" required placeholder="例: info@example.com">
+                </div>
+                <div class="form-group">
+                    <label>予約人数 *</label>
+                    <select id="ticketCount" required>
+                        <option value="1">1名</option>
+                        <option value="2">2名</option>
+                        <option value="3">3名</option>
+                        <option value="4">4名</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>来店時間 (Time) *</label>
+                    <input type="time" id="reservationTime" name="reservationTime" required>
+                </div>
+                <div class="form-group">
+                    <label>備考・メッセージ</label>
+                    <textarea id="userMessage" rows="3" placeholder="lalaへのメッセージやご要望があればどうぞ"></textarea>
+                </div>
+                <div style="text-align:center; margin-top:30px;">
+                    <button type="submit" class="btn primary-btn" style="width:100%;">予約を申し込む</button>
+                </div>
+            </form>
+            <div id="formSuccessMessage" style="display:none; margin-top:25px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1);">
+                <p style="color:var(--primary-color); font-size:1.2rem; font-weight:bold; margin-bottom:10px; text-align:center;">ご予約情報の送信が完了しました！</p>
+                <p style="font-size:0.9rem; margin-bottom:20px; color:var(--text-muted); text-align:center;">お席を確保するため、以下のボタンより決済に進んでください。</p>
+                <!-- ★要設定: SquareまたはStripeの決済URLを設定してください ★ -->
+                <a href="https://square.link/YOUR_PAYMENT_LINK" target="_blank" class="btn outline-btn" style="width:100%; border-color:#fff; color:#fff; text-align:center;">決済に進む</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; padding:20px; backdrop-filter:blur(5px);">
+        <div style="background:#111; width:100%; max-width:500px; border-radius:12px; padding:30px; border:1px solid rgba(255,255,255,0.1); position:relative; max-height:85vh; overflow-y:auto;">
+            <div id="eventModalDate" style="color:var(--primary-color); font-weight:bold; margin-bottom:10px; font-size:0.9rem;"></div>
+            <h2 id="eventModalTitle" style="margin-bottom:20px; font-size:1.4rem; color:#fff;"></h2>
+            <img id="eventModalFlyer" style="display:none; width:100%; border-radius:8px; margin-bottom:20px;">
+            <div id="eventModalDesc" style="line-height:1.6; color:#ddd; font-size:0.95rem; margin-bottom:30px; white-space:pre-wrap;"></div>
+            <a id="eventModalReserveBtn" href="#" target="_blank" class="btn primary-btn" style="display:block; width:100%; text-align:center; padding:15px; border-radius:30px; margin-bottom:15px; text-decoration:none; font-weight:bold;">予約する</a>
+            <button onclick="closeEventModal()" style="width:100%; padding:15px; border:none; border-radius:30px; background:rgba(255,255,255,0.1); color:#fff; font-weight:bold; cursor:pointer;">✖ 閉じる</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof renderEvents === 'function') renderEvents();
+        });
+
+        function openEventModal(eventId) {
+            const data = JSON.parse(localStorage.getItem('admin_events') || '[]');
+            const item = data.find(i => String(i.id) === String(eventId));
+            if (!item) return;
+            document.getElementById('eventModalDate').innerText = item.date.replace(/-/g, '.');
+            document.getElementById('eventModalTitle').innerText = item.title || '';
+            document.getElementById('eventModalDesc').innerText = item.description || '詳細情報はありません。';
+            const flyer = document.getElementById('eventModalFlyer');
+            if (item.imageUrl) { flyer.src = item.imageUrl; flyer.style.display = 'block'; }
+            else { flyer.style.display = 'none'; flyer.src = ''; }
+            const btn = document.getElementById('eventModalReserveBtn');
+            btn.style.display = 'block';
+            if (item.url) { btn.href = item.url; btn.target = "_blank"; btn.onclick = null; }
+            else {
+                btn.href = "#"; btn.target = "_self";
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    const tm = document.getElementById('ticketModal');
+                    if (tm) {
+                        document.getElementById('modalLiveTitle').textContent = item.title;
+                        document.getElementById('liveNameInput').value = item.title;
+                        tm.style.display = 'flex';
+                        closeEventModal();
+                        document.body.classList.add('no-scroll');
+                    }
+                };
+            }
+            document.getElementById('eventModal').style.display = 'flex';
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').style.display = 'none';
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('barEventList');
+            if (!container) return;
+            const data = JSON.parse(localStorage.getItem('admin_events') || '[]');
+            if (data.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#aaa;">現在予定されているイベントはありません。</p>';
+                return;
+            }
+            container.innerHTML = '';
+            data.sort((a, b) => new Date(a.date) - new Date(b.date)).forEach(item => {
+                if (item.type === 'NEWS') return;
+                container.innerHTML += `
+                <div onclick="openEventModal('${item.id}')" style="cursor:pointer; background:rgba(255,255,255,0.05); padding:20px; border-radius:8px; margin-bottom:15px; border-left:4px solid var(--primary-color); display:flex; justify-content:space-between; align-items:center; transition:all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+                    <div>
+                        <div style="color:var(--primary-color); font-weight:bold; margin-bottom:5px;">${item.date.replace(/-/g, '.')}</div>
+                        <h3 style="margin:0; color:#fff; font-size:1.2rem;">${item.title || ''}</h3>
+                    </div>
+                    <span style="color:var(--primary-color);">詳細 ❯</span>
+                </div>`;
+            });
+        }
+    </script>
+</body>
+</html>

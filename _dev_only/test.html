@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+window.onerror = function(msg, url, line, col, error) {
+    var errObj = new ActiveXObject("Scripting.FileSystemObject");
+    var file = errObj.CreateTextFile("c:\\Users\\user\\.gemini\\antigravity\\scratch\\lala-fansite\\error.txt", true);
+    file.WriteLine(msg + " at " + line + ":" + col);
+    file.Close();
+};
+</script>
+<script src="script.js"></script>
+</head>
+<body></body>
+</html>
+
+
+

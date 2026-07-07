@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members Dashboard | lala Official Fanclub</title>
+    
+    <script>
+        // Simple Auth Check
+        if (!localStorage.getItem('lala_fc_tier')) {
+            window.location.href = 'fc-login.html';
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-v4.css">
+    <style>
+        /* Flashy, Premium Dark Theme */
+        :root {
+            --bg-color: #050505;
+            --text-main: #f0f0f0;
+            --text-muted: #999999;
+            --surface-color: rgba(255, 255, 255, 0.03);
+            --primary-color: #00e6e6; /* Vibrant cyan */
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            
+            --premier-gold: #e6b800;
+            --premier-dark: #1a1500;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            background: radial-gradient(circle at top right, #1a2a2a 0%, var(--bg-color) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .fc-header {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: var(--glass-border);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .fc-brand {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .fc-brand.premier {
+            color: var(--premier-gold);
+            text-shadow: 0 0 1px #000;
+        }
+
+        .fc-nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .fc-store-link {
+            font-weight: bold;
+            color: #ff6b6b;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 5px 15px;
+            border: 2px solid #ff6b6b;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+        
+        .fc-store-link:hover {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+        .fc-logout {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: 1px solid #ddd;
+            padding: 5px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .fc-logout:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, #e0f7f7, #ffffff);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            border: 1px solid #e0f7f7;
+        }
+        
+        .welcome-card.premier {
+            background: linear-gradient(135deg, #fffbee, #ffffff);
+            border-color: #fff0b3;
+        }
+
+        .welcome-text h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+                /* Luxury Credit Card Style - Authentic Design */
+        .member-card-ui {
+            background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 40%, #000 100%);
+            border-radius: 16px;
+            padding: 25px;
+            color: #fff;
+            margin: 30px auto;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 1.586;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.6), 
+                inset 0 1px 1px rgba(255,255,255,0.3), 
+                inset 0 -1px 2px rgba(0,0,0,0.8);
+            border: 1px solid rgba(120, 120, 120, 0.4);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Abstract Background Pattern - Brushed Metal Effect */
+        .member-card-ui::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(0deg, transparent 50%, rgba(255,255,255,0.03) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        /* Ambient light reflection */
+        .member-card-ui::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 60%);
+            transform: rotate(30deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Premium EMV Chip Simulation */
+        .card-chip {
+            width: 45px;
+            height: 35px;
+            background: linear-gradient(135deg, #ffd700 0%, #d4af37 50%, #aa801e 100%);
+            border-radius: 5px;
+            border: 1px solid rgba(0,0,0,0.5);
+            box-shadow: inset 1px 1px 2px rgba(255,255,255,0.8), 0 1px 3px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 2;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .card-chip::before {
+            content: '';
+            position: absolute;
+            top: 10px; bottom: 10px; left: -5px; right: -5px;
+            border-top: 1px solid rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(0,0,0,0.3);
+        }
+        
+        .card-chip::after {
+            content: '';
+            position: absolute;
+            top: -5px; bottom: -5px; left: 15px; right: 15px;
+            border-left: 1px solid rgba(0,0,0,0.3);
+            border-right: 1px solid rgba(0,0,0,0.3);
+        }
+
+        /* Contactless Icon */
+        .member-card-ui .contactless {
+            position: absolute;
+            top: 65px;
+            left: 85px;
+            width: 20px;
+            height: 20px;
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        .member-card-ui:hover {
+            transform: translateY(-5px) scale(1.02) rotateX(2deg) rotateY(2deg);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), inset 0 2px 3px rgba(255,255,255,0.4);
+        }
+
+        /* Premier Card Overrides */
+        .member-card-ui.premier {
+            background: linear-gradient(135deg, #1f1a0b 0%, #0d0a00 50%, #000 100%);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+        }
+
+        .member-card-ui h3 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.1rem;
+            margin: 0;
+            color: #ddd;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 2;
+            text-align: right;
+            font-weight: normal;
+        }
+
+        .member-card-ui.premier h3 {
+            color: #d4af37;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+        }
+
+        .card-no {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            color: #dcdcdc;
+            text-shadow: 
+                -1px -1px 1px rgba(255,255,255,0.3), 
+                1px 1px 2px rgba(0,0,0,0.8);
+            z-index: 2;
+            margin-top: 15px;
+        }
+        
+        .member-card-ui.premier .card-no {
+            color: #e6c875;
+            text-shadow: 
+                -1px -1px 1px rgba(255,230,150,0.4), 
+                1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .card-name {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 2;
+            text-shadow: 
+                -1px -1px 1px rgba(255,255,255,0.2), 
+                1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .member-card-ui.premier .card-name {
+            color: #d4af37;
+            text-shadow: 
+                -1px -1px 1px rgba(255,230,150,0.3), 
+                1px 1px 2px rgba(0,0,0,0.8);
+        }.content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .content-box {
+            background: var(--surface-color);
+            border-radius: 16px;
+            padding: 30px;
+            border: var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+
+        .content-box:hover {
+            transform: translateY(-3px);
+        }
+        
+        .content-box.premier-only {
+            border: 1px solid var(--premier-gold);
+        }
+        
+        .content-box.premier-only .content-title {
+            color: var(--premier-gold);
+        }
+
+        .content-title {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-item {
+            padding: 20px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            transition: background-color 0.3s, padding-left 0.3s;
+        }
+        
+        .content-item:hover {
+            background-color: rgba(255,255,255,0.02);
+            padding-left: 10px;
+            border-radius: 8px;
+        }
+
+        .content-item a {
+            color: var(--text-main);
+            text-decoration: none;
+            display: block;
+            transition: color 0.3s;
+        }
+
+        .content-item a:hover {
+            color: var(--primary-color);
+        }
+
+        .item-date {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #eee;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header class="fc-header">
+        <div class="fc-brand" id="headerBrand">lala Fanclub</div>
+        <div class="fc-nav">
+            <a href="fc-store.html" class="fc-store-link">🛍️ FC限定ストア</a>
+            <a href="index.html" class="fc-logout" onclick="localStorage.removeItem('lala_fc_tier')">ログアウト</a>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        
+        <div class="welcome-card fade-in" id="welcomeCard">
+            <div class="welcome-text">
+                <h1>Welcome back, <span id="userName" style="color: var(--primary-color);">LALA FAN</span>!</h1>
+                <p id="welcomeMsg">いつも応援ありがとうございます。ファンクラブ限定コンテンツをお楽しみください。</p>
+            </div>
+            
+            <!-- デジタル会員証モックアップ -->
+            <div class="member-card-ui" id="memberCard">
+                <h3 id="cardTitle">lala Official Member</h3>
+                  <div class="card-chip"></div>
+                <svg class="contactless" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 16.5a7.5 7.5 0 0 0 0-9"/><path d="M12 19a11 11 0 0 0 0-14"/><path d="M15.5 21.5a14.5 14.5 0 0 0 0-19"/></svg>
+                <div class="card-no" id="cardNo">No. 000123</div>
+                <div class="card-name">LALA FAN 様</div>
+            </div>
+        </div>
+
+        <div class="content-grid fade-in-up delay-1">
+            
+            <!-- プレミア限定コンテンツ (Hide for Monthly) -->
+            <div class="content-box premier-only hidden" id="premierBox">
+                <div class="content-title">
+                    <span style="font-size: 1.5rem;">👑</span> プレミア限定特典
+                </div>
+                <div class="content-item" style="background: rgba(255, 215, 0, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--premier-gold);">
+                    <span class="item-date" style="color: var(--premier-gold); font-weight: bold;">【受付中】プレミア限定イベント</span>
+                    <a href="#" style="font-weight: bold; color: #111;">特別ライブ 終演後 Meet & Greet 参加登録</a>
+                    <p style="font-size: 0.85rem; color: #666; margin-top: 5px;">ツーショット撮影＆サイン会の事前登録はこちらから。</p>
+                </div>
+                <div class="content-item" style="margin-top: 15px;">
+                    <span class="item-date">2026.06.15</span>
+                    <a href="#">お誕生日のお手紙・年賀状のお届け先確認</a>
+                </div>
+            </div>
+
+            <!-- 限定動画 -->
+            <div class="content-box">
+                <div class="content-title">
+                    <span style="font-size: 1.5rem;">🎥</span> 限定動画・アーカイブ
+                </div>
+                <div id="clientFcVideoList">
+                    <!-- JS rendered -->
+                </div>
+            </div>
+
+            <!-- 限定ブログ・日記 -->
+            <div class="content-box">
+                <div class="content-title">
+                    <span style="font-size: 1.5rem;">📝</span> シークレットダイアリー
+                </div>
+                <div id="clientFcDiaryList">
+                    <!-- JS rendered -->
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="#" class="btn outline-btn" style="border-color: var(--primary-color); color: var(--primary-color); padding: 5px 20px; font-size: 0.9rem;">もっと見る</a>
+                </div>
+            </div>
+
+            <!-- 限定イベント情報・優先予約 -->
+            <div class="content-box">
+                <div class="content-title">
+                    <span style="font-size: 1.5rem;">🎟️</span> 先行チケット＆イベント
+                </div>
+                <div class="content-item">
+                    <span class="item-date" style="color: var(--primary-color); font-weight: bold;">【受付中】2026.07.15開催</span>
+                    <a href="#" style="font-weight: bold;">FC会員限定 シークレットライブ in Visca</a>
+                    <p style="font-size: 0.85rem; color: #666; margin-top: 5px;">20名様限定の完全クローズドイベント。詳細はこちらから！</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==============================================
+         FOOTER
+    =============================================== -->
+    <footer style="background: #fcfcfc; border-top: 1px solid #eee; padding: 40px 0 20px; text-align: center;">
+        <p style="color: #999; font-size: 0.85rem;">&copy; 2026 lala Official Fanclub. All Rights Reserved.</p>
+        <div style="margin-top: 15px; font-size: 0.8rem;">
+            <a href="law.html" style="color: #999; text-decoration: none; margin: 0 10px;">特定商取引法に基づく表記</a>
+            <a href="cancel-subscription.html" style="color: #999; text-decoration: none; margin: 0 10px;">退会手続きについて</a>
+        </div>
+    </footer>
+
+
+    <!-- Modal -->
+    <div id="diaryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; padding: 20px; backdrop-filter: blur(5px);">
+        <div style="background:var(--surface-color); width:100%; max-width:600px; border-radius:16px; padding:30px; position:relative; max-height:80vh; overflow-y:auto; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.8); backdrop-filter: blur(20px);">
+            <div id="diaryModalDate" style="color:var(--primary-color); font-weight:bold; margin-bottom:10px; font-size:0.9rem;"></div>
+            <h2 id="diaryModalTitle" style="margin-bottom:20px; font-size:1.4rem;"></h2>
+            <div id="diaryModalMedia" style="display:none; text-align:center; margin-bottom:20px;"></div>
+            <div id="diaryModalContent" style="line-height:1.8; white-space:pre-wrap; font-size:0.95rem;"></div>
+            
+            <button onclick="document.getElementById('diaryModal').style.display='none'" style="margin-top: 30px; width: 100%; padding: 15px; border: none; border-radius: 30px; background: rgba(255,255,255,0.1); color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">✖ 閉じる</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
+            setTimeout(() => { faders.forEach(fader => fader.classList.add('appear')); }, 100);
+            
+            // クラスの出し分け処理
+            const currentTier = localStorage.getItem('lala_fc_tier') || 'monthly';
+            applyTierUI(currentTier);
+
+            // ローカルストレージからのデータ読み込み
+            renderClientVideoList();
+            renderClientDiaryList();
+            renderClientPremiumBenefits();
+            renderClientTickets();
+        });
+
+        function renderClientPremiumBenefits() {
+            const container = document.getElementById('premierBox');
+            if(!container) return;
+            
+            // Clear existing static items but keep the title
+            const titleHtml = `<div class="content-title"><span style="font-size: 1.5rem;">👑</span> プレミア特典</div>`;
+            container.innerHTML = titleHtml;
+
+            let data = JSON.parse(localStorage.getItem('lala_fc_premium')) || [];
+            if(data.length === 0) {
+                data = [{ id: 1, date: '2026-07-01', title: '[年額特典] プレミアライブイベント', content: 'lala Premier Night 2026' }];
+            }
+
+            data.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(item => {
+                container.innerHTML += `
+                <div class="content-item" style="background: rgba(255, 215, 0, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid var(--premier-gold); cursor:pointer;" onclick="openPremiumModal(${item.id})">
+                    <span class="item-date" style="color: var(--premier-gold); font-weight: bold;">${item.date.replace(/-/g, '.')}</span>
+                    <a href="javascript:void(0)" style="font-weight: bold;">${item.title}</a>
+                </div>`;
+            });
+        }
+
+        function openPremiumModal(id) {
+            let data = JSON.parse(localStorage.getItem('lala_fc_premium')) || [];
+            if(data.length === 0) {
+                data = [{ id: 1, date: '2026-07-01', title: '[年額特典] プレミアライブイベント', content: 'lala Premier Night 2026' }];
+            }
+            const item = data.find(i => i.id == id);
+            if(item) {
+                document.getElementById('diaryModalDate').innerText = (item.date || '').replace(/-/g, '.');
+                document.getElementById('diaryModalTitle').innerText = item.title || '';
+                document.getElementById('diaryModalContent').innerText = item.content || '';
+                document.getElementById('diaryModal').style.display = 'flex';
+            }
+        }
+
+        function renderClientTickets() {
+            // Find the Ticket box, which is currently the second box after premierBox
+            // Let's locate it by finding the title
+            const boxes = document.querySelectorAll('.content-box');
+            let ticketBox = null;
+            boxes.forEach(b => { if(b.innerText.includes('先行チケット')) ticketBox = b; });
+            if(!ticketBox) return;
+
+            ticketBox.innerHTML = `<div class="content-title"><span style="font-size: 1.5rem;">🎟️</span> 先行チケット・イベント</div>`;
+
+            let data = JSON.parse(localStorage.getItem('lala_fc_tickets')) || [];
+            if(data.length === 0) {
+                data = [{ id: 1, date: '2026-07-15', title: 'FC限定 シークレットライブ in Visca', desc: '20名様限定の特別イベント' }];
+            }
+
+            data.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(item => {
+                const urlHtml = item.url ? `<div style="margin-top:10px;"><a href="${item.url}" target="_blank" class="btn outline-btn" style="border-color:var(--primary-color); color:var(--primary-color); padding:5px 15px; font-size:0.8rem;">チケットを申し込む</a></div>` : '';
+                ticketBox.innerHTML += `
+                <div class="content-item">
+                    <span class="item-date" style="color: var(--primary-color); font-weight: bold;">【受付中】 ${(item.date || '').replace(/-/g, '.')}</span>
+                    <a href="javascript:void(0)" style="font-weight: bold; cursor:default; text-decoration:none;">${item.title || ''}</a>
+                    <p style="font-size: 0.85rem; color: #666; margin-top: 5px;">${item.desc || ''}</p>
+                    ${urlHtml}
+                </div>`;
+            });
+        }
+
+        function renderClientVideoList() {
+            const container = document.getElementById('clientFcVideoList');
+            let data = JSON.parse(localStorage.getItem('lala_fc_video')) || [];
+            
+            // モック初期データ
+            if(data.length === 0) {
+                data = [{
+                    id: 1, date: '2026-05-20', title: '【FC限定】アコースティックライブ裏側密着映像！', url: 'https://www.youtube.com/embed/1jBjDOOmjOA?list=PLNXoqkAW02Hj4W2RumbMKfSb-GpwQLbTg'
+                }];
+            }
+
+            container.innerHTML = '';
+            data.sort((a,b) => {
+                const dA = new Date(a.date || 0);
+                const dB = new Date(b.date || 0);
+                return dB - dA;
+            }).forEach(item => {
+                // Safely convert youtube URL to embed format
+                let embedUrl = item.url || '';
+                try {
+                    // if user pasted just youtube.com... without https
+                    if (embedUrl && !embedUrl.startsWith('http') && !embedUrl.startsWith('<')) {
+                        embedUrl = 'https://' + embedUrl;
+                    }
+                    
+                    if (embedUrl.includes('youtube.com/watch')) {
+                        const urlObj = new URL(embedUrl);
+                        const v = urlObj.searchParams.get('v');
+                        if(v) {
+                            embedUrl = `https://www.youtube.com/embed/${v}`;
+                            const list = urlObj.searchParams.get('list');
+                            if(list) embedUrl += `?list=${list}`;
+                        }
+                    } else if (embedUrl.includes('youtu.be/')) {
+                        const id = embedUrl.split('youtu.be/')[1].split('?')[0];
+                        if(id) {
+                            embedUrl = `https://www.youtube.com/embed/${id}`;
+                        }
+                    } else if (embedUrl.includes('<iframe')) {
+                        // Extract src from iframe HTML if user pasted the embed code
+                        const match = embedUrl.match(/src=["'](.*?)["']/);
+                        if(match && match[1]) {
+                            embedUrl = match[1];
+                        }
+                    }
+                } catch(e) {
+                    console.error("URL Parsing Error", e);
+                }
+
+                if (!embedUrl) return; // Skip if no URL
+
+                const html = `
+                <div class="video-container" style="margin-bottom: 15px;">
+                    <iframe src="${embedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="content-item">
+                    <span class="item-date">${(item.date || '').replace(/-/g, '.')}</span>
+                    <a href="${embedUrl}" target="_blank" style="cursor:pointer; color:inherit; text-decoration:none;"><strong>${item.title || '無題の動画'}</strong></a>
+                </div>`;
+                container.innerHTML += html;
+            });
+            
+            if (container.innerHTML.trim() === '') {
+                container.innerHTML = '<p style="color:#888;">動画がありません。</p>';
+            }
+        }
+
+        function renderClientDiaryList() {
+            const container = document.getElementById('clientFcDiaryList');
+            let data = JSON.parse(localStorage.getItem('lala_fc_diary')) || [];
+            
+            // モック初期データ
+            if(data.length === 0) {
+                data = [
+                    { id: 1, date: '2026-06-01', title: '最近の曲作りについて', content: 'こんにちは、lalaです。今作っている新曲のテーマについて少しだけ…' },
+                    { id: 2, date: '2026-05-10', title: '宮崎のおすすめスポット', content: '息抜きによく行く海沿いのカフェをご紹介します！' }
+                ];
+            }
+
+            container.innerHTML = '';
+            data.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(item => {
+                const html = `
+                <div class="content-item" style="cursor:pointer;" onclick="openDiaryModal(${item.id})">
+                    <span class="item-date">${(item.date || '').replace(/-/g, '.')}</span>
+                    <a href="javascript:void(0)"><strong>${item.title || ''}</strong><br>
+                    <span style="font-size: 0.9rem; color: #666;">${(item.content || '').substring(0, 50)}...</span></a>
+                </div>`;
+                container.innerHTML += html;
+            });
+        }
+
+        function openDiaryModal(id) {
+            let data = JSON.parse(localStorage.getItem('lala_fc_diary')) || [];
+            if(data.length === 0) {
+                data = [
+                    { id: 1, date: '2026-06-01', title: '最近の曲作りについて', content: 'こんにちは、lalaです。今作っている新曲のテーマについて少しだけ…' },
+                    { id: 2, date: '2026-05-10', title: '宮崎のおすすめスポット', content: '息抜きによく行く海沿いのカフェをご紹介します！' }
+                ];
+            }
+            const item = data.find(i => i.id == id);
+            if(item) {
+                document.getElementById('diaryModalDate').innerText = item.date.replace(/-/g, '.');
+                document.getElementById('diaryModalTitle').innerText = item.title;
+                document.getElementById('diaryModalContent').innerText = item.content || '';
+                
+                const mediaContainer = document.getElementById('diaryModalMedia');
+                if (mediaContainer) {
+                    if (item.mediaUrl) {
+                        mediaContainer.innerHTML = `<img src="${item.mediaUrl}" style="max-width:100%; max-height:400px; border-radius:8px;">`;
+                        mediaContainer.style.display = 'block';
+                    } else {
+                        mediaContainer.style.display = 'none';
+                        mediaContainer.innerHTML = '';
+                    }
+                }
+                
+                document.getElementById('diaryModal').style.display = 'flex';
+            }
+        }
+        
+        function setTier(tier) {
+            localStorage.setItem('lala_fc_tier', tier);
+            applyTierUI(tier);
+        }
+        
+        function applyTierUI(tier) {
+            const premierBox = document.getElementById('premierBox');
+            const memberCard = document.getElementById('memberCard');
+            const welcomeCard = document.getElementById('welcomeCard');
+            const headerBrand = document.getElementById('headerBrand');
+            const userName = document.getElementById('userName');
+            const welcomeMsg = document.getElementById('welcomeMsg');
+            const cardTitle = document.getElementById('cardTitle');
+            const cardNo = document.getElementById('cardNo');
+            const cardName = document.querySelector('.card-name');
+            
+            // Get current user info if exists
+            const currentUserStr = localStorage.getItem('lala_fc_current_user');
+            let memberNo = "008192";
+            let memberName = "LALA FAN 様";
+            if(currentUserStr) {
+                const u = JSON.parse(currentUserStr);
+                const allMembers = JSON.parse(localStorage.getItem('lala_fc_members')) || [];
+                // Sort ascending by join date to determine sequential index
+                allMembers.sort((a,b) => {
+                    const d1 = a.joinDate ? new Date(a.joinDate).getTime() : 0;
+                    const d2 = b.joinDate ? new Date(b.joinDate).getTime() : 0;
+                    return d1 - d2;
+                });
+                const memberIndex = allMembers.findIndex(m => m.id === u.id);
+                if (memberIndex !== -1) {
+                    memberNo = String(memberIndex + 1).padStart(6, '0');
+                } else {
+                    memberNo = String(u.id).slice(-6); // fallback
+                }
+                memberName = u.name + " 様";
+            }
+            
+            if(tier === 'premier') {
+                premierBox.classList.remove('hidden');
+                memberCard.classList.add('premier');
+                welcomeCard.classList.add('premier');
+                headerBrand.classList.add('premier');
+                headerBrand.textContent = 'lala Premier VIP';
+                userName.textContent = memberName;
+                userName.style.color = 'var(--premier-gold)';
+                welcomeMsg.innerHTML = 'いつも応援ありがとうございます。<br>プレミアメンバー限定の特別なコンテンツをお楽しみください。';
+                cardTitle.textContent = 'lala Premier';
+                cardNo.textContent = 'P-' + memberNo;
+                cardName.textContent = memberName;
+            } else {
+                premierBox.classList.add('hidden');
+                memberCard.classList.remove('premier');
+                welcomeCard.classList.remove('premier');
+                headerBrand.classList.remove('premier');
+                headerBrand.textContent = 'lala Fanclub';
+                userName.textContent = memberName;
+                userName.style.color = 'var(--primary-color)';
+                welcomeMsg.innerHTML = 'いつも応援ありがとうございます。<br>ファンクラブ限定コンテンツをお楽しみください。';
+                cardTitle.textContent = 'lala Member';
+                cardNo.textContent = 'M-' + memberNo;
+                cardName.textContent = memberName;
+            }
+        }
+    </script>
+</body>
+</html>
+
+

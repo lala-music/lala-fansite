@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退会・サブスクリプションの解約について | lala Official Fan Site</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-v4.css">
+    <style>
+        .subpage-header { padding: 20px 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 100; }
+        .back-btn { color: #fff; font-size: 0.9rem; letter-spacing: 0.1em; opacity: 0.8; }
+        .back-btn:hover { opacity: 1; color: var(--primary-color); }
+        .subpage-hero { height: 30vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, rgba(8,16,23,0.3), var(--bg-color));}
+        .content-area { padding: 60px 0 100px; }
+        
+        .cancel-card {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="subpage-header">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+    </header>
+
+    <div class="subpage-hero fade-in">
+        <h1 class="hero-title" style="font-size: 2.5rem;">退会手続きについて</h1>
+    </div>
+
+    <section class="content-area fade-in-up delay-1">
+        <div class="container">
+            <div class="cancel-card">
+                <p style="margin-bottom: 30px; line-height: 1.8; color: var(--text-muted); text-align: left;">
+                    ファンクラブや定期便の退会（サブスクリプションの解約）は、お客様ご自身の管理画面からいつでも行うことができます。<br><br>
+                    以下のボタンよりカスタマーポータルへログインし、「プランをキャンセルする」を選択してください。<br>
+                    ※解約を行った場合、次回の更新日をもって会員資格が失効します。日割りでの返金は行っておりませんのでご了承ください。
+                </p>
+                
+                <!-- このリンクをStripeカスタマーポータルまたは決済リンクに差し替えます -->
+                <a href="#" class="btn outline-btn" style="border-color: #e74c3c; color: #e74c3c; width: 100%; max-width: 300px;">サブスクリプションを解約する</a>
+                
+                <p style="margin-top: 30px; font-size: 0.85rem; color: var(--text-muted); text-align: left;">
+                    ログインできない場合やご不明な点がある場合は、<a href="faq.html" style="color: var(--primary-color);">お問い合わせ窓口</a>までご連絡ください。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         FOOTER
+    =============================================== -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <h3>lala</h3>
+                <p>Official Site</p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 lala Official. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in, .fade-in-up');
+            setTimeout(() => { faders.forEach(fader => fader.classList.add('appear')); }, 100);
+        });
+    </script>
+</body>
+</html>
+
