@@ -3,7 +3,13 @@
 
 const GLOBAL_GAS_URL = 'https://script.google.com/macros/s/AKfycbxDAPTrb0Inv3lXp5HY4YYko2kKag9MTanHwNieWrDB8mde99vlijirlGwQCq32fTgk/exec';
 const ADMIN_EMAIL = 'livebarvisca@anthemys.jp';
-
+function checkFcPassword(pwd) {
+    const FC_PASSWORDS = {
+        'lala2026fc':  'monthly',
+        'lalaVIP2026': 'premier'
+    };
+    return FC_PASSWORDS[pwd] || null;
+}
 // XSS対策用ヘルパー関数
 function escapeHTML(str) {
     if (!str) return '';
