@@ -1,0 +1,48 @@
+==============================================
+【本番サーバーにアップロードしないファイル一覧】
+==============================================
+
+以下のファイルはローカル開発用です。
+本番サーバー（レンタルサーバー等）にはアップロードしないでください。
+
+■ 開発・修正スクリプト（不要）
+  - fix.py
+  - fix_admin.js
+  - fix_memberno.js
+  - fix_members.js
+  - fix_script.js
+  - fix_script.py
+  - recover.py
+  - replace.js
+  - update_html.js
+  - test.html
+  - test_gas.js
+
+■ GASバックエンドコード（GASに貼るもの、サーバーには不要）
+  - gas_backend.js
+
+■ ドキュメント
+  - walkthrough.md
+  - DO_NOT_UPLOAD_TO_SERVER.txt（このファイル）
+
+==============================================
+【本番サーバーにアップロードするファイル】
+==============================================
+  - index.html
+  - livebar.html
+  - fanclub.html
+  - fanclub-dashboard.html
+  - fc-login.html
+  - fc-register.html
+  - fc-store.html（または削除）
+  - store.html および store-*.html
+  - school.html
+  - faq.html
+  - law.html
+  - cancel-subscription.html
+  - dashboard_lala_7942.html（管理画面）
+  - script.js
+  - admin.js
+  - style-v4.css
+  - livebar-style-v2.css
+  - images/ フォルダ（全画像）

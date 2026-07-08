@@ -177,6 +177,7 @@
             color: var(--primary-color);
         }
     </style>
+    <meta property="og:url" content="https://lala-music.github.io/lala-fansite/fc-login.html">
 </head>
 <body class="fade-in">
 
@@ -199,24 +200,61 @@
         <a href="index.html" class="back-link">← 一般サイトに戻る</a>
     </div>
 
+    <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('appear');
+            // すでにログイン済みならダッシュボードへ
+            if (localStorage.getItem('lala_fc_tier')) {
+                window.location.href = 'fanclub-dashboard.html';
+            }
         });
 
-        function handleLogin() {
-            const pwd = document.getElementById('fcPassword').value;
+        async function handleLogin() {
+            const pwd = document.getElementById('fcPassword').value.trim();
             const errorMsg = document.getElementById('loginError');
-            
-            // シンプルな共通パスワード判定
-            if (pwd === 'visca2026') {
-                localStorage.setItem('lala_fc_tier', 'monthly');
-                window.location.href = 'fanclub-dashboard.html';
-            } else if (pwd === 'lalaVIP06') {
-                localStorage.setItem('lala_fc_tier', 'premier');
-                window.location.href = 'fanclub-dashboard.html';
-            } else {
-                errorMsg.style.display = 'block';
+            const btn = document.querySelector('.btn-login');
+            if (!pwd) return;
+
+            btn.textContent = '確認中...';
+            btn.disabled = true;
+            errorMsg.style.display = 'none';
+
+            try {
+                // GASにパスワードをPOSTして認証（パスワードをJS内に書かない）
+                const GAS_URL = typeof GLOBAL_GAS_URL !== 'undefined' ? GLOBAL_GAS_URL : '';
+                if (!GAS_URL) throw new Error('GAS URL未設定');
+
+                const fd = new FormData();
+                fd.append('type', 'fc_login');
+                fd.append('password', pwd);
+
+                const res = await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: fd });
+
+                // no-corsのためレスポンス内容は読めない
+                // GAS側でSpreadsheetに認証ログを残し、パスワードハッシュと照合する想定
+                // ★暫定: script.jsのGLOBAL_FC_PASSWORDSで照合（パスワードはここに書かずscript.jsで管理）
+                const result = checkFcPassword(pwd);
+                if (result) {
+                    localStorage.setItem('lala_fc_tier', result);
+                    localStorage.setItem('lala_fc_login_at', Date.now());
+                    window.location.href = 'fanclub-dashboard.html';
+                } else {
+                    errorMsg.style.display = 'block';
+                    btn.textContent = 'ログイン';
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                // オフライン時のフォールバック
+                const result = checkFcPassword(pwd);
+                if (result) {
+                    localStorage.setItem('lala_fc_tier', result);
+                    window.location.href = 'fanclub-dashboard.html';
+                } else {
+                    errorMsg.style.display = 'block';
+                    btn.textContent = 'ログイン';
+                    btn.disabled = false;
+                }
             }
         }
     </script>

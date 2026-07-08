@@ -3,13 +3,22 @@
 
 const GLOBAL_GAS_URL = 'https://script.google.com/macros/s/AKfycbxDAPTrb0Inv3lXp5HY4YYko2kKag9MTanHwNieWrDB8mde99vlijirlGwQCq32fTgk/exec';
 const ADMIN_EMAIL = 'livebarvisca@anthemys.jp';
+
+/**
+ * ファンクラブパスワード照合
+ * ★ パスワードを変更する場合はここだけ編集してください ★
+ * tier: 'monthly' = 通常会員, 'premier' = プレミア会員
+ * @returns {string|null} tier名 or null
+ */
 function checkFcPassword(pwd) {
+    // ★要変更: 公開前に必ず変更してください★
     const FC_PASSWORDS = {
-        'lala2026fc':  'monthly',
-        'lalaVIP2026': 'premier'
+        'lala2026fc':  'monthly',   // 通常会員パスワード
+        'lalaVIP2026': 'premier'    // プレミア会員パスワード
     };
     return FC_PASSWORDS[pwd] || null;
 }
+
 // XSS対策用ヘルパー関数
 function escapeHTML(str) {
     if (!str) return '';
